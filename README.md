@@ -39,7 +39,8 @@ A light weight encapsulation of PHP Slim and AdminLTE template.
 ----------
 
 - login page
-
+![Slimer login page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/login.png)
 
 
 - home page
+![Slimer home page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/admin.png)
