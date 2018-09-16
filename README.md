@@ -1,6 +1,10 @@
 # Slimer
 A light weight encapsulation of PHP Slim and AdminLTE template.
 
+<H3>Please star it to encourage me.</h3>
+
+Will enhance the RBAC control, mail util and so on feature in next version.
+
 ----------
 # Based on
 - Slim3: A smart and fast PHP micro framework https://www.slimframework.com/
