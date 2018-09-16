@@ -1,0 +1,21 @@
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-bell-o"></i>
+        <span class="label label-warning">{{ total }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">You have {{ total }} notification(s)</li>
+        <li>
+            <ul class="menu">
+                {% for notice in notifications %}
+                    <li>
+                        <a href="{{ path_for('sbs_adminlte_show_notification', { 'noticeId': notice.id}) }}">
+                            <i class="{{ notice.icon }}"></i> {{ notice.message }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="footer"><a href="{{ path_for('sbs_adminlte_all_notifications') }}">View all</a></li>
+    </ul>
+</li>

@@ -1,0 +1,203 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-datepicker.min.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Supervisor delegation", "delegate the supervisor request") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Delegate</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-random"></i>
+    <h3 class="box-title"></h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body row" style="height:540px; margin: 0 auto;">
+ 	<div class="col-md-offset-2 col-md-6" style="margin-top:2%">	
+  	{% if data %}
+  		<div class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-info"></i> Alert!</h4>
+                There already have a deligate!
+        </div>
+        	    <div class="profile-form">
+                    <div class="profile-user-info profile-user-info-striped">
+                    {% for key,field in data %}
+                        <div class="profile-info-row"> 
+                            <div class="profile-info-name">{{ key }}</div>
+                            <div class="profile-info-value ">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+        		<div class="box-footer">
+                     <div class="row">
+                        <div class="col-md-2 col-md-offset-3">
+                        	<button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                        </div>
+                     </div>
+                 </div>
+        
+  	{% else %}
+  		<div class="box">
+    		<form id="deligateForm" class="form-horizontal" method="post" action="{{ path_for('group-deligate_submit') }}">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-sm-3 control-label">Core ID:</label>
+                      <div class="col-sm-8">
+                        <input type="input" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-sm-3 control-label">Requester's Name:</label>
+                      <div class="col-sm-8">
+                        <input type="input" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-3 control-label">New approver's CoreID:</label>
+                      <div class="col-sm-8">
+                        <input type="input" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-3 control-label">Delegation end date:</label>
+                      <div class="col-sm-8">
+                      	<div class="input-group date">
+                          <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                          <input type="text" class="form-control pull-right" id="deligateDate" name="deligateDate">
+                        </div>
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-sm-3 control-label">Reason:</label>
+                      <div class="col-sm-8">
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." id="reasonText" name="reasonText" ></textarea>
+                      </div>
+                      <span style="color:#FF0000">*</span>
+                    </div>
+                   </div>
+  
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+                     <div class="row">
+                        <div class="col-md-2 col-md-offset-3">
+                        	<button type="button" class="btn btn-default" id="resetBtn">Reset</button>
+                        </div>
+                         <div class="col-md-2">
+                        	<button type="button" class="btn btn-info pull-right" id="submitBtn">Submit</button>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+        </div>
+    {% endif %}
+    
+    </div>
+  
+  </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-datepicker.min.js"></script>
+<script>
+$(function () {
+	$("#deligateForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			newCoreid: {required: true},
+	        deligateDate: {required: true},
+	        reasonText: {required: true}
+		},
+		messages: {
+			newCoreid:{required:'please input the deligater coreid'},
+			deligateDate:{required:'please input the deligat end date'},
+			reasonText:{required:'please input the reason'},
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-8'));
+		}
+		
+	});
+
+    $('#deligateDate').datepicker({
+        autoclose: true
+    })
+	
+	$('#submitBtn').on('click',function(){
+		if ($('#deligateForm').valid()) {
+			$('#deligateForm').submit();
+		}
+	});
+
+	$('#resetBtn').on('click',function(){
+		 $('#newCoreid').val('');
+		 $('#deligateDate').val('');
+		 $('#reasonText').val('');
+	});
+
+	$('#deleteBtn').on('click',function(){
+		bootbox.confirm("Are you sure to delte?", function(result){
+			if (result){
+				//----start an ajax for delete request
+				$.ajax({
+					type: "GET",
+					cache: false,
+					url: "{{path_for('group-deligate_cancel')}}",
+					data: null, 
+					success: function (data,status){
+						console.log(data);
+						bootbox.alert(data.data.msg);
+						//----reflush
+						window.location.reload();
+					},
+					error: function (data, status, e){
+						bootbox.alert(e);
+					}
+				});
+			}
+		});
+	});
+});
+ </script>
+{% endblock %}

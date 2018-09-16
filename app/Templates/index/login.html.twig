@@ -1,0 +1,82 @@
+{% extends 'adminlte/layout/login.html.twig' %}
+
+{% block page_content %}
+    <div class="login-box">
+		<div id="alert-warn" class="alert alert-warning alert-top" role="alert" style="display: none ;clear:both;">
+		    <button type="button" class="close alert-close" aria-label="Close"><span aria-hidden="true">X</span></button>
+		    <span class="alert-msg"></span>
+		</div>
+        <div class="login-logo">
+            <a href="#"><b>GAM</b>Portal</a>
+        </div>
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in to start your session</p>
+
+            <form id="loginForm" action="{{ path_for('login') }}" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" class="form-control" placeholder="Moto coreid" name="username" id="user">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input type="password" class="form-control" placeholder="Password" id="password" name="password">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        <div class="checkbox icheck">
+                            <label>
+                                <input type="checkbox"> Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat" id="loginBtn">Sign In</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ base_url() }}/app/Static/css/adminlte/blue.css"/>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/icheck.min.js"></script>
+    <script>
+        $(function () {
+            Alert = {
+            	    show: function($div, msg) {
+            	      $div.find('.alert-msg').text(msg);
+            	      if ($div.css('display') === 'none') {
+            	        // fadein, fadeout.
+            	        $div.fadeIn(1000).delay(2000).fadeOut(2000);
+            	      }
+            	    },
+            	    info: function(msg) {
+            	        this.show($('#alert-info'), msg);
+            	      },
+            	     warn: function(msg) {
+            	        this.show($('#alert-warn'), msg);
+            	      }
+            }
+            
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+            
+            $('#loginBtn').bind('click',function(){
+				if ($('#user').val() ==null || $('#user').val() == '' || $('#password').val() ==null || $('#password').val() == ''){
+					Alert.warn('Please input account or password');
+					return false;
+				}else{
+					$('#loginForm').submit();
+				}
+			});
+            
+        });
+        
+    </script>
+{% endblock %}

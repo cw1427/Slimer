@@ -1,0 +1,108 @@
+{% import "adminlte/layout/main_macros.html.twig" as macros %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}GAM{% endblock %}</title>
+    {# Tell the browser to be responsive to screen width. #}
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" type="image/x-icon" href="{{ base_url() }}/favicon.ico"/>
+    {% block corestyles %}
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/AdminLTE.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/_all-skins.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/app.css"/>  
+    {% endblock %}
+    {# Use standard twig block stylesheets to include CSS that is used on single page. #}
+    {% block stylesheets %}{% endblock %}
+    {% block corejs %}
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/jquery.slimscroll.min.js"></script>
+		<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/fastclick.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/adminlte.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/vue.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/bootbox.min.js"></script>
+    {% endblock %}
+    {% block javascripts_head %}{% endblock %}
+
+</head>
+<body class="hold-transition {{ admin_lte_skin|default('skin-blue') }} sidebar-mini login-page {{ sidebar_collapse(container.session) }}">
+{% block inner_body %}
+    <div class="wrapper">
+        {% block admin_lte_header %}
+            <header class="main-header">
+                {% block admin_lte_logo %}
+                    <a href="#" class="logo">
+                        <span class="logo-mini"><b>GAM</b></span>
+                        <span class="logo-lg"><b>GAM</b>Portal</span>
+                    </a>
+                {% endblock %}
+                {# Header Navbar: style can be found in header.less #}
+                <nav class="navbar navbar-static-top" role="navigation">
+                    {{ sidebar_toggle_button() }}
+                    {% if container.user is not null %}
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                {% block admin_lte_navbar %}
+                                    {{ nav_bar_notifications() }}
+                                    {{ nav_bar_tasks() }}
+                                    {{ nav_bar_user_account() }}
+                                {% endblock %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </nav>
+            </header>
+        {% endblock %}
+        
+        {# Left side column. Contains the logo and sidebar: style can be found in sidebar.less #}
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                  <form action="#" method="get" class="sidebar-form">
+                    <div class="input-group">
+                      <input type="text" name="q" class="form-control" placeholder="Search...">
+                      <span class="input-group-btn">
+                            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                            </button>
+                          </span>
+                    </div>
+                  </form>
+                {% block admin_lte_sidebar %}
+                    {% if container.user is not null %}
+                        {{ sidebar_menu(container.request) }}
+                    {% endif %}
+                {% endblock %}
+            </section>
+        </aside>
+        {# Content wrapper. Contains the content of the page. #}
+        <div class="content-wrapper">
+            {% block content %}
+                <section class="content-header">
+                    {% block header_content %}
+                        {{ macros.page_header("Page Title", "Description of Page") }}
+                    {% endblock %}
+                    {% block admin_lte_breadcrumb %}{% endblock %}
+                </section>
+                <section class="content">
+                    {{ include("adminlte/layout/flash_message.html.twig") }}
+                    {% block page_content %}{% endblock %}
+                </section>
+            {% endblock %}
+        </div>
+        {% block admin_lte_footer %}
+            <footer class="main-footer">
+                <div class="pull-right hidden-xs"><b>Version</b> 2.0.0</div>
+                <strong>Copyright &copy;  Motorola Mobility, Inc. All rights reserved. since 2018 <a href="#">Web Admin|Privacy Practices</a>.</strong>
+                All rights reserved.
+            </footer>
+        {% endblock %}
+    </div>
+{% endblock %}
+{# Use standard twig block javascripts to include JS that is used on single page. #}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

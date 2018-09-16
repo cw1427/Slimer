@@ -1,0 +1,35 @@
+<li class="dropdown tasks-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-tasks"></i>
+        <span class="label label-danger">{{ total }}</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">You have {{ total }} task(s)</li>
+        <li>
+            <ul class="menu">
+                {% for task in tasks %}
+                    <li>
+                        <a href="{{ path_for('sbs_adminlte_show_task', {'taskId': task.id}) }}">
+                            <h3>
+                                {{ task.title }}
+                                <small class="pull-right">{{ task.progress }}%</small>
+                            </h3>
+                            <div class="progress xs">
+                                <div class="progress-bar progress-bar-{{ task.color }}"
+                                     style="width: {{ task.progress }}%"
+                                     role="progressbar"
+                                     aria-valuenow="{{ task.progress }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    <span class="sr-only">{{ task.progress }} % complete</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        <li class="footer">
+            <a href="{{ path_for('sbs_adminlte_all_tasks') }}">View all tasks</a>
+        </li>
+    </ul>
+</li>

@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item"><a id="login-tab" class="nav-link {% if not resetCode %}active{% endif %}" data-toggle="pill" href="#login" role="tab" aria-controls="login" aria-selected="{% if resetCode %}false{% else %}true{% endif %}">Login</a></li>
+    <li class="nav-item"><a id="signup-tab" class="nav-link" data-toggle="pill" href="#signup" role="tab" aria-controls="signup" aria-selected="false">Sign Up</a></li>
+    <li class="nav-item"><a id="forgot-tab" class="nav-link {% if resetCode %}active{% endif %}" data-toggle="pill" href="#forgot" role="tab" aria-controls="forgot" aria-selected="{% if resetCode %}true{% else %}false{% endif %}">Reset password</a></li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade {% if not resetCode %}show active{% endif %}" id="login" role="tabpanel" aria-labelledby="login-tab">
+        <form method="POST" action="/auth/login">
+            <label for="login" class="sr-only">Login</label>
+            <input name="login" placeholder="Login" type="text" class="form-control" autofocus required>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+    </div>
+    <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+        <form method="POST" action="/auth/register">
+            <label for="login" class="sr-only">Login</label>
+            <input name="login" placeholder="Login" type="text" class="form-control" autofocus required>
+            <label for="password" class="sr-only">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <label for="name" class="sr-only">Name</label>
+            <input name="name" placeholder="Name" type="text" class="form-control" autofocus required>
+            <p></p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div class="tab-pane fade {% if resetCode %}show active{% endif %}" id="forgot" role="tabpanel" aria-labelledby="forgot-tab">
+        {% if resetCode %}
+        <form method="POST" action="/auth/reset">
+            <input type="hidden" name="code" value="{{ resetCode }}"/>
+            <label for="password" class="sr-only">New password</label>
+            <input name="password" placeholder="New password" type="password" class="form-control" autofocus required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Reset password</button>
+        </form>
+        {% else %}
+        <form method="POST" action="/auth/forgot">
+            <label for="login" class="sr-only">Login</label>
+            <input name="login" placeholder="Login" type="text" class="form-control" autofocus required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Reset password</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

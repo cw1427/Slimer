@@ -1,0 +1,24 @@
+{
+    "name": "tykd/api",
+    "type": "project",
+    "description": "Framework for open api",
+    "homepage": "",
+    "authors": [
+        {
+            "name": "cw",
+            "email": "",
+            "homepage": "",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.7",
+    	"purekid/mongodm": "dev-master",
+    	"monolog/monolog" : ">=1.11.0",
+    	"slim/slim": ">=2.6"
+    },
+    "autoload": {
+        "psr-4": {"": "app/"},
+        "classmap" : [ "app/" ]
+    }
+}

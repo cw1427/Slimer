@@ -1,0 +1,44 @@
+{% import _self as this %}
+
+{% macro render_menu_item(item,request) %}
+    {% import _self as this %}
+    {% if item.route or item.children %}
+        {% set route_name = request.getAttribute('route').getName() | split('-') | join('/') %}
+        <li id="{{ item.id }}" class="{{ item.children ? 'treeview' : '' }} {% if route_name != null and route_name in item.route %} active  {%  endif %}">
+            {{ this.render_link(item) }}
+        </li>
+    {% else %}
+        <li class="header">{{ item.label }}</li>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_link(link) %}
+    {% import _self as this %}
+    <a href="{{ link.children ? '#' : '/' in link.route ? link.route : path_for(link.route, link.routeArgs) }}">
+        <i class="{{ link.icon|default('fa fa-circle-o') }}"></i>
+        <span>{{ link.label }}</span>
+        {% if link.children %}
+            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+        {% else %}
+            {% if link.badges %}
+                {% for text, color in link.badges %}
+                    <small class="label pull-right bg-{{ color }}">{{ text }}</small>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    </a>
+    {% if link.children %}
+        {{ this.render_children(link.children) }}
+    {% endif %}
+{% endmacro %}
+
+{% macro render_children(children) %}
+    {% import _self as this %}
+    <ul class="treeview-menu">
+        {% for child in children %}
+            <li class="{{ child.active ? 'active':'' }} {{ child.children ? 'treeview' : '' }}" id="{{ child.id }}">
+                {{ this.render_link(child) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

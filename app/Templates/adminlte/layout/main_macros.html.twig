@@ -1,0 +1,37 @@
+{% macro page_header(title, description) %}
+    <h1>
+        {{ title }}
+        {% if description %}
+            <small>{{ description }}</small>
+        {% endif %}
+    </h1>
+{% endmacro %}
+
+{% macro box_header(title, collapse, remove, type) %}
+    <div class="box-header">
+        <h3 class="box-title">{{ title }}</h3>
+        {{ block('box_header_buttons') }}
+    </div>
+{% endmacro %}
+
+{% block box_collapse %}
+    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+    </button>
+{% endblock %}
+
+{% block box_remove %}
+    <button class="btn btn-{{ type|default('info') }} btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
+{% endblock %}
+
+{% block box_header_buttons %}
+    {% if collapse or remove %}
+        <div class="box-tools pull-right">
+            {% if collapse %}
+                {{ block('box_collapse') }}
+            {% endif %}
+            {% if remove %}
+                {{ block('box_remove') }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% import _self as this %}
+
+{% if flash()|length %}
+<div class="box-body" style="width:500px;margin-top: 1%;margin-right:auto;margin-left:auto">
+{% for class, messages in flash() %}
+    {% for msg in messages %}
+    <div id="flash_{{ loop.index }}" class="alert alert-{{ class }} flash-alert alert-dismissible flyover" role="alert">
+    	<h4><i class="icon fa fa-ban"></i> Alert!</h4>
+        {{ msg|raw }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <script>
+    	$(function () {
+        	var index = {{ loop.index }}; 
+    		 $("#flash_{{ loop.index }}").fadeIn(1000).delay(2000).fadeOut(2000);
+        });
+    </script>
+    {% endfor %}
+{% endfor %}
+</div>
+{% endif %}
