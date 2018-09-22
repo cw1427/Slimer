@@ -29,7 +29,8 @@
 		"robmorgan/phinx": "@stable",
 		"respect/validation": "^1",
         "symfony/console": "^3.4",
-        "dflydev/fig-cookies": "^1.0.2"
+        "dflydev/fig-cookies": "^1.0.2",
+	"nette/mail": "~2.4.5"
     },
     "autoload": {
         "psr-4": {

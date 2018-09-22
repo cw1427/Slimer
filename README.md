@@ -37,6 +37,8 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 - Flexable web page menu config.
 
+- Add SMTP mailer sender
+
 
 # Sample UI page:
 

@@ -26,4 +26,19 @@ class  Util
         $this->container = $c;
     }
     
+    public function sendMail($mailFrom,$maileTo, $mailCc,$subject,$content){
+        if ($mailFrom == null){
+            $mailFrom = '<your maile from address>';
+        }
+        $message = $this->container['smtpMessage'];
+        $message->setFrom($mailFrom)->addTo($maileTo);
+        if ($mailCc != null) {
+            $message->addCc($mailCc);
+        }
+        $message->setSubject($subject);
+        $message->setHTMLBody($content);
+        $message->addEmbeddedFile(APP_PATH . DS . 'Static' . DS . 'img' . DS . 'spacer.gif');
+        $this->container['smtpMailer']->send($message);
+    }
+    
 }

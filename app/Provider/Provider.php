@@ -66,6 +66,13 @@ class Provider implements ServiceProviderInterface
             $instance->setContainer($container);
             return $instance;
         };
+	$container['smtpMailer'] = function () use ($container) {
+            return new \Nette\Mail\SmtpMailer($container['config']('mail'));
+        };
+        $container['smtpMessage'] = function () use ($container) {
+            return new \Nette\Mail\Message();
+        };
+          
           
     }
 }
