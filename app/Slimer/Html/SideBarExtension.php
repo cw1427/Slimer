@@ -53,6 +53,11 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                 [$this, 'SidebarCollapseFunction'],
                 ['is_safe' => ['html'], 'needs_environment' => false]
                 ),
+            new \Twig_SimpleFunction(
+                 'isSubMenuActive',
+                [$this, 'isSubMenuActive'],
+                ['is_safe' => ['html'], 'needs_environment' => true]
+                )
         ];
     }
     
@@ -92,6 +97,23 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         } catch (\Exception $e) {
             return $template;
         }
+    }
+    
+    
+    public function isSubMenuActive(\Twig_Environment $environment, $children, $current_route)
+    {
+        if ($children != null and sizeof($children)>0){
+            foreach($children as $m){
+                if (isset($m['route']) && strpos($m['route'],$current_route)){
+                    return true;
+                }
+                if (isset($m['routeName']) && strpos($m['routeName'],$current_route)){
+                    return true;
+                }
+            }
+            
+        }
+        return false;
     }
     
     

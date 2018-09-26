@@ -4,15 +4,18 @@
     {% import _self as this %}
     {% if item.route or item.children %}
         {% set route_name = request.getAttribute('route').getName() | split('-') | join('/') %}
-        <li id="{{ item.id }}" class="{{ item.children ? 'treeview' : '' }} {% if route_name != null and route_name in item.route %} active  {%  endif %}">
-            {{ this.render_link(item) }}
+        {% if item.children and route_name != null %} {% set isActive = isSubMenuActive(item.children,route_name) %} {% endif %}
+        <li id="{{ item.id }}" class="{{ item.children ? 'treeview' : '' }} {% if route_name != null and route_name in item.route %} active  {%  endif %} 
+        {% if item.routeName and route_name != null and route_name in item.routeName %} active {% endif %} 
+        {% if isActive %}active menu-open {% endif %} ">
+            {{ this.render_link(item,isActive,request) }}
         </li>
     {% else %}
         <li class="header">{{ item.label }}</li>
     {% endif %}
 {% endmacro %}
 
-{% macro render_link(link) %}
+{% macro render_link(link, isActive,request) %}
     {% import _self as this %}
     <a href="{{ link.children ? '#' : '/' in link.route ? link.route : path_for(link.route, link.routeArgs) }}">
         <i class="{{ link.icon|default('fa fa-circle-o') }}"></i>
@@ -28,17 +31,15 @@
         {% endif %}
     </a>
     {% if link.children %}
-        {{ this.render_children(link.children) }}
+        {{ this.render_children(link.children,isActive,request) }}
     {% endif %}
 {% endmacro %}
 
-{% macro render_children(children) %}
+{% macro render_children(children,isActive,request) %}
     {% import _self as this %}
-    <ul class="treeview-menu">
+    <ul class="treeview-menu" style="{% if isActive %}display:block;{% endif %}">
         {% for child in children %}
-            <li class="{{ child.active ? 'active':'' }} {{ child.children ? 'treeview' : '' }}" id="{{ child.id }}">
-                {{ this.render_link(child) }}
-            </li>
+              {{  this.render_menu_item(child,request) }}
         {% endfor %}
     </ul>
 {% endmacro %}

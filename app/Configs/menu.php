@@ -25,14 +25,16 @@ return [
                 'id' => uniqid(),
                 'active' => true,
                 'label' => 'ChartJS',
-                'route' => 'auth/login',
+                'route' => '/auth/login',
+		'routeName' => '/auth/loginname',
                 'icon' => 'fa fa-th'
             ],
             [
                 'id' => uniqid(),
                 'active' => true,
                 'label' => 'Flot',
-                'route' => 'auth/login',
+                'route' => '/auth/login',
+		'routeName' => '/auth/loginname',
                 'icon' => 'fa fa-th'
             ]
         ]
