@@ -44,7 +44,7 @@ class Controller extends Root
             $action = \strtolower(\end($name)).'Action';
             
             if (\method_exists($this, $action)) {
-                return \call_user_func([$this, $action]);
+                return \call_user_func([$this, $action],$args);
             }
             
             return $this->notFound();

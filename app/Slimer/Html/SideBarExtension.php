@@ -61,6 +61,21 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
         ];
     }
     
+    function getFilters()
+    {
+        return [
+            new \Twig_SimpleFilter('render_empty', [$this, 'RenderEmpty'],['is_safe' => ['html'], 'needs_environment' => false]),
+        ];
+    }
+    
+    public function RenderEmpty($value){
+        if (isset($value) && ($value === '' || $value === ' ')){
+            return "&nbsp";
+        }else{
+            return $value;
+        }
+    }
+    
     
     
     public function SidebarMenuFunction(\Twig_Environment $environment, ServerRequestInterface $request)
