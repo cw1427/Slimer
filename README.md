@@ -39,6 +39,11 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 - Add SMTP mailer sender
 
+- Add PHP ShellCommand to execute the command by exec or pro_open
+
+- Add guzzle to bring the requests feature in Slimer.
+
+- Add Back to Top feature and add bootstrap table, datetimerange feature.
 
 # Sample UI page:
 

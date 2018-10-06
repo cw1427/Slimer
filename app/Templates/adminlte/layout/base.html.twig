@@ -26,6 +26,7 @@
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/adminlte.min.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/vue.min.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/bootbox.min.js"></script>
+	<script type="text/javascript" src="{{ base_url() }}/app/Static/js/float-panel.js"></script>
     {% endblock %}
     {% block javascripts_head %}{% endblock %}
 
@@ -102,6 +103,9 @@
         {% endblock %}
     </div>
 {% endblock %}
+<div id="backtop" class="sigma-copyright col-lg-4 single-page-nav text-right back-to-top">
+   <a href="#top">&#9650;</a>
+</div>
 {# Use standard twig block javascripts to include JS that is used on single page. #}
 {% block javascripts %}{% endblock %}
 </body>

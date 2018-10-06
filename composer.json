@@ -30,7 +30,9 @@
 		"respect/validation": "^1",
         "symfony/console": "^3.4",
         "dflydev/fig-cookies": "^1.0.2",
-	"nette/mail": "~2.4.5"
+	"nette/mail": "~2.4.5",
+	"adrianfalleiro/slim-cli-runner": "~2.4",
+        "mikehaertl/php-shellcommand": "~1.4.1"
     },
     "autoload": {
         "psr-4": {
