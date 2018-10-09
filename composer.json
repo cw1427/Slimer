@@ -32,14 +32,15 @@
         "dflydev/fig-cookies": "^1.0.2",
 	"nette/mail": "~2.4.5",
 	"adrianfalleiro/slim-cli-runner": "~2.4",
-        "mikehaertl/php-shellcommand": "~1.4.1"
+        "mikehaertl/php-shellcommand": "~1.4.1",
+	"pwfisher/command-line-php": "dev-master"
     },
     "autoload": {
         "psr-4": {
         	"App\\": "app/",
         	"App\\Provider\\": "app/Provider/",
         	"App\\Middleware\\": "app/Middleware/",
-        	"": "app/"
+                "App\\Command\\": "app/Command/"
         },
         "psr-0":{
         	 "Slimer\\": "app/"

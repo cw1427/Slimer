@@ -45,6 +45,8 @@ class App extends \Slim\App
         $settings = \array_merge((array) $container['settings']->all(), $container['config']('suit.settings', []));
         unset($container['settings']);
         $container['settings'] = $settings;
+	//----register the command
+        $container['commands'] = $container['config']('suit.commands', []);
         
         // And, finally, run Slim constructor
         parent::__construct($container);

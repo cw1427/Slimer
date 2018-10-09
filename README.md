@@ -45,6 +45,29 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 - Add Back to Top feature and add bootstrap table, datetimerange feature.
 
+
+----------
+
+# Development guide
+
+- 1. Configs
+
+- 2. Routes
+
+- 3. Controller
+
+- 4. Views
+
+- 5. Commands
+  -- Built-in PHP CLI commands.  support for:  php index.php <command name> --foo --bar=baz --spam eggs  -a
+  -- like:  php index.php Dbinit --help
+  -- command example page
+  ![command example page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/cmd.png)
+
+
+
+
+
 # Sample UI page:
 
 ----------

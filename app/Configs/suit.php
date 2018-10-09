@@ -15,10 +15,16 @@ return [
         'auth_middleware',  //----fetch the use related roles in the request
         'baseurl_middleware',
         'session_middleware', //----checking the request session info
+	'commandRunner',//----add cli command middleware
     ],
     
     'namespaces' => [
         'controller' => '\\App\\Controller\\',
+    ],
+    
+    'commands' => [
+        'SampleTask' => '\App\Command\SampleTask',
+        'Dbinit' => '\App\Command\Dbinit',
     ],
     
     'settings' => [

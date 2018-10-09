@@ -45,6 +45,9 @@ class Provider implements ServiceProviderInterface
         $container['controller'] = $this->setControllerLoader($container);
         $container['errorHandler'] = $this->setErrorHandler($container);
         $container['phpErrorHandler'] = $this->setErrorHandler($container);
+	$container['commandRunner'] = function() use ($container) {
+            return new \adrianfalleiro\SlimCLIRunner($container);
+        };
     }
     
     /**
