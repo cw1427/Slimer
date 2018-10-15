@@ -18,6 +18,22 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 ----------
 
+# Common feature on V1.2
+
+- Dockerization the Slimer
+- Setup Slimer running in php-fpm mode
+- Add nginx fastcgi support
+- Add gradle build support
+
+
+# Common feature on V1.1
+- Add SMTP mailer sender
+- Add PHP ShellCommand to execute the command by exec or pro_open
+- Add guzzle to bring the requests feature in Slimer.
+- Add Back to Top feature and add bootstrap table, datetimerange feature.
+
+----------
+
 # Common feature on V1.0
 - Basic login authentication based on DB and LDAP.
 
@@ -37,15 +53,6 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 - Flexable web page menu config.
 
-- Add SMTP mailer sender
-
-- Add PHP ShellCommand to execute the command by exec or pro_open
-
-- Add guzzle to bring the requests feature in Slimer.
-
-- Add Back to Top feature and add bootstrap table, datetimerange feature.
-
-
 ----------
 
 # Development guide
@@ -63,6 +70,12 @@ Will enhance the RBAC control, mail util and so on feature in next version.
   -- like:  php index.php Dbinit --help
   -- command example page
   ![command example page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/cmd.png)
+  
+- 6. Dockerization 
+  -- Add Dockerfile to made the slimer to be dockerization and support for php-fpm with Nginx.
+  
+- 7. Add gradle support
+  -- build the docker command:  gradle -Dregistry=<your local docker registry> slimerDocker <-Dpush=true>
 
 
 

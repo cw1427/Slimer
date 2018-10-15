@@ -1,0 +1,42 @@
+version: '2'   
+services:
+  slimer:
+    image: <your local docker registry image:version>
+    container_name: slimer
+    network_mode: host
+    ports:
+     - 9000:9000
+     - 29418:29418
+    volumes:
+     - /etc/localtime:/etc/localtime:ro
+     - /slimer_static/app:/slimer_static/app
+     - ./logs:/slimer/logs
+     - ./session:/slimer/session
+     - ./gerrit_id_rsa:/slimer/Data/gerrit_id_rsa
+     - ./known_hosts:/slimer/.ssh/known_hosts
+    environment:
+     #- GOSU_USER=slimer:9999
+     - APP_ENV=dev
+    restart: always
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000
+        
+  #nginx:
+  #  image: nginx:1.12.2
+  #  container_name: nginx
+  #  network_mode: host
+  #  ports:
+  #   - 81:81
+  #  volumes:
+  #	 - /home/chenwen9/sandbox/newslimer/docker/slimer.conf:/etc/nginx/conf.d/slimer.conf
+  #   - /var/log/nginx:/var/log/nginx
+  #   - /etc/localtime:/etc/localtime:ro
+  #  restart: always
+  #  ulimits:
+  #   nproc: 65535
+  #   nofile:
+  #      soft: 32000
+  #      hard: 40000
