@@ -31,14 +31,48 @@ class  Util
             $mailFrom = '<your maile from address>';
         }
         $message = $this->container['smtpMessage'];
-        $message->setFrom($mailFrom)->addTo($maileTo);
+        $message->setFrom($mailFrom);
+        if (\is_array($maileTo)){
+            foreach ($maileTo as $to){
+                $message->addTo($to);
+            }
+        }else{
+            $message->addTo($maileTo);
+        }
         if ($mailCc != null) {
-            $message->addCc($mailCc);
+            if (\is_array($mailCc)){
+                foreach ($mailCc as $cc){
+                    $message->addCc($cc);
+                }
+            }else{
+                $message->addCc($mailCc);
+            }
         }
         $message->setSubject($subject);
         $message->setHTMLBody($content);
-        $message->addEmbeddedFile(APP_PATH . DS . 'Static' . DS . 'img' . DS . 'spacer.gif');
+        //$message->addEmbeddedFile(APP_PATH . DS . 'Static' . DS . 'img' . DS . 'spacer.gif');
         $this->container['smtpMailer']->send($message);
+    }
+    
+    public function gerritCheckByCmd($id,$server='test'){
+        $cmd = 'ssh -l %s -p %d -i "%s" %s "gerrit gsql --format pretty -c \"select e.external_id from accounts a,account_external_ids e where a.account_id=e.account_id and e.external_id=' . "'username:$id'" . ' and a.inactive=' . "'Y'". '\"" |  wc -l';
+        $gerConf = $this->container['config']('gerrit.'.$server);
+        $SKEY = APP_ROOT . DS . 'Data' . DS . 'gerrit_id_rsa';
+        $cmd = sprintf($cmd,$gerConf['gamuser'],$gerConf['sshport'],$SKEY, $gerConf['host']);
+        $command = $this->container['shellCommand'](['command'=>$cmd,'useExec'=>true]);
+        if ($command->execute()) {
+            $result=$command->getOutput();
+            if ((int)$result > 3){
+                return false;
+            }else{
+                return true;
+            }
+        } else {
+            $exitCode = $command->getExitCode();
+            $this->container->logger->error( $command->getError() . ' error code=' . $exitCode);
+            return false;
+        }
+        
     }
     
 }
