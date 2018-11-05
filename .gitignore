@@ -15,7 +15,6 @@ venv
 node_modules
 .settings
 logs/*
-Data/*
 vendor/*
 session/*
 app/Cache/*
