@@ -13,6 +13,7 @@ return [
     'middlewares' => [
         'rbac_middleware',  //----checking the roles meet the route or not
         'auth_middleware',  //----fetch the use related roles in the request
+	'httpauth_middleware', //----basic authen before original auth
         'baseurl_middleware',
         'session_middleware', //----checking the request session info
 	'commandRunner',//----add cli command middleware
@@ -38,4 +39,9 @@ return [
         // Monolog settings
         'logger' => new \Monolog\Logger('api',array(new \Monolog\Handler\StreamHandler(LOG_PATH . DS .'gam_'.date("Ymd").'.log'))),
     ],
+    
+    'httpauth' => [
+        'path'=> ['/api'],  //----the basic path need to do the httpauth
+        'passthrough' => null //----the white list bypass the httpauth
+    ]
 ];

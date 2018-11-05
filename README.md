@@ -17,6 +17,8 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 
 ----------
+# Common feature on V1.2.2
+- Add Http basic authen feature.
 
 # Common feature on V1.2
 
@@ -56,6 +58,11 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 ----------
 
 # Development guide
+
+- 0. Initialization
+  -- When we want to start play Slimer, just need to run "php composer.phar install" in the project root path to install all of the dependencies.
+  -- And then run the "php index.php Dbinit --sync --dbEngine <your own db engine name in the cofig> to init the DB table and the data.
+  -- Make sure you have made the DB tables and init data DDL sql in file under Data folder.  e.g  users.sql
 
 - 1. Configs
 
