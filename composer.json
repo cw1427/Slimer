@@ -41,7 +41,8 @@
         	"App\\": "app/",
         	"App\\Provider\\": "app/Provider/",
         	"App\\Middleware\\": "app/Middleware/",
-                "App\\Command\\": "app/Command/"
+                "App\\Command\\": "app/Command/",
+		"App\\Api\\": "app/Api/"
         },
         "psr-0":{
         	 "Slimer\\": "app/"

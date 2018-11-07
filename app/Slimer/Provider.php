@@ -45,7 +45,7 @@ class Provider implements ServiceProviderInterface
         $container['controller'] = $this->setControllerLoader($container);
         $container['errorHandler'] = $this->setErrorHandler($container);
         $container['phpErrorHandler'] = $this->setErrorHandler($container);
-	$container['commandRunner'] = function() use ($container) {
+        $container['commandRunner'] = function() use ($container) {
             return new \adrianfalleiro\SlimCLIRunner($container);
         };
     }
@@ -59,9 +59,9 @@ class Provider implements ServiceProviderInterface
      */
     protected function setControllerLoader(Container $container)
     {
-        return $container->protect(function ($name) use ($container) {
+        return $container->protect(function ($name,$clz=null) use ($container) {
             $parts = \explode('_', $name);
-            $class = $container['config']('suit.namespaces.controller', '\\App\\Controller\\');
+            $class = (isset($clz) && $clz !=null) ? $clz : $container['config']('suit.namespaces.controller', '\\App\\Controller\\');
             foreach ($parts as $part) {
                 $class .= \ucfirst($part);
             }

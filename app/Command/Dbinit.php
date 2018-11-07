@@ -17,6 +17,7 @@ Class Dbinit extends GenericCommand{
     {
         if (isset($args["sync"]) && isset($args["dbEngine"])){
             $this->_scan($args);
+            return "successfully execute Dbinit cmd.";
         }else{
             throw new \Exception("Command error, wrong parameter.",400);
         }

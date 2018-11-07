@@ -20,15 +20,27 @@ class Router extends \Slimer\Root
      */
     public function __invoke(\Slim\App $app)
     {
-        foreach ($this->config('routes') as $group_name => $routes) {
-            $app->group($group_name, function () use ($group_name, $routes){
+        foreach ($this->config('routes') as $group => $routes) {
+            //----support for route prefix by -  e.g.  api-cmd  the api is the route prefix
+            if (\strpos($group,'-') > 0) {
+                $group_name = \end(\explode('-',$group));
+                $group = \str_replace('-','/',$group);
+            }else{
+                $group_name = $group;
+            }
+            $app->group($group, function () use ($group_name, $routes){
                 $controller = ('/' === $group_name || !$group_name) ? 'index' : \trim($group_name, '/');
                 
                 foreach ($routes as $name => $route) {
                     $methods = isset($route['methods']) ? $route['methods'] : ['GET'];
                     $pattern = isset($route['pattern']) ? $route['pattern'] : '';
                     $callable = function (Request $request, Response $response, array $args = []) use ($controller, $route) {
-                        return $this['controller']($controller)->__invoke($request, $response, $args);
+                        //----support for Api type controller load
+                        if (isset($route['namespace'])){
+                            return $this['controller']($controller,$route['namespace'])->__invoke($request, $response, $args);
+                        }else{
+                            return $this['controller']($controller)->__invoke($request, $response, $args);
+                        }
                     };
                     $this->map($methods, $pattern, $callable)->setName(('index' === $controller ? '' : $controller . '-').$name);
                 }
