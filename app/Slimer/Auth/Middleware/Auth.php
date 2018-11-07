@@ -29,11 +29,15 @@ class Auth extends Root
         $route = $request->getAttribute('route');
         //404 if route not found
         if (!$route) {
-            return $this->notFoundHandler->__invoke($request, $response);
+            if ($this->container->has("basicAuth")){
+                return $this->response->withStatus(404)->withJson(['message'=>'The request url path is not found ' . $request->getUri()->getPath()]);
+            }else{
+                return $this->notFoundHandler->__invoke($request, $response);
+            }
         }        
         if ($route->getName() == 'login') return $next($request, $response);
         //----check if has a valid session
-        if ($this->container->has('user') && $this->container->get('user')){
+        if ($this->container->has("basicAuth") || ($this->container->has('user') && $this->container->get('user'))){
             return $next($request, $response);
         }else{
             $this->container['flash']->addMessage('danger','Require login');
