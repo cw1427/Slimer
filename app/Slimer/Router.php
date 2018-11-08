@@ -23,7 +23,8 @@ class Router extends \Slimer\Root
         foreach ($this->config('routes') as $group => $routes) {
             //----support for route prefix by -  e.g.  api-cmd  the api is the route prefix
             if (\strpos($group,'-') > 0) {
-                $group_name = \end(\explode('-',$group));
+	        $gs = \explode('-',$group);
+                $group_name = \end($gs);
                 $group = \str_replace('-','/',$group);
             }else{
                 $group_name = $group;

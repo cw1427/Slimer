@@ -96,7 +96,7 @@
         </div>
         {% block admin_lte_footer %}
             <footer class="main-footer">
-                <div class="pull-right hidden-xs"><b>Version</b> 2.0.0</div>
+                <div class="pull-right hidden-xs"><b>Version</b> {{ getVersion() | default("1.0.0") }} &nbsp; {{ getCommitId() }}</div>
                 <strong>Copyright &copy; All rights reserved. since 2018 <a href="#">Web Admin|Privacy Practices</a>.</strong>
                 All rights reserved.
             </footer>

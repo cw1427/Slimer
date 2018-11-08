@@ -57,7 +57,18 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                  'isSubMenuActive',
                 [$this, 'isSubMenuActive'],
                 ['is_safe' => ['html'], 'needs_environment' => true]
+                ),
+            new \Twig_SimpleFunction(
+                'getVersion',
+                [$this, 'getVersion'],
+                ['is_safe' => ['html'], 'needs_environment' => false]
+                ),
+            new \Twig_SimpleFunction(
+                'getCommitId',
+                [$this, 'getCommitId'],
+                ['is_safe' => ['html'], 'needs_environment' => false]
                 )
+            
         ];
     }
     
@@ -126,12 +137,24 @@ class SideBarExtension extends \Twig\Extension\AbstractExtension implements \Twi
                     return true;
                 }
             }
-            
+
         }
         return false;
     }
     
+    public function getVersion()
+    {
+        $key=$this->container['config']('suit.version_key') ? $this->container['config']('suit.version_key') : "VERSION";
+        return getenv($key) ?  getenv($key) : null;
+    }
     
+    public function getCommitId()
+    {
+        $key=$this->container['config']('suit.commitid_key') ? $this->container['config']('suit.commitid_key') : "COMMITID";
+        return getenv($key) ?  getenv($key) : null;
+    }
+
+
     /**
      * {@inheritdoc}
      */

@@ -43,5 +43,8 @@ return [
     'httpauth' => [
         'path'=> ['/api'],  //----the basic path need to do the httpauth
         'passthrough' => null //----the white list bypass the httpauth
-    ]
+    ],
+    
+    'version_key' => 'VERSION',
+    'commitid_key' => 'COMMITID'
 ];
