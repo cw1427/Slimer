@@ -66,5 +66,10 @@ class Provider implements ServiceProviderInterface
             ]);
             
         };
+	
+	//----PhpRbac
+        $container['rbac'] = function($c) {
+            return new \Slimer\Auth\Rbac('',$c);
+        };
     }
 }

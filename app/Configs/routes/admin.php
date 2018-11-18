@@ -8,8 +8,8 @@ return [
     'admin' => [
         'pattern' => '/admin',
         'methods' => ['GET'],
-        //         'rbac' => [
-            //             'anonymous' => ['GET','POST'],
-            //         ],
+	'perm' => [
+	    'admin_perm'
+	]
     ]
 ];

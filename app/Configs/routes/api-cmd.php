@@ -8,6 +8,9 @@ return [
     'dbinit' => [
         'pattern' => '/dbinit',
         'methods' => ['GET','POST'],
-        'namespace' => '\\App\\Api\\'
+        'namespace' => '\\App\\Api\\',
+	'perm' => [
+            'root'
+        ]
     ],
 ];

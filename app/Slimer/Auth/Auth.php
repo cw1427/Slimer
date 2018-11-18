@@ -30,6 +30,16 @@ class Auth extends Root
         if ($this->container->has('user')) {
             unset($this->container['user']);
         }
+        $user->updateLogin();
+        //----add user group info into current user
+        $gs = $user->getUserGroups();
+        $permGroupIds = [];
+        foreach ($gs as $group){
+            \array_push($permGroupIds,$group['ID']);
+        }
+        $rs = $user->getUserRoles($permGroupIds);
+        $user->set('perm_group',$gs);
+        $user->set('roles',$rs);
         $this->container['user'] = $user;
         
         return $this->auth_storage->setUser($user);

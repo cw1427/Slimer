@@ -26,6 +26,9 @@ return [
     'commands' => [
         'SampleTask' => '\App\Command\SampleTask',
         'Dbinit' => '\App\Command\Dbinit',
+        'RbacInit' => '\App\Command\RbacInit',
+        'RbacReset' => '\App\Command\RbacReset',
+        'RbacManage' => '\App\Command\RbacManage',
     ],
     
     'settings' => [

@@ -34,7 +34,8 @@
 	"adrianfalleiro/slim-cli-runner": "~2.4",
         "mikehaertl/php-shellcommand": "~1.4.1",
 	"pwfisher/command-line-php": "dev-master",
-	"tuupola/slim-basic-auth": "~2.3.0"
+	"tuupola/slim-basic-auth": "~2.3.0",
+	"owasp/phprbac": "~2.0.0"
     },
     "autoload": {
         "psr-4": {

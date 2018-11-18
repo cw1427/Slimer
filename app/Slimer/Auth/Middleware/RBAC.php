@@ -25,42 +25,30 @@ class RBAC extends Root
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
-        return $next($request, $response);
-        
-        // Check if allowed for current role (if exists) or for anonymous role
-        if ($this->isAllowed($request, $request->getAttribute('role', '')) || $this->isAllowed($request, $this->config('auth.rbac.defaultRole', 'anonymous'))) {
-            // Run next middleware if allowed
+        $route = $request->getAttribute('route');
+        $groupName = \trim($route->getGroups()[0]->getPattern(),'/');
+        $groupName = \str_replace('/','-',$groupName);
+        $routeName = $route->getName();
+        $routeName=\end(\explode('-',$routeName));
+        $routeConf = $this->config('routes')['/'.$groupName][$routeName];
+        if (isset($routeConf['perm'])){
+            $request=$request->withAttribute('perm',$routeConf['perm']);
+            $permGroup = $this->user->get('perm_group');
+            if (isset($permGroup) && $permGroup != null){
+                $permGroupIds = [];
+                foreach ($permGroup as $group){
+                    \array_push($permGroupIds,$group['ID']);
+                }
+                foreach ($routeConf['perm'] as $perm){
+                    if ($this->rbac->check($perm,$permGroupIds)){
+                        return $next($request, $response);
+                    }
+                }
+            }
+            return $this->appErrorHandler->error403($request,$response);
+        }else{
             return $next($request, $response);
         }
-        
-        // Return error if not allowed
-        return $this->config('auth.rbac.errorCallback') ? $this->config('auth.rbac.errorCallback')->__invoke($request, $response) : $response->withJson([
-            'error' => [
-                'message' => 'You are note allowed to see this page',
-                'fields' => [],
-            ],
-            'count' => 0,
-            'data' => [],
-        ], 401);
     }
     
-    /**
-     * Check if request allowed for current user.
-     *
-     * @param ServerRequestInterface $request
-     * @param string                 $role
-     *
-     * @return bool
-     */
-    protected function isAllowed(ServerRequestInterface $request,  $role)
-    {
-        $route = $request->getAttribute('route');
-        // Get config string like 'routes./home.second.rbac.anonymous' to get rbac config for route with name "second" in route group "home"
-        $config = 'routes.'.$route->getGroups()[0]->getPattern().'.'.\strtr('/'.$route->getName(), [$route->getGroups()[0]->getPattern() => '', '-' => '']).'.rbac.'.$role;
-        if (\in_array($request->getMethod(), $this->config($config, []), true)) {
-            return true;
-        }
-        
-        return false;
-    }
 }

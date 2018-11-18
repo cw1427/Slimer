@@ -42,4 +42,18 @@ class ErrorHandler extends \App\Controller
         
         return $this->render('error/404.html', [], 404);
     }
+    
+        /**
+     * Handle permission error.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     *
+     * @return ResponseInterface
+     */
+    public function error403(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $this->logger->error($request->getUri()->__toString(), ['code' => 403, 'message' => "permission denied"]);        
+        return $this->render('error/403.html', ['perm' => $request->getAttribute('perm')], 403);
+    }
 }
