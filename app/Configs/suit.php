@@ -24,11 +24,12 @@ return [
     ],
     
     'commands' => [
-        'SampleTask' => '\App\Command\SampleTask',
-        'Dbinit' => '\App\Command\Dbinit',
-        'RbacInit' => '\App\Command\RbacInit',
-        'RbacReset' => '\App\Command\RbacReset',
-        'RbacManage' => '\App\Command\RbacManage',
+        'cmd' => '\App\Command\Cmd',
+        'sampletask' => '\App\Command\SampleTask',
+        'dbinit' => '\App\Command\Dbinit',
+        'rbacinit' => '\App\Command\RbacInit',
+        'rbacreset' => '\App\Command\RbacReset',
+        'rbacmanage' => '\App\Command\RbacManage',
     ],
     
     'settings' => [

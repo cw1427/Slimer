@@ -16,7 +16,7 @@
 <div class="box">
   <div class="box-header with-border">
     <i class="fa fa-dashboard"></i>
-    <h3 class="box-title">Welcome to GAM</h3>
+    <h3 class="box-title">Welcome to Slimer</h3>
 
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -24,8 +24,47 @@
         <i class="fa fa-minus"></i></button>
     </div>
   </div>
-  <div class="box-body" style="height:540px; margin: 0 auto;">
-    <h3>Mobile Devices Global Account Management System!<br/></h3>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-5">
+        <div class="box box-primary">
+            <div class="box-body box-profile">
+			  <img class="profile-user-img img-responsive img-circle" src="{{ base_url() }}/app/Static/img/user2-128x128.jpg" alt="User profile picture">
+              <h3 class="profile-username text-center">{{ container.session.get('user')['userName'] }}</h3>
+
+              <p class="text-muted text-center">{{ container.session.get('user')['loginName'] }}</p>
+
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item">
+                  <b>User realm:</b> <a class="pull-right">{{ container.session.get('user')['type'] }}</a>
+                </li>
+                <li class="list-group-item" style="height:auto!important;">
+                  <b>User Group:</b> 
+                  <P>
+                  	{%  for group in container.session.get('user')['perm_group'] %}
+                  		<span class="label label-success">{{ group.Name }}</span>
+                  	{%  endfor %}
+                  </p>
+                </li>
+                <li class="list-group-item" style="height:auto!important;">
+                  <b>User roles:</b> 
+                  <P>
+                  	{%  for role in container.session.get('user')['roles'] %}
+                  		<span class="label label-primary">{{ role.Title }}</span>
+                  	{%  endfor %}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <b>Last Login:</b> <a class="pull-right">{{ container.session.get('user')['changedOn'] }} ({{ container.session.get('user')['changedBy'] }})</a>
+                </li>
+              </ul>
+
+              <a href="{{ path_for("sbs_adminlte_user_profile") }}" class="btn btn-primary btn-block"><b>Profile</b></a>
+            </div>
+            <!-- /.box-body -->
+         </div>
+      </div>
+  </div>
   </div>
   <!-- /.box-body -->
 

@@ -14,6 +14,7 @@ class Rbac extends PhpRbac
 {
     
     public $container;
+    public $target;
     
     public function __construct($unit_test = '',$container=null)
     {
@@ -41,7 +42,6 @@ class Rbac extends PhpRbac
              return parent::check($Permission, $UserID);
          }else{
              $UserID = \implode(',', $UserID);
-             $this->container->logger->debug($UserID);
             // convert permission to ID
             if (is_numeric ( $Permission ))
             {
@@ -54,7 +54,6 @@ class Rbac extends PhpRbac
                     else
                         $PermissionID = $this->Permissions->titleId ( $Permission );
             }
-            $this->container->logger->debug($PermissionID);
             // if invalid, throw exception
             if ($PermissionID === null)
                 throw new \RbacPermissionNotFoundException ( "The permission '{$Permission}' not found." );
@@ -121,6 +120,41 @@ class Rbac extends PhpRbac
 			WHERE TRel.UserID in ( ". $UserID. ")" );
             
         }
+    }
+    
+    public function showRoleTree(){
+        $this->target="roles";
+        return $this->_showTree();
+    }
+    
+    public function showPermTree(){
+        $this->target="permissions";
+        return $this->_showTree();
+    }
+    /*
+     * show the whole hierarchical tree in the console
+     */
+    private function _showTree(){
+        $Query=" SELECT CONCAT( REPEAT('-', COUNT(parent.Title) - 1), node.Title) as name, (COUNT(parent.Title) - 1) as depth from {$this->table()} as node, {$this->table()} as parent
+                    where node.{$this->left()} between parent.{$this->left()} and parent.{$this->right()} 
+                    group by node.{$this->id()}
+                    order by node.{$this->left()}
+                ";
+        return JF::sql( $Query );
+    }
+    
+    private function table(){
+        return "{$this->tablePrefix()}{$this->target}";
+    }
+    
+    private function id(){
+        return "ID";
+    }
+    private function left(){
+        return "Lft";
+    }
+    private function right(){
+        return "Rght";
     }
   
 }

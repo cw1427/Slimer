@@ -10,7 +10,7 @@ Class RbacManage extends GenericCommand{
     
     protected  $desc = "Basic RBAC tables structure init, it will depends owasp/phprbac library";
     protected  $params = ["--role" => "The role title you want to manage",
-        "--type" => "The manage type, for now only support for add|delete|assign|unassign",
+        "--type" => "The manage type, for now only support for add|delete|assign|unassign|show",
         "--desc" => "The description",
         "--perm" => "The perm title you want to manage",
         "--parent" => "The parent title or path what you want to manage belong to",
@@ -70,11 +70,17 @@ Class RbacManage extends GenericCommand{
                             }
                         }
                         \array_push($this->out, "Successfully unassing role=" . $args["role"] . " on the group=" . $args["group"]);
+                    }else if($args["type"] === 'show'){
+                        $res = $this->rbac->showRoleTree();
+                        foreach ($res as $r){
+                            \array_push($this->out, $r['name']);
+                        }
+                        \array_push($this->out, "Successfully show the hierachical tree on the role=" . $args["role"]);
                     }else{
-                        throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|assign|unassign>",400);
+                        throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|assign|unassign|show>",400);
                     }
                 }else{
-                    throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|assign|unassign>",400);
+                    throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|assign|unassign|show>",400);
                 }
                 return implode(PHP_EOL, $this->out);
             }else if(isset($args["perm"])){
@@ -83,11 +89,17 @@ Class RbacManage extends GenericCommand{
                         $this->__add($args,'perm');
                     }else if ($args["type"] === 'delete'){
                         $this->__delete($args,'perm');
+                    }else if($args["type"] === 'show'){
+                        $res = $this->rbac->showPermTree();
+                        foreach ($res as $r){
+                            \array_push($this->out, $r['name']);
+                        }
+                        \array_push($this->out, "Successfully show the hierachical tree on the permission=" . $args["perm"]);
                     }else{
-                        throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete>",400);
+                        throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|show>",400);
                     }
                 }else{
-                    throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete>",400);
+                    throw new \Exception("Command error, wrong parameter, you should put at least --type <add|delete|show>",400);
                 }
                 return implode(PHP_EOL, $this->out);
             }

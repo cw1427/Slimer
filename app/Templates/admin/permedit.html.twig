@@ -1,0 +1,283 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/password_strength.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/multi-select.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "permission edit") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Permission edit</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-info"></i>
+    <h3 class="box-title">Permission edit: {{ perm.Title }}</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Basic Info</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                    		<form id="perminfoForm" class="form-horizontal" method="post" action="{{ path_for('admin-perminfo_edit') }}">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">permission name:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="Title" name="Title" value="{{ perm.Title }}"/>
+                                      </div>
+                                    </div>
+                                     <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">permission description:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="Description" name="Description" value="{{ perm.Description }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">permission children:</label>
+                                      <div class="col-sm-6">
+                                        	<table class="table table-striped">
+                                                 <tr>
+                                                    <th style="width: 10px">#</th>
+                                                    <th>Title</th>
+                                            		<th>Description</th>
+                                            		<th>Depth</th>
+                                                 </tr>
+                                            {%   for child in  perm.children%}
+                                                 <tr>
+                                                     <td>{{ loop.index  }}.</td>
+                                                     <td>{{   child.Title }}</td>
+                                            		 <td>{{   child.Description }}</td>
+                                            		 <td>{{   child.Depth }}</td>
+                                                 </tr>
+                                            {% endfor %}
+                                            </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- /.box-body -->
+                                  <!-- /.box-footer -->
+                                  <div class="row">
+                                       <div class="box-footer">
+                                        <div class="col-md-2 col-md-offset-4">
+                                        	<button type="button" class="btn btn-success" id="perminfoSubmitBtn">Change</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                        	<button type="button" class="btn btn-info pull-right" id="resetBtn">Refresh</button>
+                                        </div>
+                                        </div>
+                                  </div>
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  <!--group roles change -->
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Change permissioin direct roles relationship</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                  		   <div class="box-body">
+                  		   <div class="form-group col-md-offset-4">
+                    		<select id="roleSelector" multiple='multiple' name="rolePerms">
+                                  {% for role in roles %}
+                                  		<option value="{{ role.ID }}" {% if role.ID in perm.roles %} selected {% endif %}>{{ role.Title }}</option>
+                                  {% endfor %}                    		
+                    		</select>
+                    		</div>
+                    		</div>
+                    		<div class="box-footer">
+                            	<div class="row">
+                                    <div class="col-md-2 col-md-offset-4">
+                                    	<button type="button" class="btn btn-success" id="roleSelectSubBtn">Change</button>
+                                    </div>
+                                     <div class="col-md-2">
+                                    	<button type="button" class="btn btn-info pull-right" id="roleSelectRefreshBtn">Refresh</button>
+                                    </div>
+                                 </div>
+                             </div>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+ 
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/password_strength.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.quicksearch.min.js"></script>
+<script>
+
+function roleSelectAll(){
+	$('#roleSelector').multiSelect('select_all');
+}
+function roleDeselectAll(){
+	$('#roleSelector').multiSelect('deselect_all');
+}
+
+$(function () {
+
+	$("#perminfoForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			Title: {required: true},
+			Description: {required: true},
+		},
+		messages: {
+			
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-6'));
+		}
+		
+	});
+
+	$('#perminfoSubmitBtn').on('click',function(){
+		if ($('#perminfoForm').valid()) {
+			$.ajax({
+				type: "POST",
+				cache: false,
+				url: "{{path_for('admin-perminfo_edit')}}",
+				data: {"Title": $('#Title').val(),"Description": $('#Description').val(),"id": {{ perm.ID }} },
+				success: function (data,status){
+					bootbox.alert(data.data.msg);
+				},
+				error: function (data, status, e){
+					if (typeof(data.responseJSON.error) !== "undefined" ){
+						bootbox.alert(data.responseJSON.error);
+					}else{
+	    				bootbox.alert(e);
+					}
+				}
+			});
+			
+		}else{
+			bootbox.alert("error");
+		}
+	});
+
+	$('#resetBtn').on('click',function(){
+		window.location.reload();
+	});
+
+	$('#roleSelector').multiSelect({
+		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source roles"></input>',
+		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target roles"></input>',
+		selectableFooter: "<a class='btn' onclick='roleSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
+		selectionFooter: "<a class='btn' onclick='roleDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
+		keepOrder: true,
+		dblClick: false,
+		afterInit: function(ms){
+			var that = this,
+    	        $selectableSearch = that.$selectableUl.prev(),
+    	        $selectionSearch = that.$selectionUl.prev(),
+    	        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+    	        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    
+    	    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which === 40){
+                	        that.$selectableUl.focus();
+                	        return false;
+                	      }
+                	    });
+    	    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which == 40){
+                	        that.$selectionUl.focus();
+                	        return false;
+                	      }
+                	    });
+		},
+	   afterSelect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  },
+	  afterDeselect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  }
+	});
+
+	$('#roleSelectRefreshBtn').on('click',function(){
+		var defaultGroups = {{ perm.roles | json_encode | raw}};
+		$('#roleSelector').multiSelect('deselect_all');
+		$('#roleSelector').multiSelect('select',defaultGroups);
+	});
+	$('#roleSelectSubBtn').on('click',function(){
+		$.ajax({
+			type: "POST",
+			cache: false,
+			url: "{{path_for('admin-permrole_edit')}}",
+			data: {"selected": $('#roleSelector').val(),"id": {{ perm.ID }} }, 
+			success: function (data,status){
+				bootbox.alert(data.data.msg);
+			},
+			error: function (data, status, e){
+				if (typeof(data.responseJSON.error) !== "undefined" ){
+					bootbox.alert(data.responseJSON.error);
+				}else{
+    				bootbox.alert(e);
+				}
+			}
+		});
+	});
+});
+</script>
+{% endblock %}
+
+

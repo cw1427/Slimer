@@ -1,0 +1,304 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/select2.min.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "role manage") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Role management</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-dashboard"></i>
+    <h3 class="box-title">Role management</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+           <div id="toolbar">
+      			   <button type="button" class="btn btn-primary" id="addBtn" data-toggle="modal" data-target="#modal-add"><i class="fa fa-paw"></i> &nbsp;new role</button>
+      	   </div>
+      	   <table id="table"
+                   data-show-refresh="true"
+                   data-show-columns="true"
+                   data-search="true"
+                   data-query-params="queryParams"
+                   data-toolbar="#toolbar"
+                   data-click-to-select="true">
+                <thead>
+                <tr>
+                    <th data-field="ID"  data-width="5%">id</th>
+                    <th data-field="Title">Name</th>
+                    <th data-field="Description">Description</th>
+                    <th data-field="permissions" data-formatter="permissionFormatter">Direct Permission</th>
+                    <th data-field="Lft" data-width="5%">Left</th>
+                    <th data-field="Rght" data-width="5%">Right</th>
+                    <th data-field="action"
+                        data-align="center"
+                        data-formatter="actionFormatter"
+                        data-events="actionEvents"
+                        data-width="10%">Action</th>
+                </tr>
+                </thead>
+            </table>
+       </div>
+   </div><!-- /. .row -->
+       <div class="modal fade" id="modal-add" data-keyboard="false" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Role add</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                	<form id="roleAddForm" class="form-horizontal" method="POST" action="{{  path_for('admin-add_role') }}">
+                            <div class="form-group">
+                              <label class="col-sm-4 control-label">name:</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="Title" name="Title" value=""/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-4 control-label">description</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="Description" name="Description" value=""/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-4 control-label">parent</label>
+                              <div class="col-sm-4">
+                                	<select class="group-select" name="parent" id="parent" style="width:100%">
+                                		 {% for role in roles %}
+                                		 	<option value="{{ role.key }}" {% if role.key ==1 %}selected{% endif %}>{{ role.value }}</option>
+                                		 {% endfor %}
+                                	</select>
+                              </div>
+                            </div>
+                      </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        
+       <div class="modal fade" id="modal-roleperm">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Permission List</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row" id="permListDiv">
+                	
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+    </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/select2.min.js"></script>
+<script type="text/x-tmpl" id="action-html">
+<div class="row">
+{& if (o.row.ID == 1) { &}
+	{& if ( {{ container.session.get('user')['id'] }} == 1 ) { &}
+		<a class="btn"  href="/admin/editrole/{&=o.row.ID&}" title="Update Item"><i class="fa fa-edit"></i></a>
+	{& } &}
+{& }else{ &}
+<a class="btn"  href="/admin/editrole/{&=o.row.ID&}" title="Update Item"><i class="fa fa-edit"></i></a>
+<a class="btn"  href="javascript:deleteItem({&=o.row.ID&},'{&=o.row.Title&}')" title="Delete Item"><i class="fa fa-trash"></i></a>
+{& } &}
+</div>
+</script>
+<script type="text/x-tmpl" id="col-perm-html">
+ {&=o.resultPref&}...<a class='btn' href="javascript:detail('{&=o.index&}')">(See all)</a>
+</script>
+
+<script type="text/x-tmpl" id="perm-table-html">
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<table class="table table-striped">
+     <tr>
+        <th style="width: 10px">#</th>
+        <th>Groups Name</th>
+		<th>Groups Desc</th>
+     </tr>
+{& for (var i=0; i<o.perms.length; i++) { &}
+     <tr>
+         <td>{&=i + 1 &}.</td>
+         <td>{&=o.perms[i].Title &}</td>
+		 <td>{&=o.perms[i].Description &}</td>
+     </tr>
+{& } &}
+</table>
+</div>
+</div>
+</script>
+
+<script>
+
+function actionFormatter(value, row, index, field){
+	return tmpl("action-html",{"row":row});
+}
+
+function permissionFormatter(value, row, index, field) {
+
+	var num = value.length;
+	var result = num + "|";
+	for (var i=0;i<num;i++){
+		result+=value[i].Title+",";
+	}
+	result.substring(0,num-1);
+	//if (result.length > 30){
+		return tmpl("col-perm-html",{"resultPref":result.substring(0,30),"index":index});
+	//}
+	//return result;
+}
+
+function queryParams(params){
+	return params;
+}
+
+function deleteItem(id,name){
+	bootbox.confirm({
+	    message: "Do you want to confirm delete this role=" + name,
+	    buttons: {
+	        confirm: {
+	            label: '<i class="fa fa-check"></i> Confirm',
+	            className: 'btn-success'
+	        },
+	        cancel: {
+	            label: '<i class="fa fa-times"></i> Cancel',
+	            className: 'btn-danger'
+	        }
+	    },
+	    callback: function (result) {
+	        if (result){
+				$.ajax({
+					type: "DELETE",
+					cache: false,
+					url: "{{ path_for('admin-del_role')}}",
+					data: {"id":id,"name":name}, 
+					success: function (data,status){
+						//----reflush
+						window.location.reload();
+					},
+					error: function (data, status, e){
+						bootbox.alert(e);
+					}
+				});
+		    }else{
+				
+			}
+	    }
+	});
+	
+}
+
+function detail(id){
+	var $innerHtml = tmpl("perm-table-html",{"perms":$('#table').bootstrapTable('getData')[id].permissions});
+	$("#permListDiv").html($innerHtml);
+	$("#modal-roleperm").modal();
+	
+};
+
+$(function () {
+
+	$('.group-select').select2();
+	
+	$("#roleAddForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: true,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			Title: {required: true},
+			Description: {required: true},
+		},
+		messages: {
+
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-4'));
+		}
+		
+	});
+	$table = $('#table').bootstrapTable(
+			{
+				url: "{{path_for('admin-get_roles')}}",
+				sidePagination: "server",
+				pagination: true,
+				pageSize: 10,
+				pageNumber: 1,
+				pageList:[10,20,50,100],
+				smartDisplay: false
+   			}
+	);
+	$('#modal-add').on('show.bs.modal', function (e) {
+		  $("#roleAddForm").data('validator').resetForm();
+		  $('#Title').val(null);
+		  $('#Description').val(null);
+    });
+
+	$('#submitBtn').on('click',function(){
+		if ($('#roleAddForm').valid()) {
+			$('#roleAddForm').submit();
+		}
+	});
+
+});
+</script>
+{% endblock %}

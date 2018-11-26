@@ -34,14 +34,14 @@ $routes = [
             'pattern' => 'userprofile',
             'methods' => ['GET']
         ],
+	'user_profile_passwordchange' => [
+            'pattern' => 'changepassword',
+            'methods' => ['POST']
+        ],
         'logout' => [
             'pattern' => 'logout',
             'methods' => ['GET']
         ],
-        'profile' => [
-            'pattern' => 'profile',
-            'methods' => ['GET']
-        ]
     ],
 ];
 

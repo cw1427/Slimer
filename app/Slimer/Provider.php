@@ -46,6 +46,10 @@ class Provider implements ServiceProviderInterface
         $container['errorHandler'] = $this->setErrorHandler($container);
         $container['phpErrorHandler'] = $this->setErrorHandler($container);
         $container['commandRunner'] = function() use ($container) {
+	    if (PHP_SAPI == 'cli') {
+                global $argv;
+                $argv[1] = strtolower($argv[1]);
+            }
             return new \adrianfalleiro\SlimCLIRunner($container);
         };
     }

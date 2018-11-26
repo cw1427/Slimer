@@ -15,6 +15,9 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 - AdminLTE: A html web template
 
+----------
+# Common feature on V1.3.0
+- Add RBAC control backend CLI command and UI management pages.
 
 ----------
 # Common feature on V1.2.2

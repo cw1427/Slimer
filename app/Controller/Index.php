@@ -12,11 +12,6 @@ class Index extends \App\Controller
         return $this->render('index/index.html.twig');
     }
     
-    public function secondAction()
-    {
-        return $this->response->write('Hello, second world!');
-    }
-    
     public function loginAction()
     {
         if ($this->request->isGet()){
@@ -34,8 +29,6 @@ class Index extends \App\Controller
                 $this->flash->addMessage('warning','username or password is not correct');
                 return $this->response->withRedirect('/login');
             }else{
-                //----put user into session
-                $this->session->set('user',$user->getData());
                 return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }
         }
@@ -55,7 +48,22 @@ class Index extends \App\Controller
         return $this->response->withRedirect($this->router->pathFor('login'));
     }
     
-    public function profileAction() {
-        return $this->response->write('profile');
+    public function sbs_adminlte_user_profileAction() {
+        return $this->render('index/profile.html.twig');
+    }
+    
+    public function user_profile_passwordchangeAction(){
+        $data = $this->request->getParsedBody();
+        if (isset($data['newPassword'])){
+            if ($this->user->get("type") === "local"){
+                $this->dbGam->update("user",["password"=> \password_hash($data['newPassword'], PASSWORD_DEFAULT)],["id"=>$this->user->get("id")]);
+            }else{
+                return $this->json(["error"=>["message"=>"non local user type not allow to change the password"]],500);
+            }
+        }else{
+            return $this->json(["error"=>["message"=>"wrong parameter, new password not found"]],400);
+        }
+        $this->logger->info("user={$this->user->get('loginName')} reset the password for self");
+        return $this->json(["msg"=>"success"]);
     }
 }

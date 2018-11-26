@@ -1,0 +1,320 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "User manage") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User management</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-dashboard"></i>
+    <h3 class="box-title">User management</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+           <div id="toolbar">
+      			   <button type="button" class="btn btn-primary" id="addBtn" data-toggle="modal" data-target="#modal-useradd"><i class="fa fa-user"></i> &nbsp;new user</button>
+      	   </div>
+      	   <table id="table"
+                   data-show-refresh="true"
+                   data-show-columns="true"
+                   data-search="true"
+                   data-query-params="queryParams"
+                   data-toolbar="#toolbar"
+                   data-click-to-select="true">
+                <thead>
+                <tr>
+                    <th data-field="id"  data-width="5%">id</th>
+                    <th data-field="loginName">core id</th>
+                    <th data-field="userName">user name</th>
+                    <th data-field="firstName" data-visible="false">first name</th>
+                    <th data-field="lastName" data-visible="false">last name</th>
+                    <th data-field="type" data-width="10%">realm</th>
+        			<th data-field="groups" data-formatter="groupFormatter">groups</th>
+        			<th data-field="type" data-formatter="activeFormatter">active</th>
+                    <th data-field="email">mail</th>
+                    <th data-field="changedOn" data-visible="false">last login</th>
+                    <th data-field="changedBy" data-visible="false">client IP</th>
+                    <th data-field="action"
+                        data-align="center"
+                        data-formatter="actionFormatter"
+                        data-events="actionEvents"
+                        data-width="10%">Action</th>
+                </tr>
+                </thead>
+            </table>
+       </div>
+   </div><!-- /. .row -->
+       <div class="modal fade" id="modal-useradd" data-keyboard="false" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">User add</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                	<form id="userAddForm" class="form-horizontal" method="POST" action="{{  path_for('admin-add_user') }}">
+                            <div class="form-group">
+                              <label for="inputEmail3" class="col-sm-4 control-label">login name:</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="loginName" name="loginName" value=""/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="inputEmail3" class="col-sm-4 control-label">first name</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="firstName" name="firstName" value=""/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="inputPassword3" class="col-sm-4 control-label">last name</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="lastName" name="lastName" value=""/>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label for="inputPassword3" class="col-sm-4 control-label">email</label>
+                              <div class="col-sm-4">
+                                <input type="input" class="form-control" id="email" name="email" value=""/>
+                              </div>
+                            </div>
+                      </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+        
+       <div class="modal fade" id="modal-usergroups">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Group List</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row" id="groupListDiv">
+                	
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+        </div>
+    </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/x-tmpl" id="action-html">
+<div class="row">
+
+{& if (o.row.id == 1) { &}
+	{& if ( {{ container.session.get('user')['id'] }} == 1 ) { &}
+		<a class="btn"  href="/admin/edituser/{&=o.row.id&}" title="Update Item"><i class="fa fa-edit"></i></a>
+	{& } &}
+{& }else{ &}
+<a class="btn"  href="/admin/edituser/{&=o.row.id&}" title="Update Item"><i class="fa fa-edit"></i></a>
+<a class="btn"  href="javascript:deleteItem({&=o.row.id&},'{&=o.row.loginName&}')" title="Delete Item"><i class="fa fa-trash"></i></a>
+{& } &}
+</div>
+</script>
+<script type="text/x-tmpl" id="col-group-html">
+ {&=o.resultPref&}...<a class='btn' href="javascript:detail('{&=o.index&}')">(See all)</a>
+</script>
+
+<script type="text/x-tmpl" id="group-table-html">
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<table class="table table-striped">
+     <tr>
+        <th style="width: 10px">#</th>
+        <th>Groups Name</th>
+		<th>Groups Desc</th>
+     </tr>
+{& for (var i=0; i<o.groups.length; i++) { &}
+     <tr>
+         <td>{&=i + 1 &}.</td>
+         <td>{&=o.groups[i].Name &}</td>
+		 <td>{&=o.groups[i].Title &}</td>
+     </tr>
+{& } &}
+</table>
+</div>
+</div>
+</script>
+
+<script>
+
+function actionFormatter(value, row, index, field){
+	return tmpl("action-html",{"row":row});
+}
+
+function groupFormatter(value, row, index, field) {
+
+	var num = value.length;
+	var result = num + "|";
+	for (var i=0;i<num;i++){
+		result+=value[i].Name+",";
+	}
+	result.substring(0,num-1);
+	//if (result.length > 30){
+		return tmpl("col-group-html",{"resultPref":result.substring(0,30),"index":index});
+	//}
+	//return result;
+}
+
+function activeFormatter(value, row, index, field){
+	if (value) {
+		return "<small class='label label-success'><i class='fa fa-unlock'></i>&nbsp;active</small>";
+	}else{
+		return "<small class='label label-danger'><i class='fa fa-lock'></i>&nbsp;active</small>";
+	}
+	
+}
+
+function queryParams(params){
+	return params;
+}
+
+function deleteItem(id,name){
+	bootbox.confirm({
+	    message: "Do you want to confirm delete this user=" + name,
+	    buttons: {
+	        confirm: {
+	            label: '<i class="fa fa-check"></i> Confirm',
+	            className: 'btn-success'
+	        },
+	        cancel: {
+	            label: '<i class="fa fa-times"></i> Cancel',
+	            className: 'btn-danger'
+	        }
+	    },
+	    callback: function (result) {
+	        if (result){
+				$.ajax({
+					type: "DELETE",
+					cache: false,
+					url: "{{ path_for('admin-del_user')}}",
+					data: {"id":id,"name":name}, 
+					success: function (data,status){
+						//----reflush
+						window.location.reload();
+					},
+					error: function (data, status, e){
+						bootbox.alert(e);
+					}
+				});
+		    }else{
+				
+			}
+	    }
+	});
+	
+}
+
+function detail(id){
+	var $innerHtml = tmpl("group-table-html",{"groups":$('#table').bootstrapTable('getData')[id].groups});
+	$("#groupListDiv").html($innerHtml);
+	$("#modal-usergroups").modal();
+	
+};
+
+$(function () {
+
+	$("#userAddForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: true,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			loginName: {required: true},
+			firstName: {required: true},
+			lastName: {required: true}
+		},
+		messages: {
+
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-4'));
+		}
+		
+	});
+	$table = $('#table').bootstrapTable(
+			{
+				url: "{{path_for('admin-get_users')}}",
+				sidePagination: "server",
+				pagination: true,
+				pageSize: 10,
+				pageNumber: 1,
+				pageList:[10,20,50,100],
+				smartDisplay: false
+   			}
+	);
+	$('#modal-useradd').on('show.bs.modal', function (e) {
+		  $("#userAddForm").data('validator').resetForm();
+		  $('#loginName').val(null);
+		  $('#firstName').val(null);
+		  $('#lastName').val(null);
+		  $('#email').val(null);
+    });
+
+	$('#submitBtn').on('click',function(){
+		if ($('#userAddForm').valid()) {
+			$('#userAddForm').submit();
+		}
+	});
+
+});
+</script>
+{% endblock %}

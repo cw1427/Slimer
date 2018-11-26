@@ -10,6 +10,8 @@ use Slimer\Root;
 
 class SampleTask extends Root{
     
+    public  $desc = "SampleTask";
+    
     /**
      * SampleTask command
      *

@@ -1,0 +1,215 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/password_strength.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Portal", "profile") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Profile</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-info"></i>
+    <h3 class="box-title">User Profile: {{ container.session.get('user')['loginName'] }}</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Basic Info</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-8 col-offset-2">
+                    		<form id="artGroupForm" class="form-horizontal" method="post" action="#">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">Core ID:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">Commerce ID:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="commerceId" disabled value="{{ container.session.get('user')['motCommerceID'] }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">Full Name:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">Department Number:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="department" disabled value="{{ container.session.get('user')['department'] }}"/>
+                                      </div>
+                                    </div>
+                                     <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">User Realm:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="type" disabled value="{{ container.session.get('user')['type'] }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">User Roles:</label>
+                                      <div class="col-sm-6">
+                                             	{%  for role in container.session.get('user')['roles'] %}
+                                              		<span class="label label-primary">{{ role.Title }}</span>
+                                              	{%  endfor %}
+                                      </div>
+                                    </div>
+                                    
+                                   </div>
+                                  <!-- /.box-body -->
+                                  <!-- /.box-footer -->
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  <!-- password reset for the local user -->
+  {% if  container.session.get('user')['type'] == 'local' %}
+   <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Password</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-8 col-offset-2">
+                    		<form id="passwordForm" class="form-horizontal" method="post" action="#">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">New password:</label>
+                                      <div class="col-sm-6">
+                                          <div id="newPassword" name="newPassword"></div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">Confirm password:</label>
+                                      <div class="col-sm-6">
+                                          <div id="confirmPassword" name="confirmPassword"></div>
+                                      </div>
+                                    </div>
+                                   </div>
+                                  <!-- /.box-body -->
+                                  <div class="box-footer">
+                                     <div class="row">
+                                        <div class="col-md-2 col-md-offset-4">
+                                        	<button type="button" class="btn btn-success" id="passwordChangeBtn">Change</button>
+                                        </div>
+                                         <div class="col-md-2">
+                                        	<button type="button" class="btn btn-info pull-right" id="submitBtn">Cancel</button>
+                                        </div>
+                                     </div>
+                                  </div>
+                                  <!-- /.box-footer -->
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  {% endif %}
+  
+  </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+ 
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/password_strength.js"></script>
+<script>
+$(function () {
+
+	$("#passwordForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			inner_newPassword: {required: true},
+			inner_confirmPassword: {required: true, equalTo: "#inner_newPassword"},
+		},
+		messages: {
+			
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-6'));
+		}
+		
+	});
+	
+    $('#newPassword').strength_meter();
+    $('#confirmPassword').strength_meter();
+
+	$('#passwordChangeBtn').on('click',function(){
+		if ($('#passwordForm').valid()) {
+			$.ajax({
+				type: "POST",
+				cache: false,
+				url: "{{path_for('user_profile_passwordchange')}}",
+				data: {"newPassword": $('#inner_newPassword').val()}, 
+				success: function (data,status){
+					bootbox.alert(data.data.msg);
+					$('#inner_newPassword').val(null);
+					$('#inner_confirmPassword').val(null);
+				},
+				error: function (data, status, e){
+					bootbox.alert(e);
+				}
+			});
+			
+		}else{
+			bootbox.alert("failed");
+		}
+	});
+    
+});
+</script>
+{% endblock %}
+
+

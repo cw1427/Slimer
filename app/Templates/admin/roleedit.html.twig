@@ -1,0 +1,412 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/password_strength.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/multi-select.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "role edit") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Role edit</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-info"></i>
+    <h3 class="box-title">Role edit: {{ role.Title }}</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Basic Info</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                    		<form id="roleinfoForm" class="form-horizontal" method="post" action="{{ path_for('admin-roleinfo_edit') }}">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">role name:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="Title" name="Title" value="{{ role.Title }}"/>
+                                      </div>
+                                    </div>
+                                     <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">role description:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="Description" name="Description" value="{{ role.Description }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">role children:</label>
+                                      <div class="col-sm-6">
+                                        	<table class="table table-striped">
+                                                 <tr>
+                                                    <th style="width: 10px">#</th>
+                                                    <th>Title</th>
+                                            		<th>Description</th>
+                                            		<th>Depth</th>
+                                                 </tr>
+                                            {%   for child in  role.children%}
+                                                 <tr>
+                                                     <td>{{ loop.index  }}.</td>
+                                                     <td>{{   child.Title }}</td>
+                                            		 <td>{{   child.Description }}</td>
+                                            		 <td>{{   child.Depth }}</td>
+                                                 </tr>
+                                            {% endfor %}
+                                            </table>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">role all permissions:</label>
+                                      <div class="col-sm-6">
+                                        	<table class="table table-striped">
+                                                 <tr>
+                                                    <th style="width: 10px">#</th>
+                                                    <th>Title</th>
+                                            		<th>Description</th>
+                                                 </tr>
+                                            {%   for child in  role.allperm%}
+                                                 <tr>
+                                                     <td>{{ loop.index  }}.</td>
+                                                     <td>{{   child.Title }}</td>
+                                            		 <td>{{   child.Description }}</td>
+                                                 </tr>
+                                            {% endfor %}
+                                            </table>
+                                      </div>
+                                    </div>
+                                        
+                                  </div>
+                                  <!-- /.box-body -->
+                                  <!-- /.box-footer -->
+                                  <div class="row">
+                                       <div class="box-footer">
+                                        <div class="col-md-2 col-md-offset-4">
+                                        	<button type="button" class="btn btn-success" id="roleinfoSubmitBtn">Change</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                        	<button type="button" class="btn btn-info pull-right" id="resetBtn">Refresh</button>
+                                        </div>
+                                        </div>
+                                  </div>
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  <!--group roles change -->
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Change role direct permissions</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                  		   <div class="box-body">
+                  		   <div class="form-group col-md-offset-4">
+                    		<select id="permSelector" multiple='multiple' name="rolePerms">
+                                  {% for perm in perms %}
+                                  		<option value="{{ perm.ID }}" {% if perm.ID in role.perms %} selected {% endif %}>{{ perm.Title }}</option>
+                                  {% endfor %}                    		
+                    		</select>
+                    		</div>
+                    		</div>
+                    		<div class="box-footer">
+                            	<div class="row">
+                                    <div class="col-md-2 col-md-offset-4">
+                                    	<button type="button" class="btn btn-success" id="permSelectSubBtn">Change</button>
+                                    </div>
+                                     <div class="col-md-2">
+                                    	<button type="button" class="btn btn-info pull-right" id="permSelectRefreshBtn">Refresh</button>
+                                    </div>
+                                 </div>
+                             </div>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  <!--group users change -->
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Change role groups</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                  		   <div class="box-body">
+                  		   <div class="form-group col-md-offset-4">
+                    		<select id="groupSelector" multiple='multiple' name="roleGroups">
+                                  {% for g in groups %}
+                                  		<option value="{{ g.ID }}" {% if g.ID in role.groups %} selected {% endif %}>{{ g.Name }}</option>
+                                  {% endfor %}                    		
+                    		</select>
+                    		</div>
+                    		</div>
+                    		<div class="box-footer">
+                            	<div class="row">
+                                    <div class="col-md-2 col-md-offset-4">
+                                    	<button type="button" class="btn btn-success" id="groupSelectSubBtn">Change</button>
+                                    </div>
+                                     <div class="col-md-2">
+                                    	<button type="button" class="btn btn-info pull-right" id="groupSelectRefreshBtn">Refresh</button>
+                                    </div>
+                                 </div>
+                             </div>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+ 
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/password_strength.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.quicksearch.min.js"></script>
+<script>
+
+function permSelectAll(){
+	$('#permSelector').multiSelect('select_all');
+}
+function permDeselectAll(){
+	$('#permSelector').multiSelect('deselect_all');
+}
+
+function groupSelectAll(){
+	$('#groupSelector').multiSelect('select_all');
+}
+function groupDeselectAll(){
+	$('#groupSelector').multiSelect('deselect_all');
+}
+$(function () {
+
+	$("#roleinfoForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			Title: {required: true},
+			Description: {required: true},
+		},
+		messages: {
+			
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-6'));
+		}
+		
+	});
+
+	$('#roleinfoSubmitBtn').on('click',function(){
+		if ($('#roleinfoForm').valid()) {
+			$.ajax({
+				type: "POST",
+				cache: false,
+				url: "{{path_for('admin-roleinfo_edit')}}",
+				data: {"Title": $('#Title').val(),"Description": $('#Description').val(),"id": {{ role.ID }} },
+				success: function (data,status){
+					bootbox.alert(data.data.msg);
+				},
+				error: function (data, status, e){
+					if (typeof(data.responseJSON.error) !== "undefined" ){
+						bootbox.alert(data.responseJSON.error);
+					}else{
+	    				bootbox.alert(e);
+					}
+				}
+			});
+			
+		}else{
+			bootbox.alert("error");
+		}
+	});
+
+	$('#resetBtn').on('click',function(){
+		window.location.reload();
+	});
+
+	$('#permSelector').multiSelect({
+		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source permission"></input>',
+		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target permission"></input>',
+		selectableFooter: "<a class='btn' onclick='permSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
+		selectionFooter: "<a class='btn' onclick='permDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
+		keepOrder: true,
+		dblClick: false,
+		afterInit: function(ms){
+			var that = this,
+    	        $selectableSearch = that.$selectableUl.prev(),
+    	        $selectionSearch = that.$selectionUl.prev(),
+    	        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+    	        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    
+    	    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which === 40){
+                	        that.$selectableUl.focus();
+                	        return false;
+                	      }
+                	    });
+    	    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which == 40){
+                	        that.$selectionUl.focus();
+                	        return false;
+                	      }
+                	    });
+		},
+	   afterSelect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  },
+	  afterDeselect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  }
+	});
+
+	$('#permSelectRefreshBtn').on('click',function(){
+		var defaultGroups = {{ role.perms | json_encode | raw}};
+		$('#permSelector').multiSelect('deselect_all');
+		$('#permSelector').multiSelect('select',defaultGroups);
+	});
+	$('#permSelectSubBtn').on('click',function(){
+		$.ajax({
+			type: "POST",
+			cache: false,
+			url: "{{path_for('admin-roleperm_edit')}}",
+			data: {"selected": $('#permSelector').val(),"id": {{ role.ID }} }, 
+			success: function (data,status){
+				bootbox.alert(data.data.msg);
+			},
+			error: function (data, status, e){
+				if (typeof(data.responseJSON.error) !== "undefined" ){
+					bootbox.alert(data.responseJSON.error);
+				}else{
+    				bootbox.alert(e);
+				}
+			}
+		});
+	});
+
+
+	$('#groupSelector').multiSelect({
+		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
+		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
+		selectableFooter: "<a class='btn' onclick='groupSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
+		selectionFooter: "<a class='btn' onclick='groupDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
+		keepOrder: true,
+		dblClick: false,
+		afterInit: function(ms){
+			var that = this,
+    	        $selectableSearch = that.$selectableUl.prev(),
+    	        $selectionSearch = that.$selectionUl.prev(),
+    	        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+    	        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    
+    	    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which === 40){
+                	        that.$selectableUl.focus();
+                	        return false;
+                	      }
+                	    });
+    	    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which == 40){
+                	        that.$selectionUl.focus();
+                	        return false;
+                	      }
+                	    });
+		},
+	   afterSelect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  },
+	  afterDeselect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  }
+	});
+	
+	$('#groupSelectRefreshBtn').on('click',function(){
+		var defaultGroups = {{ role.groups | json_encode | raw}};
+		$('#groupSelector').multiSelect('deselect_all');
+		$('#groupSelector').multiSelect('select',defaultGroups);
+	});
+	$('#groupSelectSubBtn').on('click',function(){
+		$.ajax({
+			type: "POST",
+			cache: false,
+			url: "{{path_for('admin-rolegroup_edit')}}",
+			data: {"selected": $('#groupSelector').val(),"id": {{ role.ID }} }, 
+			success: function (data,status){
+				bootbox.alert(data.data.msg);
+			},
+			error: function (data, status, e){
+				if (typeof(data.responseJSON.error) !== "undefined" ){
+					bootbox.alert(data.responseJSON.error);
+				}else{
+    				bootbox.alert(e);
+				}
+			}
+		});
+	});
+	
+});
+</script>
+{% endblock %}
+
+

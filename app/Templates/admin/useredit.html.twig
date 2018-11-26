@@ -1,0 +1,401 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/password_strength.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/multi-select.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "user edit") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">User edit</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box">
+  <div class="box-header with-border">
+    <i class="fa fa-info"></i>
+    <h3 class="box-title">User edit: {{ user.loginName }}</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body" style="min-height:560px; height:auto!important;margin: 0 auto;">
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Basic Info</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                    		<form id="userinfoForm" class="form-horizontal" method="post" action="{{ path_for('admin-userinfo_edit') }}">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">login name:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="coreid" disabled value="{{ user.loginName }}"/>
+                                      </div>
+                                    </div>
+                                     <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">user Realm:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="type" disabled value="{{ user.type }}"/>
+                                      </div>
+                                    </div>
+                                     <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">user status:</label>
+                                      <div class="col-sm-6">
+                                        <input type="input" class="form-control" id="active" disabled value="{{ user.active }}"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputPassword3" class="col-sm-4 control-label">User Roles:</label>
+                                      <div class="col-sm-6">
+                                             	{%  for role in user.roles %}
+                                              		<span class="label label-primary">{{ role.Title }}</span>
+                                              	{%  endfor %}
+                                      </div>
+                                    </div>
+                                        <div class="form-group">
+                                      	<label for="inputPassword3" class="col-sm-4 control-label">first name:</label>
+                                          <div class="col-sm-6">
+                                            <input type="input" class="form-control" id="firstName" name="firstName" {% if user.type == 'ldap' %}disabled {% endif %} value="{{ user.firstName }}"/>
+                                          </div>
+                                        </div>
+                                        <div class="form-group">
+                                          <label for="inputPassword3" class="col-sm-4 control-label">last name:</label>
+                                          <div class="col-sm-6">
+                                            <input type="input" class="form-control" id="lastName" name="lastName" {% if user.type == 'ldap' %}disabled {% endif %}  value="{{ user.lastName }}"/>
+                                          </div>
+                                        </div>
+                                     </div>
+                                  <!-- /.box-body -->
+                                  <!-- /.box-footer -->
+                                  <div class="row">
+                                       {% if user.type == 'local' %}
+                                       <div class="box-footer">
+                                        <div class="col-md-2 col-md-offset-4">
+                                        	<button type="button" class="btn btn-success" id="userinfoSubmitBtn">Change</button>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-info pull-right" id="resetBtn">Refresh</button>
+                                        </div>
+                                        </div>
+                                        {% endif %} 
+                                  </div>
+                                  
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  <!-- password reset for the local user -->
+  {% if  user.type == 'local' %}
+   <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Change password</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                    		<form id="passwordForm" class="form-horizontal" method="post" action="#">
+                                  <div class="box-body">
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">New password:</label>
+                                      <div class="col-sm-6">
+                                          <div id="newPassword" name="newPassword"></div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="inputEmail3" class="col-sm-4 control-label">Confirm password:</label>
+                                      <div class="col-sm-6">
+                                          <div id="confirmPassword" name="confirmPassword"></div>
+                                      </div>
+                                    </div>
+                                   </div>
+                                  <!-- /.box-body -->
+                                  <div class="box-footer">
+                                     <div class="row">
+                                        <div class="col-md-2 col-md-offset-4">
+                                        	<button type="button" class="btn btn-success" id="passwordChangeBtn">Change</button>
+                                        </div>
+                                         <div class="col-md-2">
+                                        	<button type="button" class="btn btn-info pull-right" id="cancelBtn">Cancel</button>
+                                        </div>
+                                     </div>
+                                  </div>
+                                  <!-- /.box-footer -->
+                              </form>
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  {% endif %}
+  
+  <!-- user groups change -->
+  <div class="row">
+      <div class="col-md-12">
+        	  <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab_1" data-toggle="tab">Change user groups</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab_1">
+                   <div class="row">
+                  		<div class="col-md-10">
+                  		   <div class="box-body">
+                  		   <div class="form-group col-md-offset-4">
+                    		<select id="groupSelector" multiple='multiple' name="userGroups">
+                                  {% for group in groups %}
+                                    {% if group.Type == "ldap" %}
+                                    	{% if group.ID in user.groupsid %}
+                                  			<option value="{{ group.ID }}"  selected disabled>{{ group.Name }}</option>
+                                  		 {% endif %}
+                                  	{% else %}
+                                  		<option value="{{ group.ID }}" {% if group.ID in user.groupsid %} selected {% endif %}>{{ group.Name }}</option>
+                                  	{% endif %}
+                                  {% endfor %}                    		
+                    		</select>
+                    		</div>
+                    		</div>
+                    		
+                    		<div class="box-footer">
+                            	<div class="row">
+                                    <div class="col-md-2 col-md-offset-4">
+                                    	<button type="button" class="btn btn-success" id="groupSelectSubBtn">Change</button>
+                                    </div>
+                                     <div class="col-md-2">
+                                    	<button type="button" class="btn btn-info pull-right" id="groupSelectRefreshBtn">Refresh</button>
+                                    </div>
+                                 </div>
+                             </div>
+                    		
+                        </div>
+                  	</div>
+                  </div>
+                </div>
+              </div>
+      </div>
+  </div>
+  
+  </div>
+  <!-- /.box-body -->
+
+  <!-- /.box-footer-->
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+ 
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/password_strength.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.quicksearch.min.js"></script>
+<script>
+
+function groupSelectAll(){
+	$('#groupSelector').multiSelect('select_all');
+}
+function groupDeselectAll(){
+	$('#groupSelector').multiSelect('deselect_all');
+}
+$(function () {
+
+	$("#passwordForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			inner_newPassword: {required: true},
+			inner_confirmPassword: {required: true, equalTo: "#inner_newPassword"},
+		},
+		messages: {
+			
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-6'));
+		}
+		
+	});
+
+	$("#userinfoForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			firstName: {required: true},
+			lastName: {required: true},
+		},
+		messages: {
+			
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-6'));
+		}
+		
+	});
+	
+    $('#newPassword').strength_meter();
+    $('#confirmPassword').strength_meter();
+
+	$('#passwordChangeBtn').on('click',function(){
+		if ($('#passwordForm').valid()) {
+			$.ajax({
+				type: "POST",
+				cache: false,
+				url: "{{path_for('admin-password_change')}}",
+				data: {"newPassword": $('#inner_newPassword').val(),"id": {{ user.id }}}, 
+				success: function (data,status){
+					bootbox.alert(data.data.msg);
+					$('#inner_newPassword').val(null);
+					$('#inner_confirmPassword').val(null);
+				},
+				error: function (data, status, e){
+					bootbox.alert(e);
+				}
+			});
+			
+		}else{
+			bootbox.alert("error");
+		}
+	});
+
+	$('#userinfoSubmitBtn').on('click',function(){
+		if ($('#userinfoForm').valid()) {
+			$.ajax({
+				type: "POST",
+				cache: false,
+				url: "{{path_for('admin-userinfo_edit')}}",
+				data: {"firstName": $('#firstName').val(),"lastName": $('#lastName').val(),"id": {{ user.id }} }, 
+				success: function (data,status){
+					bootbox.alert(data.data.msg);
+				},
+				error: function (data, status, e){
+					if (typeof(data.responseJSON.error) !== "undefined" ){
+						bootbox.alert(data.responseJSON.error);
+					}else{
+	    				bootbox.alert(e);
+					}
+				}
+			});
+			
+		}else{
+			bootbox.alert("error");
+		}
+	});
+
+	$('#resetBtn').on('click',function(){
+		window.location.reload();
+	});
+
+	$('#groupSelector').multiSelect({
+		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
+		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
+		selectableFooter: "<a class='btn' onclick='groupSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
+		selectionFooter: "<a class='btn' onclick='groupDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
+		keepOrder: true,
+		dblClick: false,
+		afterInit: function(ms){
+			var that = this,
+    	        $selectableSearch = that.$selectableUl.prev(),
+    	        $selectionSearch = that.$selectionUl.prev(),
+    	        selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+    	        selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+    
+    	    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which === 40){
+                	        that.$selectableUl.focus();
+                	        return false;
+                	      }
+                	    });
+    	    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                	    .on('keydown', function(e){
+                	      if (e.which == 40){
+                	        that.$selectionUl.focus();
+                	        return false;
+                	      }
+                	    });
+		},
+	   afterSelect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  },
+	  afterDeselect: function(){
+	    this.qs1.cache();
+	    this.qs2.cache();
+	  }
+	});
+
+	$('#groupSelectRefreshBtn').on('click',function(){
+		var defaultGroups = {{ user.groupsid | json_encode | raw}};
+		$('#groupSelector').multiSelect('deselect_all');
+		$('#groupSelector').multiSelect('select',defaultGroups);
+	});
+	$('#groupSelectSubBtn').on('click',function(){
+		$.ajax({
+			type: "POST",
+			cache: false,
+			url: "{{path_for('admin-usergroup_edit')}}",
+			data: {"selected": $('#groupSelector').val(),"id": {{ user.id }} }, 
+			success: function (data,status){
+				bootbox.alert(data.data.msg);
+			},
+			error: function (data, status, e){
+				if (typeof(data.responseJSON.error) !== "undefined" ){
+					bootbox.alert(data.responseJSON.error);
+				}else{
+    				bootbox.alert(e);
+				}
+			}
+		});
+		
+	});
+});
+</script>
+{% endblock %}
+
+
