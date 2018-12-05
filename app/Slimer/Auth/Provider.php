@@ -7,6 +7,7 @@ namespace Slimer\Auth;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\Ldap\Entry;
 
 class Provider implements ServiceProviderInterface
 {
@@ -45,11 +46,14 @@ class Provider implements ServiceProviderInterface
         
         //@codeCoverageIgnoreStart
         if (\class_exists('\Symfony\Component\Ldap\Ldap')) {
-            $container['ldap_client'] = function ($c) {
-                $ldap = \Symfony\Component\Ldap\Ldap::create('ext_ldap', $c['config']('auth.ldap.server'));
-//                 $ldap->bind($c['config']('auth.ldap.admin.dn'), $c['config']('auth.ldap.admin.password'));
+            $container['ldap_client'] = $container->protect(function ($conf) use ($container) {
+                $ldap = \Symfony\Component\Ldap\Ldap::create('ext_ldap', $container['config']($conf));
                 return $ldap;
-            };
+            });
+            
+            $container['ldap_entry'] = $container->protect(function ($dn, array $attributes = array()) use ($container) {
+                return new Entry($dn,$attributes);
+            });
         }
         // if Slimer/orm not installed, we use \Slimer\Root class directly
         if (!\class_exists('\Slimer\ORM\Entity')) {
@@ -58,7 +62,8 @@ class Provider implements ServiceProviderInterface
             });
         }
         //@codeCoverageIgnoreEnd
-	$container['httpauth_middleware'] = function ($c) {
+        
+        $container['httpauth_middleware'] = function ($c) {
             return new \Slim\Middleware\HttpBasicAuthentication([
                 "path"=> $c["config"]('suit.httpauth.path') ? $c["config"]("suit.httpauth.path") : ["/"],
                 "paththrough"=> $c["config"]('suit.httpauth.paththrough'),
@@ -66,10 +71,10 @@ class Provider implements ServiceProviderInterface
             ]);
             
         };
-	
-	//----PhpRbac
+        
+        //----PhpRbac
         $container['rbac'] = function($c) {
-            return new \Slimer\Auth\Rbac('',$c);
+            return new Rbac('',$c);
         };
     }
 }

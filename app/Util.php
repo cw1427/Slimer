@@ -16,9 +16,9 @@ class  Util
     }
     
     public  function ldapCheck($coreid){
-        $ldap = $this->container->ldap_client;
+        $ldap = $this->container['ldap_client']('auth.ldap.server');
         $ldap->bind($this->container['config']('auth.ldap.admin.dn'), $this->container['config']('auth.ldap.admin.password'));
-        $collection = $this->container->ldap_client->query($this->container['config']('auth.ldap.baseDN'), '(' . 'motguid=' . $coreid .')')->execute();
+        $collection = $ldap->query($this->container['config']('auth.ldap.baseDN'), '(' . 'motguid=' . $coreid .')')->execute();
         return $collection;
     }
     

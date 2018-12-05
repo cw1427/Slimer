@@ -66,6 +66,7 @@ class Provider implements ServiceProviderInterface
             $instance->setContainer($container);
             return $instance;
         };
+        
         $container['smtpMailer'] = function () use ($container) {
             return new \Nette\Mail\SmtpMailer($container['config']('mail'));
         };
@@ -75,10 +76,10 @@ class Provider implements ServiceProviderInterface
         $container['shellCommand'] = $container->protect(function ($command) use ($container) {
             return new \mikehaertl\shellcommand\Command($command);
         });
-        $container['httpClient'] = function () use ($container) {
-            return new \GuzzleHttp\Client(['timeout'=>60]);
-        };
-          
-          
+        $container['httpClient'] = $container->protect(function ($configArray=[]) use ($container) {
+            $ca = \array_merge($configArray,['timeout'=>60,'verify'=>false]);
+            return new \GuzzleHttp\Client($ca);
+        });
+        
     }
 }

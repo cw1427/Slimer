@@ -25,11 +25,13 @@ class RBAC extends Root
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next)
     {
+        
         $route = $request->getAttribute('route');
         $groupName = \trim($route->getGroups()[0]->getPattern(),'/');
         $groupName = \str_replace('/','-',$groupName);
         $routeName = $route->getName();
-        $routeName=\end(\explode('-',$routeName));
+        $rns = \explode('-',$routeName);
+        $routeName=\end($rns);
         $routeConf = $this->config('routes')['/'.$groupName][$routeName];
         if (isset($routeConf['perm'])){
             $request=$request->withAttribute('perm',$routeConf['perm']);
@@ -50,5 +52,4 @@ class RBAC extends Root
             return $next($request, $response);
         }
     }
-    
 }

@@ -63,15 +63,13 @@ class LDAP extends Root implements RepositoryInterface
         }
         $query .= ')';
         try {
-            $this->ldap_client->bind(sprintf($this->config('auth.ldap.userDn'),$login), $password);
+            $ldap = $this->ldap_client('auth.ldap.server');
+            $ldap->bind(sprintf($this->config('auth.ldap.userDn'),$login), $password);
         }catch (\Exception $t) {
             $this->logger->error('LDAP bind failed', ['loginName' =>$login]);
             return null;
         }
-        $collection = $this->ldap_client
-        ->query($this->config('auth.ldap.baseDN'), $query)
-        ->execute();
-        
+        $collection = $ldap->query($this->config('auth.ldap.baseDN'), $query)->execute();
         foreach ($collection->toArray() as $entry) {
             $user = $this->entity($this->config('auth.entity'))->load(strtolower($entry->getAttributes()['motCoreID'][0]), $this->config('auth.ldap.fields.loginInDb', 'loginName'));
             foreach ($entry->getAttributes() as $attribute => $value) {
@@ -82,7 +80,9 @@ class LDAP extends Root implements RepositoryInterface
             }
             $user->set($this->config('auth.ldap.fields.loginInDb', 'loginName'),strtolower($login));
             $user->set('type','ldap');
+            $data = $user->getData();
             $user->save();
+            $user->setData($data);
             return $user;
         }
         
