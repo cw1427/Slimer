@@ -50,11 +50,12 @@ class Admin extends \App\Controller
         $offset = $params['offset'];
         $limit = $params['limit'];
         $search = isset($params['search'])? $params['search']: null;
-        $WHERE = ['LIMIT'=>[$offset,$limit]];
+        $WHERE = [];
         if (isset($search) && $search !=""){
             $WHERE['OR']=["loginName[~]"=>"%{$search}%","userName[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("user");
+        $total = $this->dbGam->count("user",$WHERE);
+        $WHERE['LIMIT']=[$offset,$limit];
         $userList=$this->dbGam->select("user","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
@@ -207,11 +208,12 @@ class Admin extends \App\Controller
         $offset = $params['offset'];
         $limit = $params['limit'];
         $search = isset($params['search'])? $params['search']: null;
-        $WHERE = ['LIMIT'=>[$offset,$limit]];
+        $WHERE = [];
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Name[~]"=>"%{$search}%","Title[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_group");
+        $total = $this->dbGam->count("perm_group",$WHERE);
+        $WHERE['LIMIT']=[$offset,$limit];
         $groupList=$this->dbGam->select("perm_group","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
@@ -379,11 +381,12 @@ class Admin extends \App\Controller
         $offset = $params['offset'];
         $limit = $params['limit'];
         $search = isset($params['search'])? $params['search']: null;
-        $WHERE = ['LIMIT'=>[$offset,$limit]];
+        $WHERE = [];
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Title[~]"=>"%{$search}%","Description[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_roles");
+        $total = $this->dbGam->count("perm_roles",$WHERE);
+        $WHERE['LIMIT']=[$offset,$limit];
         $roleList=$this->dbGam->select("perm_roles","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
@@ -572,11 +575,12 @@ class Admin extends \App\Controller
         $offset = $params['offset'];
         $limit = $params['limit'];
         $search = isset($params['search'])? $params['search']: null;
-        $WHERE = ['LIMIT'=>[$offset,$limit]];
+        $WHERE = [];
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Title[~]"=>"%{$search}%","Description[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_permissions");
+        $total = $this->dbGam->count("perm_permissions",$WHERE);
+        $WHERE['LIMIT']=[$offset,$limit];
         $permList=$this->dbGam->select("perm_permissions","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
