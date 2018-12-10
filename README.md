@@ -3,7 +3,9 @@ A light weight encapsulation of PHP Slim and AdminLTE template.
 
 <H3>Please star it to encourage me.</h3>
 
-Will enhance the RBAC control, mail util and so on feature in next version.
+A WebMVC skeleton framework based on https://packagist.org/packages/slimer/slimer-core
+
+Full feature MVC, RBAC, RESTFUL API, Backend commands.
 
 ----------
 # Based on
@@ -17,8 +19,10 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 ----------
 
-# Common feature on V1.4.0
+# Common feature on V1.4.1
 - Refactor slimer project, move some core codes into slimer-core as dependency(which will release to packgist website)
+- Split slimer core folder out of this project, and release it to: https://packagist.org/packages/slimer/slimer-core
+- Change the composer dependency from slimer/slimer-core on packgist:  https://packagist.org/packages/slimer/slimer-core
 
 # Common feature on V1.3.0
 - Add RBAC control backend CLI command and UI management pages.

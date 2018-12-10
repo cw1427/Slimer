@@ -12,7 +12,7 @@ return [
             'database_name' => 'slimer',
             'server' => '127.0.0.1',
             'username' => 'root',
-            'password' => '****',
+            'password' => 'www123#',
             'charset' => 'utf8',
             'port' => 3306,
             'option' => [
