@@ -16,10 +16,13 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 - AdminLTE: A html web template
 
 ----------
+
+# Common feature on V1.4.0
+- Refactor slimer project, move some core codes into slimer-core as dependency(which will release to packgist website)
+
 # Common feature on V1.3.0
 - Add RBAC control backend CLI command and UI management pages.
 
-----------
 # Common feature on V1.2.2
 - Add Http basic authen feature.
 
@@ -30,6 +33,7 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 - Add nginx fastcgi support
 - Add gradle build support
 
+----------
 
 # Common feature on V1.1
 - Add SMTP mailer sender
@@ -63,8 +67,15 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 # Development guide
 
 - 0. Initialization
-  -- When we want to start play Slimer, just need to run "php composer.phar install" in the project root path to install all of the dependencies.
-  -- And then run the "php index.php Dbinit --sync --dbEngine <your own db engine name in the cofig> to init the DB table and the data.
+  -- When we want to start play Slimer, just need to run "php composer.phar install","php composer.phar update" in the project root path to install all of the dependencies.
+  -- Run "php index.php cmd -l" to check all of the built-in commands.
+  -- And then run the "php index.php dbinit --sync --dbEngine dbDefault to init the DB table and the data.
+  -- If you need RBAC permission controll, just run the RBAC related command to do the initialization.
+     Because I used php-rbac library as the bottom library which for now only support for mysql|sqlite3. 
+     I will refactor it as a part of slimer.
+  	 ----Run the "php index.php rbacinit --dbEngine dbDefault" to init the DB table and the data.
+  	 ----Run "php index.php rbacinit --dbEngine dbDefault" to init the rbac tables.
+  	 ----Run "php index.php rbacreset --force" to init the basic rbac metadata.
   -- Make sure you have made the DB tables and init data DDL sql in file under Data folder.  e.g  users.sql
 
 - 1. Configs

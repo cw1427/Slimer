@@ -51,7 +51,7 @@ abstract class Entity extends \Slimer\Root
     public function getScheme()
     {
         if (null === $this->scheme) {
-            $raw = $this->dbGam->query('DESCRIBE '.$this->getTable())->fetchAll();
+            $raw = $this->dbDefault->query('DESCRIBE '.$this->getTable())->fetchAll();
             $this->scheme = [];
             foreach ($raw as $field) {
                 $this->scheme[$field['Field']] = $field;
@@ -88,10 +88,10 @@ abstract class Entity extends \Slimer\Root
         }
         
         if ($this->getId()) {
-            $this->dbGam->update($this->getTable(), $this->data, ['id' => $this->getId()]);
+            $this->dbDefault->update($this->getTable(), $this->data, ['id' => $this->getId()]);
         } else {
-            $this->dbGam->insert($this->getTable(), $this->data);
-            $this->setId($this->dbGam->id());
+            $this->dbDefault->insert($this->getTable(), $this->data);
+            $this->setId($this->dbDefault->id());
         }
         
         return $this;
@@ -129,7 +129,7 @@ abstract class Entity extends \Slimer\Root
      */
     public function load($value, $field = 'id', array $fields = null)
     {
-        $data = $this->dbGam->get($this->getTable(), isset($fields) ? $fields : '*', [$field => $value]);
+        $data = $this->dbDefault->get($this->getTable(), isset($fields) ? $fields : '*', [$field => $value]);
         $this->data = \is_array($data) ? $data : []; //handle empty result gracefuly
         
         return $this;
@@ -146,7 +146,7 @@ abstract class Entity extends \Slimer\Root
      */
     public function loadAll(array $where = [],  $assoc = false, array $fields = null)
     {
-        $allData = $this->dbGam->select($this->getTable(), $fields ? $fields : '*', $where);
+        $allData = $this->dbDefault->select($this->getTable(), $fields ? $fields : '*', $where);
         $items = [];
         foreach ($allData as $data) {
             $items[] = ($assoc) ? $data : $this->container['entity']($this->__getEntityName())->setData($data);
@@ -190,7 +190,7 @@ abstract class Entity extends \Slimer\Root
      */
     public function has(array $where = [])
     {
-        return $this->dbGam->has($this->getTable(), $where);
+        return $this->dbDefault->has($this->getTable(), $where);
     }
     
     /**
@@ -202,7 +202,7 @@ abstract class Entity extends \Slimer\Root
      */
     public function count(array $where = [])
     {
-        return $this->dbGam->count($this->getTable(), $where);
+        return $this->dbDefault->count($this->getTable(), $where);
     }
     
     /**
@@ -212,7 +212,7 @@ abstract class Entity extends \Slimer\Root
      */
     public function delete()
     {
-        return (bool) $this->dbGam->delete($this->getTable(), ['id' => $this->getId()]);
+        return (bool) $this->dbDefault->delete($this->getTable(), ['id' => $this->getId()]);
     }
     
     /**

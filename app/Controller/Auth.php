@@ -8,7 +8,7 @@ namespace App\Controller;
  *
  * That controller handles work with auth for you
  */
-class Auth extends \App\Controller
+class Auth extends \Slimer\Controller
 {
     public function formAction()
     {

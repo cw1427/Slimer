@@ -13,7 +13,7 @@ class User extends \Slimer\Orm\Entity {
     
     public function getUserGroups(){
         try {
-            return $this->dbGam->query("select g.* from <perm_group> as g join <perm_usergroup> as ug on ug.GroupID = g.ID where <ug.UserID> = :id",['id'=>$this->data['id']])->fetchAll();
+            return $this->dbDefault->query("select g.* from <perm_group> as g join <perm_usergroup> as ug on ug.GroupID = g.ID where <ug.UserID> = :id",['id'=>$this->data['id']])->fetchAll();
         } catch (\Exception $e) {
             $this->logger->error("Load user perm_group error, plesae run Dbinit and RbacInit command first");
             return null;
@@ -32,7 +32,7 @@ class User extends \Slimer\Orm\Entity {
     public function updateLogin(){
         $this->set("changedOn",date('Y-m-d H:i:s',time()));
         $this->set("changedBy",$_SERVER['REMOTE_ADDR']);
-        $this->dbGam->update($this->getTable(),["changedOn"=>$this->get("changedOn"),"changedBy"=>$this->get("changedBy")],['id'=>$this->data['id']]);
+        $this->dbDefault->update($this->getTable(),["changedOn"=>$this->get("changedOn"),"changedBy"=>$this->get("changedBy")],['id'=>$this->data['id']]);
     }
     
     public function getTable()

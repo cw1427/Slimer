@@ -13,7 +13,7 @@ use function GuzzleHttp\json_encode;
  *
  * That controller handles work with auth for you
  */
-class Admin extends \App\Controller
+class Admin extends \Slimer\Controller
 {
     public function AdminAction()
     {
@@ -21,23 +21,8 @@ class Admin extends \App\Controller
     }
     
     public function approval_deligateAction(){
-        //----check if is admin
-        $c = $this->dbGam->count("admin",\Medoo\Medoo::raw("WHERE lower(COREID)=:ci",[":ci"=>$this->user->get("loginName")]));
-        $al = [];
-        if ($c == 0) {
-            //----check ids to fetch the user whose motsupervisorcoreid is current user.
-            $query = '(motsupervisorcoreid=' .  strtoupper( $this->user->get("loginName")) .')';
-            try {
-                $this->ldap_client->bind($this->config('auth.ldap.hudsoncm.dn'), $this->config('auth.ldap.hudsoncm.password'));
-            }catch (\Exception $t) {
-                $this->logger->error('LDAP bind failed', ['loginName' =>'hudsoncm']);
-                throw new \Exception('Bind LDAP account failed.',500);
-            }
-            $collection = $this->ldap_client
-            ->query("ou=people,ou=intranet,dc=motorola,dc=com", $query)
-            ->execute();
-        }
-        return $this->render('admin/supervisor_approval_deligate.html.twig',["isAdmin"=>$c,"al"=>$al]);
+
+        return $this->render('admin/supervisor_approval_deligate.html.twig');
     }
     
     public function user_manageAction(){
@@ -54,15 +39,15 @@ class Admin extends \App\Controller
         if (isset($search) && $search !=""){
             $WHERE['OR']=["loginName[~]"=>"%{$search}%","userName[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("user",$WHERE);
+        $total = $this->dbDefault->count("user",$WHERE);
         $WHERE['LIMIT']=[$offset,$limit];
-        $userList=$this->dbGam->select("user","*",$WHERE);
+        $userList=$this->dbDefault->select("user","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
         foreach($userList as $user){
             \array_push($uids,$user["id"]);
         }
-        $groupList = $this->dbGam->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
+        $groupList = $this->dbDefault->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
             ["b.Name","b.Title","c.id"],["c.id"=>$uids]);
         foreach($userList as &$user){
             $user["groups"]=[];
@@ -78,7 +63,7 @@ class Admin extends \App\Controller
     public function add_userAction(){
         $params = $this->request->getParams();
         //---check if the loginName exists
-        $count = $this->dbGam->count("user",["loginName"=>$params["loginName"]]);
+        $count = $this->dbDefault->count("user",["loginName"=>$params["loginName"]]);
         if ($count>0){
             $this->flash->addMessage('danger',"loginName exists: {$params['loginName']}");
             return $this->response->withRedirect($this->router->pathFor('admin-user_manage'));
@@ -104,7 +89,7 @@ class Admin extends \App\Controller
                 return $this->json(["error"=>["message"=>"not allowed"]],400);
             }
             //---begin transaction delete the usergroup info first and then the user data
-            $this->dbGam->action(function($db) use (&$params){
+            $this->dbDefault->action(function($db) use (&$params){
                 try{
                     $db->delete("perm_usergroup",["UserID"=>$params['id']]);
                     $db->delete("user",["id"=>$params["id"]]);
@@ -144,13 +129,13 @@ class Admin extends \App\Controller
         $user->set('groups',$gs);
         $user->set('roles',$rs);
         $user->set('groupsid',$permGroupIds);
-        $groups=$this->dbGam->select("perm_group","*");
+        $groups=$this->dbDefault->select("perm_group","*");
         $this->render("admin/useredit.html.twig",["user"=>$user->getData(),"groups"=>$groups]);
     }
     
     public function userinfo_editAction(){
         $args = $this->request->getParams();
-        $this->dbGam->update("user",["firstName"=> $args['firstName'],"lastName"=>$args['lastName'],'userName'=>"{$args['firstName']} {$args['lastName']}"],["id"=>$args['id']]);
+        $this->dbDefault->update("user",["firstName"=> $args['firstName'],"lastName"=>$args['lastName'],'userName'=>"{$args['firstName']} {$args['lastName']}"],["id"=>$args['id']]);
         $this->logger->info("userid={$args["id"]} userinfo changed by {$this->user->get('loginName')}");
         return $this->json(["msg"=>"success"]);
     }
@@ -161,7 +146,7 @@ class Admin extends \App\Controller
             if ($data['id'] ==1 && $this->user->get('id') != 1){
                 return $this->json(["error"=>["message"=>"admin account not allow been modified by other account"],"msg"=>"not allow change admin account info"],403); 
             }
-            $this->dbGam->update("user",["password"=> \password_hash($data['newPassword'], PASSWORD_DEFAULT)],["id"=>$data["id"]]);
+            $this->dbDefault->update("user",["password"=> \password_hash($data['newPassword'], PASSWORD_DEFAULT)],["id"=>$data["id"]]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter, new password not found"]],400);
         }
@@ -173,7 +158,7 @@ class Admin extends \App\Controller
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_usergroup",["UserID"=>$data['id']]);
                     $userGroupData = [];
@@ -212,15 +197,15 @@ class Admin extends \App\Controller
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Name[~]"=>"%{$search}%","Title[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_group",$WHERE);
+        $total = $this->dbDefault->count("perm_group",$WHERE);
         $WHERE['LIMIT']=[$offset,$limit];
-        $groupList=$this->dbGam->select("perm_group","*",$WHERE);
+        $groupList=$this->dbDefault->select("perm_group","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
         foreach($groupList as $group){
             \array_push($uids,$group["ID"]);
         }
-        $roleList = $this->dbGam->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
+        $roleList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
             ["b.Title","b.Description","c.ID"],["c.ID"=>$uids]);
         foreach($groupList as &$group){
             $group["Roles"]=[];
@@ -237,13 +222,13 @@ class Admin extends \App\Controller
         $params = $this->request->getParams();
         $params['Name'] = trim($params['Name']," ");
         //---check if the loginName exists
-        $count = $this->dbGam->count("perm_group",['Name'=>$params['Name']]);
+        $count = $this->dbDefault->count("perm_group",['Name'=>$params['Name']]);
         if ($count>0){
             $this->flash->addMessage('danger',"group exists: {$params['Name']}");
             return $this->response->withRedirect($this->router->pathFor('admin-group_manage'));
         }
         $params["Type"]="local";
-        $this->dbGam->insert("perm_group",$params);
+        $this->dbDefault->insert("perm_group",$params);
         $this->flash->addMessage('success',"Successfully add a new group {$params['Name']}");
         return $this->response->withRedirect($this->router->pathFor('admin-group_manage'));
     }
@@ -252,7 +237,7 @@ class Admin extends \App\Controller
         $params = $this->request->getParsedBody();
         if (isset($params["id"])){
             //---begin transaction delete the usergroup info first and then the user data
-            $this->dbGam->action(function($db) use (&$params){
+            $this->dbDefault->action(function($db) use (&$params){
                 try{
                     $db->delete("perm_usergroup",["GroupID"=>$params['id']]);
                     $db->delete("perm_userroles",["UserID"=>$params["id"]]);
@@ -278,12 +263,12 @@ class Admin extends \App\Controller
     
     public function edit_groupAction($args){
         $id = $args['uid'];
-        $group = $this->dbGam->get("perm_group","*",["ID"=>$id]);
+        $group = $this->dbDefault->get("perm_group","*",["ID"=>$id]);
         //----fetch its users and roles
-        $userList = $this->dbGam->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
+        $userList = $this->dbDefault->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
             "c.id",["b.ID"=>$id]);
         $group["users"] = $userList;
-        $roleList = $this->dbGam->select("perm_userroles(a)",["[><]perm_group(b)"=>["a.UserID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
+        $roleList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_group(b)"=>["a.UserID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
             "c.ID",["b.ID"=>$id]);
         //----iterator the role list to fetch all of their permissions
         $roleids=[];
@@ -294,18 +279,18 @@ class Admin extends \App\Controller
                 array_push($roleids, $child['ID']);
             }
         }
-        $permList = $this->dbGam->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
+        $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
                 ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
         $group["roles"] = $roleList;
         $group["perms"] = array_values($permList);
-        $users=$this->dbGam->select("user",["id","userName","loginName"]);
-        $roles=$this->dbGam->select("perm_roles",["ID","Title"]);
+        $users=$this->dbDefault->select("user",["id","userName","loginName"]);
+        $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
         $this->render("admin/groupedit.html.twig",["group"=>$group,"users"=>$users,"roles"=>$roles]);
     }
     
     public function groupinfo_editAction(){
         $args = $this->request->getParams();
-        $this->dbGam->update("perm_group",["Name"=> $args['name'],"Title"=>$args['title']],["ID"=>$args['id']]);
+        $this->dbDefault->update("perm_group",["Name"=> $args['name'],"Title"=>$args['title']],["ID"=>$args['id']]);
         $this->logger->info("groupid={$args["id"]} info changed by {$this->user->get('loginName')}");
         return $this->json(["msg"=>"success"]);
     }
@@ -314,7 +299,7 @@ class Admin extends \App\Controller
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_userroles",["UserID"=>$data['id']]);
                     $groupRoleData = [];
@@ -346,7 +331,7 @@ class Admin extends \App\Controller
         }
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_usergroup",["GroupID"=>$data['id']]);
                     $groupUserData = [];
@@ -372,7 +357,7 @@ class Admin extends \App\Controller
     }
     
     public function role_manageAction(){
-        $roles = $this->dbGam->select("perm_roles",["ID(key)","Title(value)"]);
+        $roles = $this->dbDefault->select("perm_roles",["ID(key)","Title(value)"]);
         return $this->render('admin/rolemanage.html.twig',['roles'=>$roles]);
     }
     
@@ -385,15 +370,15 @@ class Admin extends \App\Controller
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Title[~]"=>"%{$search}%","Description[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_roles",$WHERE);
+        $total = $this->dbDefault->count("perm_roles",$WHERE);
         $WHERE['LIMIT']=[$offset,$limit];
-        $roleList=$this->dbGam->select("perm_roles","*",$WHERE);
+        $roleList=$this->dbDefault->select("perm_roles","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
         foreach($roleList as $role){
             \array_push($uids,$role["ID"]);
         }
-        $permList = $this->dbGam->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
+        $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
             ["c.Title","c.Description","b.ID"],["b.ID"=>$uids]);
         foreach($roleList as &$role){
             $role["permissions"]=[];
@@ -428,7 +413,7 @@ class Admin extends \App\Controller
             //---remove the role node from the role tree
             //---clean its relation ship
             $this->rbac->Roles->remove($params["id"]);
-            $this->dbGam->action(function($db) use (&$params){
+            $this->dbDefault->action(function($db) use (&$params){
                 try{
                     $db->delete("perm_rolepermissions",["RoleID"=>$params['id']]);
                     $db->delete("perm_userroles",["RoleID"=>$params["id"]]);
@@ -456,14 +441,14 @@ class Admin extends \App\Controller
         if ($id == 1 && $this->user->get('id') !=1){
             return $this->appErrorHandler->error403($this->request,$this->response);
         }
-        $role = $this->dbGam->get("perm_roles","*",["ID"=>$id]);
+        $role = $this->dbDefault->get("perm_roles","*",["ID"=>$id]);
         //----fetch its directly children.
         $roleChildren = $this->rbac->Roles->descendants($id);
         $roleids=[$id];
         foreach($roleChildren as $childName=>$child){
             array_push($roleids, $child['ID']);
         }
-        $permList = $this->dbGam->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
+        $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
             ["c.ID","c.Title","c.Description","b.ID(roleid)"],["b.ID"=>$roleids]);
         $role["allperm"]=$permList;
         $role["perms"] = [];
@@ -484,22 +469,22 @@ class Admin extends \App\Controller
             }
         });
         $role["children"] = $children;
-        $groupList = $this->dbGam->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
+        $groupList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
             "c.ID",["b.ID"=>$id]);
         $role["groups"] = $groupList;
-        $groups=$this->dbGam->select("perm_group",["ID","Name"]);
-        $perms=$this->dbGam->select("perm_permissions",["ID","Title"]);
+        $groups=$this->dbDefault->select("perm_group",["ID","Name"]);
+        $perms=$this->dbDefault->select("perm_permissions",["ID","Title"]);
         $this->render("admin/roleedit.html.twig",["role"=>$role,"groups"=>$groups,"perms"=>$perms]);
     }
     
     public function roleinfo_editAction(){
         $args = $this->request->getParams();
         //----check if Title already exists
-        $count = $this->dbGam->count("perm_roles",["Title"=>$args['Title']]);
+        $count = $this->dbDefault->count("perm_roles",["Title"=>$args['Title']]);
         if ($count>0){
             return $this->json(["error"=>["message"=>"role title exists"]],400);
         }else{
-            $this->dbGam->update("perm_roles",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
+            $this->dbDefault->update("perm_roles",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
             $this->logger->info("roleid={$args["id"]} info changed by {$this->user->get('loginName')}");
             return $this->json(["msg"=>"success"]);
         }
@@ -509,7 +494,7 @@ class Admin extends \App\Controller
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_rolepermissions",["RoleID"=>$data['id']]);
                     $rolePermData = [];
@@ -538,7 +523,7 @@ class Admin extends \App\Controller
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_userroles",["RoleID"=>$data['id']]);
                     $roleGroupData = [];
@@ -566,7 +551,7 @@ class Admin extends \App\Controller
     //----------------start permissions related action--------------------------------
     
     public function perm_manageAction(){
-        $perm = $this->dbGam->select("perm_permissions",["ID(key)","Title(value)"]);
+        $perm = $this->dbDefault->select("perm_permissions",["ID(key)","Title(value)"]);
         return $this->render('admin/permmanage.html.twig',['perms'=>$perm]);
     }
     
@@ -579,15 +564,15 @@ class Admin extends \App\Controller
         if (isset($search) && $search !=""){
             $WHERE['OR']=["Title[~]"=>"%{$search}%","Description[~]"=>"%{$search}%"];
         }
-        $total = $this->dbGam->count("perm_permissions",$WHERE);
+        $total = $this->dbDefault->count("perm_permissions",$WHERE);
         $WHERE['LIMIT']=[$offset,$limit];
-        $permList=$this->dbGam->select("perm_permissions","*",$WHERE);
+        $permList=$this->dbDefault->select("perm_permissions","*",$WHERE);
         //---collect all of the current page user id to fetch their group set
         $uids=[];
         foreach($permList as $perm){
             \array_push($uids,$perm["ID"]);
         }
-        $roleList = $this->dbGam->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
+        $roleList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
             ["c.Title","c.Description","b.ID"],["b.ID"=>$uids]);
         foreach($permList as &$perm){
             $perm["roles"]=[];
@@ -622,7 +607,7 @@ class Admin extends \App\Controller
             //---remove the role node from the role tree
             //---clean its relation ship
             $this->rbac->Permissions->remove($params["id"]);
-            $this->dbGam->delete("perm_rolepermissions",["PermissionID"=>$params['id']]);
+            $this->dbDefault->delete("perm_rolepermissions",["PermissionID"=>$params['id']]);
             $this->flash->addMessage('success',"Successfully delete the permission {$params['name']}");
             return $this->json(["message"=>"successfully deleted"]);
         }else{
@@ -635,7 +620,7 @@ class Admin extends \App\Controller
         if ($id == 1 && $this->user->get('id') !=1){
             return $this->appErrorHandler->error403($this->request,$this->response);
         }
-        $perm = $this->dbGam->get("perm_permissions","*",["ID"=>$id]);
+        $perm = $this->dbDefault->get("perm_permissions","*",["ID"=>$id]);
         //----fetch its directly children.
         $permChildren = $this->rbac->Permissions->descendants($id);
         $children =array_values($permChildren);
@@ -650,21 +635,21 @@ class Admin extends \App\Controller
             }
         });
         $perm["children"] = $children;
-        $roleList = $this->dbGam->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
+        $roleList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
             "c.ID",["b.ID"=>$id]);
         $perm["roles"] = $roleList;
-        $roles=$this->dbGam->select("perm_roles",["ID","Title"]);
+        $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
         $this->render("admin/permedit.html.twig",["perm"=>$perm,"roles"=>$roles]);
     }
     
     public function perminfo_editAction(){
         $args = $this->request->getParams();
         //----check if Title already exists
-        $count = $this->dbGam->count("perm_permissions",["Title"=>$args['Title']]);
+        $count = $this->dbDefault->count("perm_permissions",["Title"=>$args['Title']]);
         if ($count>0){
             return $this->json(["error"=>["message"=>"permission title exists"]],400);
         }else{
-            $this->dbGam->update("perm_permissions",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
+            $this->dbDefault->update("perm_permissions",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
             $this->logger->info("permissionid={$args["id"]} info changed by {$this->user->get('loginName')}");
             return $this->json(["msg"=>"success"]);
         }
@@ -674,7 +659,7 @@ class Admin extends \App\Controller
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
         if (isset($data['id'])){
-            $this->dbGam->action(function($db) use (&$data){
+            $this->dbDefault->action(function($db) use (&$data){
                 try{
                     $db->delete("perm_rolepermissions",["PermissionID"=>$data['id']]);
                     $rolePermData = [];

@@ -22,7 +22,7 @@ class App extends \Slim\App
          * If not passed, use default `pwd`/config
          */
         if (!isset($container['config_dir'])) {
-            $container['config_dir'] = \getcwd().'/config';
+            $container['config_dir'] = \getcwd().'/Config';
         }
         
         // To register dependencies, we need container object, not array

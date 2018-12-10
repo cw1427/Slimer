@@ -19,10 +19,10 @@ class Rbac extends PhpRbac
     public function __construct($unit_test = '',$container=null)
     {
         $this->container = $container;
-        $host = $this->container['config']('medoo.gam.server');
-        $user = $this->container['config']('medoo.gam.username');
-        $pass = $this->container['config']('medoo.gam.password');
-        $dbname = $this->container['config']('medoo.gam.database_name');
+        $host = $this->container['config']('db.default.server');
+        $user = $this->container['config']('db.default.username');
+        $pass = $this->container['config']('db.default.password');
+        $dbname = $this->container['config']('db.default.database_name');
         $adapter="pdo_mysql";
         $tablePrefix = $this->container['config']('rbac.rbac_table_prefix') ? $this->container['config']('rbac.rbac_table_prefix') : 'PREFIX_';
       

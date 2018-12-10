@@ -15,8 +15,8 @@ class Provider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container['dbGam'] = $this->setMedoo($container,'medoo.db1');
-        $container['entity'] = $this->setEntityLoader($container,'medoo.db1');
+        $container['dbDefault'] = $this->setMedoo($container,'db.default');
+        $container['entity'] = $this->setEntityLoader($container,'db.default');
     }
     
     /**

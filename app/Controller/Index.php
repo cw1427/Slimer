@@ -5,7 +5,7 @@
  */
 namespace App\Controller;
 
-class Index extends \App\Controller
+class Index extends \Slimer\Controller
 {
     public function indexAction()
     {

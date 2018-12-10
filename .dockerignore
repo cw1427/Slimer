@@ -1,0 +1,17 @@
+*.db
+session
+Data/gerrit_id_rsa
+.settings
+.gradle
+.git
+logs
+gradle
+*.gradle
+*.properties
+*.yml
+.gitignore
+.dockerignore
+build
+app/public/*
+app/Cache/*
+node_modules

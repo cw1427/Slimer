@@ -6,10 +6,10 @@
  */
 
 return [
-    'db1' =>[
+    'default' =>[
             'namespace' => '\App\Models\\',
             'database_type' => 'mysql',
-            'database_name' => 'XXXX',
+            'database_name' => 'slimer',
             'server' => '127.0.0.1',
             'username' => 'root',
             'password' => '****',

@@ -4,7 +4,7 @@
  * Desc: The generic controller class for the route set mapping
  */
 
-namespace App;
+namespace Slimer;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

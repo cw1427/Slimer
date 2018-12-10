@@ -20,17 +20,6 @@ class Provider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container['baseurl_middleware'] = function ($c) {
-            return new \App\Middleware\Baseurl($c);
-        };
-        $container['appErrorHandler'] = function ($c) {
-            return new \App\ErrorHandler($c);
-        };
-        $container['notFoundHandler'] = function ($c) {
-            return function (ServerRequestInterface $request, ResponseInterface $response) use ($c) {
-                return $c['appErrorHandler']->error404($request, $response);
-            };
-        };
         $container['logger'] = function ($c) {
             $config = $c['config']('log');
             $logger = new \Monolog\Logger(isset($config['channel'] ) ? $config['channel'] : 'app');
@@ -65,21 +54,6 @@ class Provider implements ServiceProviderInterface
             $instance =new \App\Util();
             $instance->setContainer($container);
             return $instance;
-        };
-        
-        $container['smtpMailer'] = function () use ($container) {
-            return new \Nette\Mail\SmtpMailer($container['config']('mail'));
-        };
-        $container['smtpMessage'] = $container->factory(function () use ($container) {
-            return new \Nette\Mail\Message();
-        });
-        $container['shellCommand'] = $container->protect(function ($command) use ($container) {
-            return new \mikehaertl\shellcommand\Command($command);
-        });
-        $container['httpClient'] = $container->protect(function ($configArray=[]) use ($container) {
-            $ca = \array_merge($configArray,['timeout'=>60,'verify'=>false]);
-            return new \GuzzleHttp\Client($ca);
-        });
-        
+        };    
     }
 }

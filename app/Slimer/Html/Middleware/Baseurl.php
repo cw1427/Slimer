@@ -4,7 +4,7 @@
  * Desc: Middleware to extract the basic url path for every request
  */
 
-namespace App\Middleware;
+namespace Slimer\Html\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

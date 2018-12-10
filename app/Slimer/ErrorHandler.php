@@ -3,13 +3,13 @@
  * Author: Shawn Chen
  * Desc: The Slim error handler extention
  */
-namespace App;
+namespace Slimer;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Exception;
 
-class ErrorHandler extends \App\Controller
+class ErrorHandler extends \Slimer\Controller
 {
     /**
      * Handle exception.

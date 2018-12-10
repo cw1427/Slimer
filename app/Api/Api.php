@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * The API type basic controller to overwrite the basci Action response the json type data
  */
-class Api extends \App\Controller
+class Api extends \Slimer\Controller
 {
     protected $defaultResponse = [
         'error' => [

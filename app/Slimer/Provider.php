@@ -41,6 +41,15 @@ class Provider implements ServiceProviderInterface
             
             return $next($request, $response);
         });
+        
+        $container['appErrorHandler'] = function ($c) {
+            return new \Slimer\ErrorHandler($c);
+        };
+        $container['notFoundHandler'] = function ($c) {
+            return function (ServerRequestInterface $request, ResponseInterface $response) use ($c) {
+                return $c['appErrorHandler']->error404($request, $response);
+            };
+        };
 
         $container['controller'] = $this->setControllerLoader($container);
         $container['errorHandler'] = $this->setErrorHandler($container);
@@ -52,6 +61,20 @@ class Provider implements ServiceProviderInterface
             }
             return new \adrianfalleiro\SlimCLIRunner($container);
         };
+        
+        $container['smtpMailer'] = function () use ($container) {
+            return new \Nette\Mail\SmtpMailer($container['config']('mail'));
+        };
+        $container['smtpMessage'] = $container->factory(function () use ($container) {
+            return new \Nette\Mail\Message();
+        });
+        $container['shellCommand'] = $container->protect(function ($command) use ($container) {
+            return new \mikehaertl\shellcommand\Command($command);
+        });
+        $container['httpClient'] = $container->protect(function ($configArray=[]) use ($container) {
+            $ca = \array_merge($configArray,['timeout'=>60,'verify'=>false]);
+            return new \GuzzleHttp\Client($ca);
+        });
     }
     
     /**

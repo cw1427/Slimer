@@ -21,6 +21,10 @@ class Provider implements ServiceProviderInterface
             return $guard;
         };
         
+        $container['baseurl_middleware'] = function ($c) {
+            return new \Slimer\Html\Middleware\Baseurl($c);
+        };
+        
         $container['flash'] = function (Container $container) {
             return new \Slim\Flash\Messages();
         };
