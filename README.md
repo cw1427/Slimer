@@ -66,6 +66,10 @@ Will enhance the RBAC control, mail util and so on feature in next version.
 
 # Development guide
 
+- -1. Prepare
+  -- Modify the db connection config in: app/Configs/db.php. Slimer support for all of the dbs which: https://medoo.in/ support for.
+  -- But for the RBAC, for now I used php-rbac 3rd part library which could only support for mysql or sqlite. Will refactor and implement by medoo.  
+  
 - 0. Initialization
   -- When we want to start play Slimer, just need to run "php composer.phar install","php composer.phar update" in the project root path to install all of the dependencies.
   -- Run "php index.php cmd -l" to check all of the built-in commands.
