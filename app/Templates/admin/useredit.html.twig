@@ -289,7 +289,7 @@ $(function () {
 				url: "{{path_for('admin-password_change')}}",
 				data: {"newPassword": $('#inner_newPassword').val(),"id": {{ user.id }}}, 
 				success: function (data,status){
-					bootbox.alert(data.data.msg);
+					bootbox.alert(data.data.message);
 					$('#inner_newPassword').val(null);
 					$('#inner_confirmPassword').val(null);
 				},
@@ -311,7 +311,7 @@ $(function () {
 				url: "{{path_for('admin-userinfo_edit')}}",
 				data: {"firstName": $('#firstName').val(),"lastName": $('#lastName').val(),"id": {{ user.id }} }, 
 				success: function (data,status){
-					bootbox.alert(data.data.msg);
+					bootbox.alert(data.data.message);
 				},
 				error: function (data, status, e){
 					if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -382,7 +382,7 @@ $(function () {
 			url: "{{path_for('admin-usergroup_edit')}}",
 			data: {"selected": $('#groupSelector').val(),"id": {{ user.id }} }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){

@@ -247,7 +247,7 @@ $(function () {
 				url: "{{path_for('admin-groupinfo_edit')}}",
 				data: {"name": $('#name').val(),"title": $('#title').val(),"id": {{ group.ID }} },
 				success: function (data,status){
-					bootbox.alert(data.data.msg);
+					bootbox.alert(data.data.message);
 				},
 				error: function (data, status, e){
 					if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -318,7 +318,7 @@ $(function () {
 			url: "{{path_for('admin-grouprole_edit')}}",
 			data: {"selected": $('#roleSelector').val(),"id": {{ group.ID }} }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -383,7 +383,7 @@ $(function () {
 			url: "{{path_for('admin-groupuser_edit')}}",
 			data: {"selected": $('#userSelector').val(),"id": {{ group.ID }},"type":"{{ group.Type}}" }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){

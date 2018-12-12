@@ -194,7 +194,7 @@ $(function () {
 				url: "{{path_for('admin-perminfo_edit')}}",
 				data: {"Title": $('#Title').val(),"Description": $('#Description').val(),"id": {{ perm.ID }} },
 				success: function (data,status){
-					bootbox.alert(data.data.msg);
+					bootbox.alert(data.data.message);
 				},
 				error: function (data, status, e){
 					if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -265,7 +265,7 @@ $(function () {
 			url: "{{path_for('admin-permrole_edit')}}",
 			data: {"selected": $('#roleSelector').val(),"id": {{ perm.ID }} }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){

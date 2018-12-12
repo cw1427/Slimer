@@ -258,7 +258,7 @@ $(function () {
 				url: "{{path_for('admin-roleinfo_edit')}}",
 				data: {"Title": $('#Title').val(),"Description": $('#Description').val(),"id": {{ role.ID }} },
 				success: function (data,status){
-					bootbox.alert(data.data.msg);
+					bootbox.alert(data.data.message);
 				},
 				error: function (data, status, e){
 					if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -329,7 +329,7 @@ $(function () {
 			url: "{{path_for('admin-roleperm_edit')}}",
 			data: {"selected": $('#permSelector').val(),"id": {{ role.ID }} }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){
@@ -393,7 +393,7 @@ $(function () {
 			url: "{{path_for('admin-rolegroup_edit')}}",
 			data: {"selected": $('#groupSelector').val(),"id": {{ role.ID }} }, 
 			success: function (data,status){
-				bootbox.alert(data.data.msg);
+				bootbox.alert(data.data.message);
 			},
 			error: function (data, status, e){
 				if (typeof(data.responseJSON.error) !== "undefined" ){

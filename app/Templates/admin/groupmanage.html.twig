@@ -206,10 +206,16 @@ function deleteItem(id,name){
 					data: {"id":id,"name":name}, 
 					success: function (data,status){
 						//----reflush
-						window.location.reload();
+						bootbox.alert(data.data.message,function(){
+							window.location.reload();
+						});
 					},
 					error: function (data, status, e){
-						bootbox.alert(e);
+						if (typeof(res.responseJSON.error) !== "undefined" ){
+							bootbox.alert(res.responseJSON.error);
+						}else{
+							bootbox.alert('Error occured: ' + status);
+						}
 					}
 				});
 		    }else{

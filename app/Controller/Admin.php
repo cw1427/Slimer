@@ -24,7 +24,7 @@ class Admin extends \Slimer\Controller
 
         return $this->render('admin/supervisor_approval_deligate.html.twig');
     }
-    
+      
     public function user_manageAction(){
         
         return $this->render('admin/usermanage.html.twig');
@@ -102,11 +102,11 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if ($params['result']){
-                return $this->json(["message"=>"successfully deleted"]);
-            }else{
-                return $this->json(["error"=>["message"=>"internal error"]],500);
-            }
+                if ($params['result']){
+                    return $this->json(["message"=>"successfully deleted"]);
+                }else{
+                    return $this->json(["error"=>["message"=>"internal error"]],500);
+                }
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -137,21 +137,21 @@ class Admin extends \Slimer\Controller
         $args = $this->request->getParams();
         $this->dbDefault->update("user",["firstName"=> $args['firstName'],"lastName"=>$args['lastName'],'userName'=>"{$args['firstName']} {$args['lastName']}"],["id"=>$args['id']]);
         $this->logger->info("userid={$args["id"]} userinfo changed by {$this->user->get('loginName')}");
-        return $this->json(["msg"=>"success"]);
+        return $this->json(["message"=>"success"]);
     }
     
     public function password_changeAction(){
         $data = $this->request->getParsedBody();
         if (isset($data['newPassword']) && isset($data['id'])){
             if ($data['id'] ==1 && $this->user->get('id') != 1){
-                return $this->json(["error"=>["message"=>"admin account not allow been modified by other account"],"msg"=>"not allow change admin account info"],403); 
+                return $this->json(["error"=>["message"=>"admin account not allow been modified by other account"],"msg"=>"not allow change admin account info"],403);
             }
             $this->dbDefault->update("user",["password"=> \password_hash($data['newPassword'], PASSWORD_DEFAULT)],["id"=>$data["id"]]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter, new password not found"]],400);
         }
         $this->logger->info("userid={$data["id"]} password changed by {$this->user->get('loginName')}");
-        return $this->json(["msg"=>"success"]);
+        return $this->json(["message"=>"success"]);
     }
     
     public function usergroup_editAction(){
@@ -174,10 +174,10 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if (!$data["result"]){
-                return $this->json(["error"=>["message"=>"Internal error"]],500);
-            }
-            return $this->json(["msg"=>"success"]);
+                if (!$data["result"]){
+                    return $this->json(["error"=>["message"=>"Internal error"]],500);
+                }
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -251,11 +251,11 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if ($params['result']){
-                return $this->json(["message"=>"successfully deleted"]);
-            }else{
-                return $this->json(["error"=>["message"=>"internal error"]],500);
-            }
+                if ($params['result']){
+                    return $this->json(["message"=>"successfully deleted"]);
+                }else{
+                    return $this->json(["error"=>["message"=>"internal error"]],500);
+                }
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -280,7 +280,7 @@ class Admin extends \Slimer\Controller
             }
         }
         $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
-                ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
+            ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
         $group["roles"] = $roleList;
         $group["perms"] = array_values($permList);
         $users=$this->dbDefault->select("user",["id","userName","loginName"]);
@@ -315,10 +315,10 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if (!$data["result"]){
-                return $this->json(["error"=>["message"=>"Internal error"]],500);
-            }
-            return $this->json(["msg"=>"success"]);
+                if (!$data["result"]){
+                    return $this->json(["error"=>["message"=>"Internal error"]],500);
+                }
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -350,7 +350,7 @@ class Admin extends \Slimer\Controller
                 if (!$data["result"]){
                     return $this->json(["error"=>["message"=>"Internal error"]],500);
                 }
-                return $this->json(["msg"=>"success"]);
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -426,11 +426,11 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if ($params['result']){
-                return $this->json(["message"=>"successfully deleted"]);
-            }else{
-                return $this->json(["error"=>["message"=>"internal error"]],500);
-            }
+                if ($params['result']){
+                    return $this->json(["message"=>"successfully deleted"]);
+                }else{
+                    return $this->json(["error"=>["message"=>"internal error"]],500);
+                }
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -468,13 +468,13 @@ class Admin extends \Slimer\Controller
                 else return true;
             }
         });
-        $role["children"] = $children;
-        $groupList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
-            "c.ID",["b.ID"=>$id]);
-        $role["groups"] = $groupList;
-        $groups=$this->dbDefault->select("perm_group",["ID","Name"]);
-        $perms=$this->dbDefault->select("perm_permissions",["ID","Title"]);
-        $this->render("admin/roleedit.html.twig",["role"=>$role,"groups"=>$groups,"perms"=>$perms]);
+            $role["children"] = $children;
+            $groupList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
+                "c.ID",["b.ID"=>$id]);
+            $role["groups"] = $groupList;
+            $groups=$this->dbDefault->select("perm_group",["ID","Name"]);
+            $perms=$this->dbDefault->select("perm_permissions",["ID","Title"]);
+            $this->render("admin/roleedit.html.twig",["role"=>$role,"groups"=>$groups,"perms"=>$perms]);
     }
     
     public function roleinfo_editAction(){
@@ -486,7 +486,7 @@ class Admin extends \Slimer\Controller
         }else{
             $this->dbDefault->update("perm_roles",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
             $this->logger->info("roleid={$args["id"]} info changed by {$this->user->get('loginName')}");
-            return $this->json(["msg"=>"success"]);
+            return $this->json(["message"=>"success"]);
         }
     }
     
@@ -539,10 +539,10 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if (!$data["result"]){
-                return $this->json(["error"=>["message"=>"Internal error"]],500);
-            }
-            return $this->json(["msg"=>"success"]);
+                if (!$data["result"]){
+                    return $this->json(["error"=>["message"=>"Internal error"]],500);
+                }
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
@@ -634,12 +634,12 @@ class Admin extends \Slimer\Controller
                 else return true;
             }
         });
-        $perm["children"] = $children;
-        $roleList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
-            "c.ID",["b.ID"=>$id]);
-        $perm["roles"] = $roleList;
-        $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
-        $this->render("admin/permedit.html.twig",["perm"=>$perm,"roles"=>$roles]);
+            $perm["children"] = $children;
+            $roleList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_permissions(b)"=>["a.PermissionID"=>"ID"],"[><]perm_roles(c)"=>["a.RoleID"=>"ID"]],
+                "c.ID",["b.ID"=>$id]);
+            $perm["roles"] = $roleList;
+            $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
+            $this->render("admin/permedit.html.twig",["perm"=>$perm,"roles"=>$roles]);
     }
     
     public function perminfo_editAction(){
@@ -651,7 +651,7 @@ class Admin extends \Slimer\Controller
         }else{
             $this->dbDefault->update("perm_permissions",["Title"=> $args['Title'],"Description"=>$args['Description']],["ID"=>$args['id']]);
             $this->logger->info("permissionid={$args["id"]} info changed by {$this->user->get('loginName')}");
-            return $this->json(["msg"=>"success"]);
+            return $this->json(["message"=>"success"]);
         }
     }
     
@@ -675,13 +675,13 @@ class Admin extends \Slimer\Controller
                     return false;
                 }
             });
-            if (!$data["result"]){
-                return $this->json(["error"=>["message"=>"Internal error"]],500);
-            }
-            return $this->json(["msg"=>"success"]);
+                if (!$data["result"]){
+                    return $this->json(["error"=>["message"=>"Internal error"]],500);
+                }
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-
+    
 }
