@@ -38,8 +38,8 @@
             <header class="main-header">
                 {% block admin_lte_logo %}
                     <a href="#" class="logo">
-                        <span class="logo-mini"><b>GAM</b></span>
-                        <span class="logo-lg"><b>GAM</b>Portal</span>
+                        <span class="logo-mini"><b>{{ container.suit_config.__invoke('suit.project_name','Slimer') }}</b></span>
+                        <span class="logo-lg"><b>{{ container.suit_config.__invoke('suit.project_name','Slimer') }}</b>Portal</span>
                     </a>
                 {% endblock %}
                 {# Header Navbar: style can be found in header.less #}

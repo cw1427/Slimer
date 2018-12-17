@@ -48,5 +48,6 @@ return [
     ],
     
     'version_key' => 'VERSION',
-    'commitid_key' => 'COMMITID'
+    'commitid_key' => 'COMMITID',
+    'project_name' => 'Slimer' //----default is Slimer
 ];
