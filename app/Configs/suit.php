@@ -43,8 +43,10 @@ return [
     ],
     
     'httpauth' => [
+        'secure'=>false,
         'path'=> ['/api'],  //----the basic path need to do the httpauth
-        'passthrough' => null //----the white list bypass the httpauth
+        'passthrough' => null, //----the white list bypass the httpauth
+        "relaxed" => ["localhost", "127.0.0.1"],
     ],
     
     'version_key' => 'VERSION',
