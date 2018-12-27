@@ -188,18 +188,25 @@ $(function () {
 
 	$('#passwordChangeBtn').on('click',function(){
 		if ($('#passwordForm').valid()) {
+			$('#loading').loading();
 			$.ajax({
 				type: "POST",
 				cache: false,
 				url: "{{path_for('user_profile_passwordchange')}}",
 				data: {"newPassword": $('#inner_newPassword').val()}, 
 				success: function (data,status){
+					$('#loading').hideLoading();
 					bootbox.alert(data.data.msg);
 					$('#inner_newPassword').val(null);
 					$('#inner_confirmPassword').val(null);
 				},
 				error: function (data, status, e){
-					bootbox.alert(e);
+					$('#loading').hideLoading();
+					if (typeof(data.responseJSON.error) !== "undefined" ){
+						bootbox.alert(data.responseJSON.error);
+					}else{
+	    				bootbox.alert(e);
+					}
 				}
 			});
 			

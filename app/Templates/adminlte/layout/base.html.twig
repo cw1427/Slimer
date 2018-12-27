@@ -13,6 +13,7 @@
         <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/font-awesome.min.css"/>
         <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/AdminLTE.min.css"/>
         <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/_all-skins.min.css"/>
+        <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/showLoading.css"/>
         <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/app.css"/>  
     {% endblock %}
     {# Use standard twig block stylesheets to include CSS that is used on single page. #}
@@ -24,9 +25,10 @@
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/jquery.slimscroll.min.js"></script>
 		<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/fastclick.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/adminlte.min.js"></script>
-        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/vue.min.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/bootbox.min.js"></script>
-	<script type="text/javascript" src="{{ base_url() }}/app/Static/js/float-panel.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/float-panel.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.showLoading.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/app.js"></script>
     {% endblock %}
     {% block javascripts_head %}{% endblock %}
 
@@ -88,10 +90,12 @@
                     {% endblock %}
                     {% block admin_lte_breadcrumb %}{% endblock %}
                 </section>
+                <div id="loading">
                 <section class="content">
                     {{ include("adminlte/layout/flash_message.html.twig") }}
                     {% block page_content %}{% endblock %}
                 </section>
+                </div>
             {% endblock %}
         </div>
         {% block admin_lte_footer %}

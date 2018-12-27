@@ -179,6 +179,7 @@ $(function () {
 	$('#deleteBtn').on('click',function(){
 		bootbox.confirm("Are you sure to delte?", function(result){
 			if (result){
+				$('#loading').loading();
 				//----start an ajax for delete request
 				$.ajax({
 					type: "GET",
@@ -186,12 +187,14 @@ $(function () {
 					url: "{{path_for('group-deligate_cancel')}}",
 					data: null, 
 					success: function (data,status){
+						$('#loading').loading();
 						console.log(data);
-						bootbox.alert(data.data.msg);
-						//----reflush
-						window.location.reload();
+						bootbox.alert(data.data.msg,function(){
+    						window.location.reload();
+						});
 					},
 					error: function (data, status, e){
+						$('#loading').loading();
 						bootbox.alert(e);
 					}
 				});

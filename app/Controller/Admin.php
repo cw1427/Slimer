@@ -15,10 +15,6 @@ use function GuzzleHttp\json_encode;
  */
 class Admin extends \Slimer\Controller
 {
-    public function AdminAction()
-    {
-        return $this->render('index/index.html.twig');
-    }
     
     public function approval_deligateAction(){
 

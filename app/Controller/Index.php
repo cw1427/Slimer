@@ -29,7 +29,7 @@ class Index extends \Slimer\Controller
                 $this->flash->addMessage('warning','username or password is not correct');
                 return $this->response->withRedirect('/login');
             }else{
-                return $this->response->withRedirect($this->router->pathFor('admin-admin'));
+                return $this->response->withRedirect($this->router->pathFor('index-index'));
             }
         }
         

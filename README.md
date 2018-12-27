@@ -18,6 +18,9 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 - AdminLTE: A html web template
 
 ----------
+# Common feature on V1.4.2
+- Add webpage showLoading feature to add Ajax request page mask.
+- Add Composer private repoistry dependencies config in composer.json
 
 # Common feature on V1.4.1
 - Refactor slimer project, move some core codes into slimer-core as dependency(which will release to packgist website)
