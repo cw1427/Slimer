@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/fastclick.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/adminlte.min.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/bootbox.min.js"></script>
+        <script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/vue.min.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/float-panel.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.showLoading.js"></script>
         <script type="text/javascript" src="{{ base_url() }}/app/Static/js/app.js"></script>
@@ -65,9 +66,10 @@
         {# Left side column. Contains the logo and sidebar: style can be found in sidebar.less #}
         <aside class="main-sidebar">
             <section class="sidebar">
+              <div id="siderbar">
                   <form action="#" method="get" class="sidebar-form">
                     <div class="input-group">
-                      <input type="text" name="q" class="form-control" placeholder="Search...">
+                      <input type="text" class="form-control" placeholder="Search..." v-model="searchItem">
                       <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                             </button>
@@ -79,6 +81,66 @@
                         {{ sidebar_menu(container.request) }}
                     {% endif %}
                 {% endblock %}
+                <ul class="treeview-menu" data-widget="tree" :style="searchMenuDisplay">
+                	<div v-for="item in searchMenuList">
+                	  <div v-if="contains(item.label)">
+                	    <li><a :href="item.route"><i :class="item.icon"></i> ${item.label}</a></li>
+                	  </div>
+                    </div>
+                </ul>
+            </div>
+                <script>
+                	var vm = new Vue({
+                		delimiters: ['${', '}'],
+						el: '#siderbar',
+						data: {
+							searchItem: '',
+							menuList: {{ container.suit_config.__invoke('menu') | json_encode | raw }},
+							searchMenuList: []
+						},
+						filters: {
+							  
+						},
+						computed:{
+							menuDisplay: function(){
+								if (this.searchItem.length>0){
+									return "display:none";
+								}else{
+									return "display:block";
+								}
+							},
+							searchMenuDisplay:function(){
+								if (this.searchItem.length>0){
+									return "display:block";
+								}else{
+									return "display:none";
+								}
+							},
+						},
+						methods: {
+							pickSearchMenus: function(item){
+								 if (item.route != null && item.route.length >0){
+									 this.searchMenuList.push(item);
+							     }else{
+								     if (item.children !=null && item.children.length>0){
+										 for (var i=0;i<item.children.length;i++){
+											 this.pickSearchMenus(item.children[i]);
+									     }
+									 }
+								 }
+							},
+							contains: function (value) {
+						    	return value.toLowerCase().includes(this.searchItem) ? true : false;
+						  	}	
+						},
+						created: function () {
+							this.menuDisplay="display:block";
+							for (var i=0;i<this.menuList.length;i++){
+								 this.pickSearchMenus(this.menuList[i]);
+						    }
+						}
+                	});
+                </script>
             </section>
         </aside>
         {# Content wrapper. Contains the content of the page. #}
