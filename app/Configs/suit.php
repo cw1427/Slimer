@@ -23,6 +23,17 @@ return [
         'controller' => '\\App\\Controller\\',
     ],
     
+    'tasks'=> [],
+    'notices'=>[],
+    'actions' => [
+        [
+            'route'=>'unintroed',
+            'icon'=>'fa fa-lightbulb-o',
+            'message'=>'Show guidance',
+            'data'=>[]
+        ]
+    ],
+    
     'commands' => [
         'cmd' => '\App\Command\Cmd',
         'sampletask' => '\App\Command\SampleTask',
@@ -51,5 +62,29 @@ return [
     
     'version_key' => 'VERSION',
     'commitid_key' => 'COMMITID',
-    'project_name' => 'Slimer' //----default is Slimer
+    'project_name' => 'Slimer', //----default is Slimer
+    'intro_date' => '2018-12-31',  //-----if not setup will ignore the intro
+    'introductions' => [
+        'app'=>[
+            'data-step' =>'1',
+            'data-intro' => 'Slimer Guide, Please click skip or down to finish introduction.',
+        ],
+        'menuToggleButton' => [
+            'data-step' =>'2',
+            'data-intro' => 'Click here to toggle fold menu11111',
+        ],
+        'actions' => [
+            'data-step' =>'3',
+            'data-intro' => 'Several actions <br/> click show guidance to force introduction',
+        ],
+        'navBarUser' => [
+            'data-step' =>'4',
+            'data-intro' => 'Click here gos to Profile or Sign out',
+            'data-position' => 'bottom-left-aligned'
+        ],
+        'quickSearch'=>[
+            'data-step' =>'5',
+            'data-intro' => 'Input key words about the menus lable for quick seach',
+        ],
+    ]
 ];

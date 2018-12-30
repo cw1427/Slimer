@@ -1,7 +1,7 @@
 {
     "name": "Slimer",
     "type": "web framework",
-    "version": "1.4.2",
+    "version": "1.4.3",
     "description": "Light weight framework based on Slim and AdminLTE and WTF project",
     "authors": [
         {
@@ -9,21 +9,9 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-    	{
-            "type": "composer",
-            "url": "https://<your private composer registry>/packagist"
-        },
-        {
-            "type": "composer",
-            "url": "https://<your private composer registry>/packagistremote/"
-        },
-		{
-			"packagist": false
-		}
-    ],
+
     "require": {
-        "slimer/slimer-core": "^1.0.2"
+        "slimer/slimer-core": "^1.0.3"
     },
     "autoload": {
         "psr-4": {

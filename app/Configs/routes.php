@@ -34,7 +34,7 @@ $routes = [
             'pattern' => 'userprofile',
             'methods' => ['GET']
         ],
-	'user_profile_passwordchange' => [
+	    'user_profile_passwordchange' => [
             'pattern' => 'changepassword',
             'methods' => ['POST']
         ],
@@ -42,6 +42,22 @@ $routes = [
             'pattern' => 'logout',
             'methods' => ['GET']
         ],
+        'introed' => [
+            'pattern' => 'introed',
+            'methods' => ['GET']
+        ],
+        'unintroed'=>[
+            'pattern' => 'unintroed',
+            'methods' => ['GET']
+        ],
+        'sbs_adminlte_show_task' => [
+            'pattern' => 'sbs_adminlte_show_task[/{taskId}]',
+            'methods' => ['GET']
+        ],
+        'sbs_adminlte_all_tasks' => [
+            'pattern' => 'sbs_adminlte_all_tasks',
+            'methods' => ['GET']
+        ]
     ],
 ];
 

@@ -30,6 +30,7 @@ class User extends \Slimer\Orm\Entity {
     }
     
     public function updateLogin(){
+        $this->set("lastLogin",$this->get("changedOn"));
         $this->set("changedOn",date('Y-m-d H:i:s',time()));
         $this->set("changedBy",$_SERVER['REMOTE_ADDR']);
         $this->dbDefault->update($this->getTable(),["changedOn"=>$this->get("changedOn"),"changedBy"=>$this->get("changedBy")],['id'=>$this->data['id']]);

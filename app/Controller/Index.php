@@ -29,7 +29,7 @@ class Index extends \Slimer\Controller
                 $this->flash->addMessage('warning','username or password is not correct');
                 return $this->response->withRedirect('/login');
             }else{
-                return $this->response->withRedirect($this->router->pathFor('index-index'));
+                return $this->response->withRedirect($this->router->pathFor('index'));
             }
         }
         
@@ -65,5 +65,22 @@ class Index extends \Slimer\Controller
         }
         $this->logger->info("user={$this->user->get('loginName')} reset the password for self");
         return $this->json(["msg"=>"success"]);
+    }
+    
+    public function introedAction(){
+        $this->session->set('introed',true);
+        return $this->json(["msg"=>"success"]);
+    }
+    
+    public function unintroedAction(){
+        $this->session->set('introed',false);
+        return $this->response->withRedirect($this->router->pathFor('index'));
+    }
+    
+    
+    public function sbs_adminlte_show_taskAction( $args ) {
+    }
+    
+    public function sbs_adminlte_all_tasks(){
     }
 }

@@ -1,5 +1,11 @@
 {% extends 'adminlte/layout/base.html.twig' %}
 
+{% block stylesheets %}
+{% if isNeedIntro() %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/introjs.min.css"/>
+{% endif %}
+{% endblock %}
+
 {% block header_content %}
     {{ macros.page_header("Portal", "") }}
 {% endblock %}
@@ -55,7 +61,7 @@
                   </p>
                 </li>
                 <li class="list-group-item">
-                  <b>Last Login:</b> <a class="pull-right">{{ container.session.get('user')['changedOn'] }} ({{ container.session.get('user')['changedBy'] }})</a>
+                  <b>Last Login:</b> <a class="pull-right">{{ container.session.get('user')['lastLogin'] }} ({{ container.session.get('user')['changedBy'] }})</a>
                 </li>
               </ul>
 
@@ -74,3 +80,27 @@
 
 {% endblock %}
 
+{% block javascripts %}
+{% if isNeedIntro() %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/intro.min.js"></script>
+<script>
+function introed(){
+	$.ajax({
+		type: "GET",
+		cache: false,
+		url: "{{ path_for('introed') }}" ,
+		data: null, 
+		success: function (data,status){
+
+		},
+		error: function (data, status, e){
+
+		}
+	});
+};
+$(function () {
+	introJs().oncomplete(introed).onexit(introed).start();
+});
+</script>
+{% endif %}
+{% endblock %}

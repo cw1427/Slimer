@@ -1,0 +1,19 @@
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown"   {{ getIntroduction('actions') }}>
+        <i class="fa fa-gears"></i>
+        <span class="label label-warning"></span>
+    </a>
+	<ul class="dropdown-menu" role="menu">
+		<li>
+            <ul class="menu">
+               {% for action in actions %}
+                    <li>
+                        <a href="{{ path_for(action.route, action.data ) }}">
+                            <i class="{{ action.icon }}"></i> {{ action.message }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+         </li>
+     </ul>
+</li>

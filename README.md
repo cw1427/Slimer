@@ -18,7 +18,8 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 - AdminLTE: A html web template
 
 ----------
-# Common feature on V1.4.2
+# Common feature on V1.4.3
+- Add introjs support to make it configurable.
 - Add webpage showLoading feature to add Ajax request page mask.
 - Add Composer private repoistry dependencies config in composer.json
 
@@ -73,6 +74,23 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 
 # Development guide
 
+- Add composer private registry support
+ --Add below code segment into the composer.json file to support for the private composer registry. Make sure it has the credential be available on auth.json.
+ 
+	`"repositories": [
+    	{
+            "type": "composer",
+            "url": "https://<your private composer registry>/packagist"
+        },
+        {
+            "type": "composer",
+            "url": "https://<your private composer registry>/packagistremote/"
+        },
+		{
+			"packagist": false
+		}
+    ],`
+
 - -1. Prepare
   -- Modify the db connection config in: app/Configs/db.php. Slimer support for all of the dbs which: https://medoo.in/ support for.
   -- But for the RBAC, for now I used php-rbac 3rd part library which could only support for mysql or sqlite. Will refactor and implement by medoo.  
@@ -123,3 +141,9 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 
 - home page
 ![Slimer home page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/admin.png)
+
+- Introduction page
+![Slimer intro page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/intro.png)
+
+- Menu quick search page
+![Slimer menuq page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/menuQuickSearch.png)

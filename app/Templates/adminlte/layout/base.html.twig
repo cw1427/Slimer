@@ -40,7 +40,7 @@
         {% block admin_lte_header %}
             <header class="main-header">
                 {% block admin_lte_logo %}
-                    <a href="#" class="logo">
+                    <a href="#" class="logo" {{ getIntroduction('app') }}>
                         <span class="logo-mini"><b>{{ container.suit_config.__invoke('suit.project_name','Slimer') }}</b></span>
                         <span class="logo-lg"><b>{{ container.suit_config.__invoke('suit.project_name','Slimer') }}</b>Portal</span>
                     </a>
@@ -52,6 +52,7 @@
                         <div class="navbar-custom-menu">
                             <ul class="nav navbar-nav">
                                 {% block admin_lte_navbar %}
+                                    {{ nav_bar_actions() }}
                                     {{ nav_bar_notifications() }}
                                     {{ nav_bar_tasks() }}
                                     {{ nav_bar_user_account() }}
@@ -68,7 +69,7 @@
             <section class="sidebar">
               <div id="siderbar">
                   <form action="#" method="get" class="sidebar-form">
-                    <div class="input-group">
+                    <div class="input-group"  {{ getIntroduction('quickSearch') }}>
                       <input type="text" class="form-control" placeholder="Search..." v-model="searchItem">
                       <span class="input-group-btn">
                             <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
