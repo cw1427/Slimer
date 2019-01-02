@@ -11,7 +11,7 @@
     ],
 
     "require": {
-        "slimer/slimer-core": "^1.0.3"
+        "slimer/slimer-core": "^1.0.4"
     },
     "autoload": {
         "psr-4": {
