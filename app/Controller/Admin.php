@@ -275,8 +275,12 @@ class Admin extends \Slimer\Controller
                 array_push($roleids, $child['ID']);
             }
         }
-        $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
+        if (sizeof($roleids)>0){
+            $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
             ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
+        }else{
+            $permList = [];
+        }
         $group["roles"] = $roleList;
         $group["perms"] = array_values($permList);
         $users=$this->dbDefault->select("user",["id","userName","loginName"]);

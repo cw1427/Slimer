@@ -86,5 +86,6 @@ return [
             'data-step' =>'5',
             'data-intro' => 'Input key words about the menus lable for quick seach',
         ],
-    ]
+    ],
+    'menu_visible_by_perm' => True
 ];

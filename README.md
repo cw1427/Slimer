@@ -18,7 +18,8 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 - AdminLTE: A html web template
 
 ----------
-# Common feature on V1.4.3
+# Common feature on V1.4.4
+- Add menu visible by permission feature.
 - Add introjs support to make it configurable.
 - Add webpage showLoading feature to add Ajax request page mask.
 - Add Composer private repoistry dependencies config in composer.json

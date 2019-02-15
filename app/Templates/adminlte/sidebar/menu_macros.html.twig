@@ -2,17 +2,19 @@
 
 {% macro render_menu_item(item,request) %}
     {% import _self as this %}
-    {% if item.route or item.children %}
-        {% set route_name = request.getAttribute('route').getName() | split('-') | join('/') %}
-        {% if item.children and route_name != null %} {% set isActive = isSubMenuActive(item.children,route_name) %} {% endif %}
-        <li id="{{ item.id }}" class="{{ item.children ? 'treeview' : '' }} {% if route_name != null and route_name in item.route %} active  {%  endif %} 
-        {% if item.routeName and route_name != null and route_name in item.routeName %} active {% endif %} 
-        {% if isActive %}active menu-open {% endif %} ">
-            {{ this.render_link(item,isActive,request) }}
-        </li>
-    {% else %}
-        <li class="header">{{ item.label }}</li>
-    {% endif %}
+    {% if isMenuVisible(item) %}
+        {% if item.route or item.children %}
+            {% set route_name = request.getAttribute('route').getName() | split('-') | join('/') %}
+            {% if item.children and route_name != null %} {% set isActive = isSubMenuActive(item.children,route_name) %} {% endif %}
+            <li id="{{ item.id }}" class="{{ item.children ? 'treeview' : '' }} {% if route_name != null and route_name in item.route %} active  {%  endif %} 
+            {% if item.routeName and route_name != null and route_name in item.routeName %} active {% endif %} 
+            {% if isActive %}active menu-open {% endif %} ">
+                {{ this.render_link(item,isActive,request) }}
+            </li>
+        {% else %}
+            <li class="header">{{ item.label }}</li>
+        {% endif %}
+     {% endif %}
 {% endmacro %}
 
 {% macro render_link(link, isActive,request) %}
@@ -25,7 +27,7 @@
         {% else %}
             {% if link.badges %}
                 {% for text, color in link.badges %}
-                    <small class="label pull-right bg-{{ color }}">{{ text }}</small>
+                    <small class="label pull-right bg-{{ color }}">{{ text | raw }}</small>
                 {% endfor %}
             {% endif %}
         {% endif %}
