@@ -47,9 +47,10 @@
                     <th data-field="ID"  data-width="5%">id</th>
                     <th data-field="Title">Name</th>
                     <th data-field="Description">Description</th>
+                    <th data-field="Path">Hierachy Path</th>
                     <th data-field="permissions" data-formatter="permissionFormatter">Direct Permission</th>
-                    <th data-field="Lft" data-width="5%">Left</th>
-                    <th data-field="Rght" data-width="5%">Right</th>
+                    <th data-field="Lft" data-width="5%" data-visible="false">Left</th>
+                    <th data-field="Rght" data-width="5%" data-visible="false">Right</th>
                     <th data-field="action"
                         data-align="center"
                         data-formatter="actionFormatter"
@@ -190,13 +191,13 @@ function permissionFormatter(value, row, index, field) {
 	var num = value.length;
 	var result = num + "|";
 	for (var i=0;i<num;i++){
-		result+=value[i].Title+",";
+		result+=value[i].Title+", ";
 	}
-	result.substring(0,num-1);
-	//if (result.length > 30){
+	result=result.substring(0,result.length-2);
+	if (result.length > 30){
 		return tmpl("col-perm-html",{"resultPref":result.substring(0,30),"index":index});
-	//}
-	//return result;
+	}
+	return result;
 }
 
 function queryParams(params){

@@ -20,7 +20,7 @@ class Admin extends \Slimer\Controller
 
         return $this->render('admin/supervisor_approval_deligate.html.twig');
     }
-      
+    
     public function user_manageAction(){
         
         return $this->render('admin/usermanage.html.twig');
@@ -161,7 +161,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($userGroupData,["GroupID"=>$g,"UserID"=>$data['id']]);
                     }
-                    $db->insert("perm_usergroup",$userGroupData);
+                    if (sizeof($userGroupData)>0){
+                        $db->insert("perm_usergroup",$userGroupData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back
@@ -277,7 +279,7 @@ class Admin extends \Slimer\Controller
         }
         if (sizeof($roleids)>0){
             $permList = $this->dbDefault->select("perm_rolepermissions(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_permissions(c)"=>["a.PermissionID"=>"ID"]],
-            ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
+                ["c.ID","c.Title","c.Description"],["b.ID"=>$roleids]);
         }else{
             $permList = [];
         }
@@ -306,7 +308,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($groupRoleData,["RoleID"=>$g,"UserID"=>$data['id'],"AssignmentDate"=>time()]);
                     }
-                    $db->insert("perm_userroles",$groupRoleData);
+                    if (sizeof($groupRoleData)>0){
+                        $db->insert("perm_userroles",$groupRoleData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back
@@ -338,7 +342,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($groupUserData,["UserID"=>$g,"GroupID"=>$data['id']]);
                     }
-                    $db->insert("perm_usergroup",$groupUserData);
+                    if (sizeof($groupUserData)>0){
+                        $db->insert("perm_usergroup",$groupUserData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back
@@ -387,6 +393,8 @@ class Admin extends \Slimer\Controller
                     \array_push( $role["permissions"],$perm);
                 }
             }
+            //----get the node path
+            $role['Path']=$this->rbac->Roles->getPath($role['ID']);
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$roleList,"total"=>$total]);
     }
@@ -501,7 +509,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($rolePermData,["PermissionID"=>$g,"RoleID"=>$data['id'],"AssignmentDate"=>time()]);
                     }
-                    $db->insert("perm_rolepermissions",$rolePermData);
+                    if (sizeof($rolePermData)>0){
+                        $db->insert("perm_rolepermissions",$rolePermData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back
@@ -530,7 +540,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($roleGroupData,["UserID"=>$g,"RoleID"=>$data['id']]);
                     }
-                    $db->insert("perm_userroles",$roleGroupData);
+                    if (sizeof($roleGroupData)>0){
+                        $db->insert("perm_userroles",$roleGroupData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back
@@ -581,6 +593,8 @@ class Admin extends \Slimer\Controller
                     \array_push( $perm["roles"],$role);
                 }
             }
+            //----get the node path
+            $perm['Path']=$this->rbac->Permissions->getPath($perm['ID']);
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$permList,"total"=>$total]);
     }
@@ -666,7 +680,9 @@ class Admin extends \Slimer\Controller
                     foreach($data['selected'] as $g){
                         \array_push($rolePermData,["RoleID"=>$g,"PermissionID"=>$data['id'],"AssignmentDate"=>time()]);
                     }
-                    $db->insert("perm_rolepermissions",$rolePermData);
+                    if (siezeof($rolePermData)>0){
+                        $db->insert("perm_rolepermissions",$rolePermData);
+                    }
                     $data["result"]=true;
                 }catch (\Exception $e){
                     //---roll back

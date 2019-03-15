@@ -196,13 +196,13 @@ function groupFormatter(value, row, index, field) {
 	var num = value.length;
 	var result = num + "|";
 	for (var i=0;i<num;i++){
-		result+=value[i].Name+",";
+		result+=value[i].Title+", ";
 	}
-	result.substring(0,num-1);
-	//if (result.length > 30){
+	result=result.substring(0,result.length-2);
+	if (result.length > 30){
 		return tmpl("col-group-html",{"resultPref":result.substring(0,30),"index":index});
-	//}
-	//return result;
+	}
+	return result;
 }
 
 function activeFormatter(value, row, index, field){
