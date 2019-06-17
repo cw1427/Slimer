@@ -43,8 +43,12 @@ class Admin extends \Slimer\Controller
         foreach($userList as $user){
             \array_push($uids,$user["id"]);
         }
-        $groupList = $this->dbDefault->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
-            ["b.Name","b.Title","c.id"],["c.id"=>$uids]);
+        if (sizeof($uids)>0){
+            $groupList = $this->dbDefault->select("perm_usergroup(a)",["[><]perm_group(b)"=>["a.GroupID"=>"ID"],"[><]user(c)"=>["a.UserID"=>"id"]],
+                ["b.Name","b.Title","c.id"],["c.id"=>$uids]);
+        }else{
+            $groupList=[];
+        }
         foreach($userList as &$user){
             $user["groups"]=[];
             foreach ($groupList as $group){
@@ -203,8 +207,12 @@ class Admin extends \Slimer\Controller
         foreach($groupList as $group){
             \array_push($uids,$group["ID"]);
         }
-        $roleList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
-            ["b.Title","b.Description","c.ID"],["c.ID"=>$uids]);
+        if (sizeof($uids)>0){
+            $roleList = $this->dbDefault->select("perm_userroles(a)",["[><]perm_roles(b)"=>["a.RoleID"=>"ID"],"[><]perm_group(c)"=>["a.UserID"=>"ID"]],
+                ["b.Title","b.Description","c.ID"],["c.ID"=>$uids]);
+        }else{
+            $roleList=[];
+        }
         foreach($groupList as &$group){
             $group["Roles"]=[];
             foreach ($roleList as $role){

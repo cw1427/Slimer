@@ -5,9 +5,9 @@ apply plugin: 'docker'
 buildscript {
 
     repositories {
-        maven {
-            url "<your local maven registry nexus>"
-        }
+        //maven {
+        //    url "<your local maven registry nexus>"
+        //}
         jcenter()
         mavenCentral()
     }
@@ -19,9 +19,9 @@ buildscript {
 
 repositories {
 
-   maven {
-        url "<your local maven registry nexus>"
-   }
+   //maven {
+   //     url "<your local maven registry nexus>"
+   //}
    jcenter()
    mavenCentral()
 }
@@ -37,7 +37,8 @@ docker{
 
 task slimerDocker(type:Docker){
     dockerfile='Dockerfile'
-    setEnvironment("slimer_COMMIT_ID", commitID())
+    String cid=commitID()
+    setEnvironment("slimer_COMMIT_ID", cid?cid:'NA')
     applicationName = 'slimer_dev'
     tagVersion = getVersion()
     if (System.properties['registry'] != null) {
@@ -69,6 +70,7 @@ def commitID() {
         //commandLine 'git', 'show', '-s', '--pretty=oneline'
         commandLine 'git', 'rev-parse', '--short', 'HEAD'
         standardOutput = stdout
+        ignoreExitValue = true
     }
     return stdout.toString().trim()
 }

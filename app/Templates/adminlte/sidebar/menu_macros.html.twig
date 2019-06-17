@@ -12,7 +12,7 @@
                 {{ this.render_link(item,isActive,request) }}
             </li>
         {% else %}
-            <li class="header">{{ item.label }}</li>
+            <li class="header">{{ item.label | raw }}</li>
         {% endif %}
      {% endif %}
 {% endmacro %}
@@ -21,7 +21,7 @@
     {% import _self as this %}
     <a href="{{ link.children ? '#' : '/' in link.route ? link.route : path_for(link.route, link.routeArgs) }}">
         <i class="{{ link.icon|default('fa fa-circle-o') }}"></i>
-        <span>{{ link.label }}</span>
+        <span>{{ link.label | raw }}</span>
         {% if link.children %}
             <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
         {% else %}

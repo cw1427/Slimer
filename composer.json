@@ -1,7 +1,7 @@
 {
     "name": "Slimer",
     "type": "web framework",
-    "version": "1.4.5",
+    "version": "1.4.6",
     "description": "Light weight framework based on Slim and AdminLTE and WTF project",
     "authors": [
         {
@@ -11,7 +11,7 @@
     ],
 
     "require": {
-        "slimer/slimer-core": "^1.0.5"
+        "slimer/slimer-core": "^1.0.8"
     },
     "autoload": {
         "psr-4": {
