@@ -16,11 +16,6 @@ use function GuzzleHttp\json_encode;
 class Admin extends \Slimer\Controller
 {
     
-    public function approval_deligateAction(){
-
-        return $this->render('admin/supervisor_approval_deligate.html.twig');
-    }
-    
     public function user_manageAction(){
         
         return $this->render('admin/usermanage.html.twig');
@@ -76,7 +71,8 @@ class Admin extends \Slimer\Controller
         $params["createdBy"] = $this->user->get('loginName');
         $params["password"] = \password_hash("123456", PASSWORD_DEFAULT);
         $user->setData($params);
-        $user->save();
+        //$user->save();
+        $this->dbDefault->insert($user->getTable(),$params);
         $this->flash->addMessage('success',"Successfully add a new user {$params['loginName']}");
         return $this->response->withRedirect($this->router->pathFor('admin-user_manage'));
     }

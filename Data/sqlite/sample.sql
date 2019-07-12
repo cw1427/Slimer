@@ -1,0 +1,5 @@
+CREATE TABLE sample (
+  id INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL,
+  name varchar(45)   DEFAULT NULL,
+  country varchar(255)   DEFAULT NULL
+);

@@ -7,20 +7,13 @@
 
 $routes = [
     '/' => [ //Default group for /
-        'index' => [ //route name and action in controller
+        'main' => [ //route name and action in controller
             'pattern' => '', //pattern
             'methods' => ['GET'], //Allowed HTTP methods
-            'rbac' => [ //Role-Based Access Controll
-                'anonymous' => ['GET'], //Key is role name, value is array of allowed HTTP methods for that role
-            ],
         ],
-        'second' => [ //route name
-            'pattern' => 'second', //pattern
-            'rbac' => [
-                'anonymous' => ['GET'],
-            ],
-            //all other fields will be defaults
-            //methods = ['GET']
+        'index' => [ //route name and action in controller
+            'pattern' => 'index', //pattern
+            'methods' => ['GET'], //Allowed HTTP methods
         ],
         'login' => [
             'pattern' => 'login',

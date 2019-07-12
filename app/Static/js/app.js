@@ -4,7 +4,7 @@
  */
 	jQuery.fn.loading = function(delay) {
 		if (delay ==null){
-			delay =10000;//---10 second delay
+			delay =60000;//---60 second delay
 		}
 		var option={
     			afterShow: function(option){

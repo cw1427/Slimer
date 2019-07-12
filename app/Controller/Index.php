@@ -7,6 +7,12 @@ namespace App\Controller;
 
 class Index extends \Slimer\Controller
 {
+    
+    public function mainAction()
+    {
+        return $this->response->withRedirect($this->router->pathFor('index'));
+    }
+    
     public function indexAction()
     {
         return $this->render('index/index.html.twig');
@@ -16,7 +22,7 @@ class Index extends \Slimer\Controller
     {
         if ($this->request->isGet()){
             if ($this->container->has('user') && $this->container->get('user')){
-                return $this->response->withRedirect($this->router->pathFor('admin-admin'));            
+                return $this->response->withRedirect($this->router->pathFor('index'));            
             }else{
                 $this->render('index/login.html.twig');
             }

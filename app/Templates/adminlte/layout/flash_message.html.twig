@@ -1,7 +1,7 @@
 {% import _self as this %}
 
 {% if flash()|length %}
-<div class="box-body" style="width:500px;margin-top: 1%;margin-right:auto;margin-left:auto">
+<div class="" style="width:500px;margin-right:auto;margin-left:auto">
 <div class="flyover">
 {% for class, messages in flash() %}
     {% for msg in messages %}
@@ -14,7 +14,13 @@
     </div>
     <script>
     	$(function () {
-    		 $("#flash_{{ class }}_{{ loop.index }}").fadeIn(1000).delay(2000).fadeOut(2000);
+    		{% if class == "danger" %}
+    		 $("#flash_{{ class }}_{{ loop.index }}").fadeIn(1000);
+    		{% elseif class == "warning" %}
+    		$("#flash_{{ class }}_{{ loop.index }}").fadeIn(1000).delay(2000).fadeOut(60000);
+    		{% else %}
+    		$("#flash_{{ class }}_{{ loop.index }}").fadeIn(1000).delay(2000).fadeOut(30000);
+    		{% endif %}
         });
     </script>
     {% endfor %}

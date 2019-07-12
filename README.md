@@ -1,11 +1,39 @@
 # Slimer
-A light weight encapsulation of PHP Slim and AdminLTE template.
+*A light weight encapsulation of PHP <a href="http://www.slimframework.com/docs/" target="blank"> Slim 3 </a> and [AdminLTE](https://adminlte.io/themes/AdminLTE/index2.html) template.*
 
-<H3>Please star it to encourage me.</h3>
+*A WebMVC skeleton framework based on [Slimer-core](https://packagist.org/packages/slimer/slimer-core)*
 
-A WebMVC skeleton framework based on https://packagist.org/packages/slimer/slimer-core
+*Built-in [Medoo](https://medoo.in) have multpi DB type support. So make sure the php_pdo_* DB driver had been installed.
 
-Full feature MVC, RBAC, RESTFUL API, Backend commands.
+1.X versions would based on PHP5.6, support for Sqlite3, Mysql, Pgsql adn so on which Meedo framework support for.
+
+> Feature list
+
+- Container
+- Config suit
+- RBAC
+- RESTFUL API 
+- Commands
+- LDAP
+- Message flash
+- Mail template
+- Guide
+- Docker
+
+
+> Version release history.
+
+
+## v1.4.6(latest ready to go in the main branch)
+- Bug fix and add menu lable raw filter.
+
+## v1.4.5
+- Fix some bug for the menu quick search and the security management page adjustment.
+- Add menu visible by permission feature.
+- Add introjs support to make it configurable.
+- Add webpage showLoading feature to add Ajax request page mask.
+- Add Composer private repoistry dependencies config in composer.json
+
 
 ----------
 # Based on
@@ -17,97 +45,9 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
 
 - AdminLTE: A html web template
 
-----------
-# Common feature on V1.4.5
-- Fix some bug for the menu quick search and the security management page adjustment.
-- Add menu visible by permission feature.
-- Add introjs support to make it configurable.
-- Add webpage showLoading feature to add Ajax request page mask.
-- Add Composer private repoistry dependencies config in composer.json
+# Development guide 
 
-# Common feature on V1.4.1
-- Refactor slimer project, move some core codes into slimer-core as dependency(which will release to packgist website)
-- Split slimer core folder out of this project, and release it to: https://packagist.org/packages/slimer/slimer-core
-- Change the composer dependency from slimer/slimer-core on packgist:  https://packagist.org/packages/slimer/slimer-core
-
-# Common feature on V1.3.0
-- Add RBAC control backend CLI command and UI management pages.
-
-# Common feature on V1.2.2
-- Add Http basic authen feature.
-
-# Common feature on V1.2
-
-- Dockerization the Slimer
-- Setup Slimer running in php-fpm mode
-- Add nginx fastcgi support
-- Add gradle build support
-
-----------
-
-# Common feature on V1.1
-- Add SMTP mailer sender
-- Add PHP ShellCommand to execute the command by exec or pro_open
-- Add guzzle to bring the requests feature in Slimer.
-- Add Back to Top feature and add bootstrap table, datetimerange feature.
-
-----------
-
-# Common feature on V1.0
-- Basic login authentication based on DB and LDAP.
-
-- Basic MVC structure like Java Structs2. (request mapping to the Controller action function).
-
-- Dependency Intergection container extends by provider. 
-
-- Extendable configuration by module files.
-
-- Light weight Slim-Flash wrapper to bring easily alert feature in page.
-
-- Implement adminLTE template in Slimer.
-
-- PHP Session control based on interface.
-
-- Log management.
-
-- Flexable web page menu config.
-
-----------
-
-# Development guide
-
-- Add composer private registry support
- --Add below code segment into the composer.json file to support for the private composer registry. Make sure it has the credential be available on auth.json.
- 
-	`"repositories": [
-    	{
-            "type": "composer",
-            "url": "https://<your private composer registry>/packagist"
-        },
-        {
-            "type": "composer",
-            "url": "https://<your private composer registry>/packagistremote/"
-        },
-		{
-			"packagist": false
-		}
-    ],`
-
-- -1. Prepare
-  -- Modify the db connection config in: app/Configs/db.php. Slimer support for all of the dbs which: https://medoo.in/ support for.
-  -- But for the RBAC, for now I used php-rbac 3rd part library which could only support for mysql or sqlite. Will refactor and implement by medoo.  
-  
-- 0. Initialization
-  -- When we want to start play Slimer, just need to run "php composer.phar install","php composer.phar update" in the project root path to install all of the dependencies.
-  -- Run "php index.php cmd -l" to check all of the built-in commands.
-  -- And then run the "php index.php dbinit --sync --dbEngine dbDefault to init the DB table and the data.
-  -- If you need RBAC permission controll, just run the RBAC related command to do the initialization.
-     Because I used php-rbac library as the bottom library which for now only support for mysql|sqlite3. 
-     I will refactor it as a part of slimer.
-  	 ----Run the "php index.php rbacinit --dbEngine dbDefault" to init the DB table and the data.
-  	 ----Run "php index.php rbacinit --dbEngine dbDefault" to init the rbac tables.
-  	 ----Run "php index.php rbacreset --force" to init the basic rbac metadata.
-  -- Make sure you have made the DB tables and init data DDL sql in file under Data folder.  e.g  users.sql
+>[guide doc](https://github.com/cw1427/Slimer/blob/master/docs/quick_start.md)
 
 - 1. Configs
 
@@ -128,7 +68,6 @@ Full feature MVC, RBAC, RESTFUL API, Backend commands.
   
 - 7. Add gradle support
   -- build the docker command:  gradle -Dregistry=<your local docker registry> slimerDocker <-Dpush=true>
-
 
 
 

@@ -9,11 +9,6 @@ return [
         'pattern' => '/admin',
         'methods' => ['GET'],
     ],
-    'approval_deligate' => [
-        'pattern' => '/admapprovaldeligate',
-        'methods' => ['GET'],
-        'perm' => ['approval']
-    ],
     'user_manage' => [
         'pattern' =>'/usermanage',
         'methods' => ['GET'],

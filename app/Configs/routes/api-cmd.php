@@ -9,7 +9,7 @@ return [
         'pattern' => '/dbinit',
         'methods' => ['GET','POST'],
         'namespace' => '\\App\\Api\\',
-	'perm' => [
+	    'perm' => [
             'root'
         ]
     ],

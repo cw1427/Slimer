@@ -8,7 +8,8 @@ return [
         'id' => uniqid(),
         'active' => true,
         'label' => 'Portal',
-        'route' => '/admin/admin',
+        'route' => '/index',
+        'routeName' => '/index',
         'icon' => 'fa fa-dashboard',
         'badges' => [
             'new' => 'green'
@@ -21,14 +22,6 @@ return [
         'route' => '',
         'icon' => 'fa fa-cog',
         'children' => [
-            [
-                'id' => uniqid(),
-                'active' => false,
-                'label' => 'Approval Delegation',
-                'route' => '/admin/admapprovaldeligate',
-                'routeName' => '/admin/approval_deligate',
-                'icon' => 'fa fa-arrows-h'
-            ],
             [
                 'id' => uniqid(),
                 'active' => false,
@@ -66,26 +59,25 @@ return [
     [
         'id' => uniqid(),
         'active' => false,
-        'label' => 'charts',
-        'route' => 'auth/second',
+        'label' => 'Samples',
+        'route' => '',
         'icon' => 'fa fa-th',
         'children' => [
             [
                 'id' => uniqid(),
                 'active' => true,
-                'label' => 'ChartJS',
-                'route' => '/auth/login',
-		'routeName' => '/auth/loginname',
+                'label' => 'Forms',
+                'route' => '/samples/form',
                 'icon' => 'fa fa-th'
             ],
             [
                 'id' => uniqid(),
                 'active' => true,
-                'label' => 'Flot',
-                'route' => '/auth/login',
-		'routeName' => '/auth/loginname',
+                'label' => 'Tables',
+                'route' => '/samples/table',
+                'routeName' => '/samples/table',
                 'icon' => 'fa fa-th'
-            ]
+            ],
         ]
     ],
 ];

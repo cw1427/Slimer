@@ -1,0 +1,389 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table-filter-control.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Samples", "Table CRUD") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="{{ path_for('admin-admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><i class="fa fa-cloud"></i> Samples</li>
+        <li class="active"><i class="fa fa-pencil"></i> table</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <i class="fa fa-random"></i>
+    <h3 class="box-title">
+    Manage the sample table data
+    </h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body row" style="min-height:560px; height:auto!important;margin: 0 auto;">
+   <div class="row">
+  	<div class="col-md-12">
+  			<div id="toolbar">
+      			   <button type"button" class="btn btn-primary" id="addBtn" data-toggle="modal" data-target="#modal-artgroupadd"><i class="fa fa-user"></i> &nbsp;new sample data</button>
+      	   </div>
+      	   <table id="table"
+                   data-show-refresh="true"
+                   data-show-columns="true"
+                   data-search="true"
+                   data-query-params="queryParams"
+                   data-toolbar="#toolbar"
+                   data-filter-control="true"
+                   data-filter-show-clear="true"
+                   data-search-on-enter-key="true"
+                   data-click-to-select="true">
+                <thead>
+                <tr>
+                    <th data-field="id"  data-width="5%">ID</th>
+                    <th data-field="name" data-filter-Control="input">Name</th>
+                    <th data-field="country" data-formatter="approverFormatter">Country</th>
+                    <th data-field="action"
+                        data-align="center"
+                        data-formatter="actionFormatter"
+                        data-events="actionEvents"
+                        data-width="10%">Action</th>
+                </tr>
+                </thead>
+            </table>
+     </div>
+   </div>
+   
+   <!-- add modal dialog -->
+   <div class="modal fade" id="modal-artgroupadd" data-keyboard="false" data-backdrop="false">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">data add</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                	<form id="artGroupForm" class="form-horizontal" method="POST" action="{{ path_for('samples-table_add') }}">
+                		<div class="form-group">
+                          <label for="" class="col-sm-3 control-label"> name:</label>
+                          <div class="col-sm-8">
+                            <input type="input" class="form-control" id="name" name="name" value=""/>
+                          </div>
+                          <span style="color:#FF0000;">*</span>
+                        </div>
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label">country list:</label>
+                           <div class="col-sm-8">
+                               <textarea class="form-control" rows="3" placeholder="Space separated countries" id="country" name="country" ></textarea>
+                          </div>
+                          <span style="color:#FF0000;">*</span>
+                        </div>
+       					
+                    </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+              </div>
+            </div>
+            <!-- /.modal-content -->
+          </div>
+          <!-- /.modal-dialog -->
+    </div>
+   <!--/. end ofadd modal dialog -->
+   
+   
+     <!-- edit modal dialog -->
+   <div class="modal fade" id="modal-artgroupedit" data-keyboard="false" data-backdrop="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">data edit</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+            	<form id="artGroupEditForm" class="form-horizontal" method="POST" action="">
+            		<div class="form-group">
+                      <label for="" class="col-sm-3 control-label">name:</label>
+                      <div class="col-sm-8">
+                        <input type="input" class="form-control" id="nameEdit" name="name" value="" readonly/>
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                    <div class="form-group">
+                      <label for="" class="col-sm-3 control-label">country list:</label>
+                       <div class="col-sm-8">
+                           <textarea class="form-control" rows="3" placeholder="Space separated countries" id="countryEdit" name="countryEdit" ></textarea>
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                   
+                </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="editSubmitBtn">Submit</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+   
+    <div class="modal fade" id="modal-ownerlist">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">country List</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row" id="ownerListDiv">
+            	
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+  	
+  </div>
+  <!-- /.box-body -->
+
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table-filter-control.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/x-tmpl" id="action-html">
+<div class="row">
+<a class="btn"  href="javascript:editItem({&=o.index&},'{&=o.row.country&}')" title="Update Item"><i class="fa fa-edit"></i></a>
+<a class="btn"  href="javascript:deleteItem({&=o.row.id&},'{&=o.row.country&}')" title="Delete Item"><i class="fa fa-trash"></i></a>
+</div>
+</script>
+<script type="text/x-tmpl" id="col-owner-html">
+{& for (var i=0; i<o.resultPref.length; i++) { &}
+  {& if (i<4) { &}
+	<span class="label label-primary" style="margin-left:2px">{&=o.resultPref[i] &}</span>
+  {& } else { &}
+		...<a class='btn' href="javascript:detail('{&=o.index&}')">(See all)</a>
+        {& break; &}
+  {& } &}  
+{& } &}
+</script>
+
+<script type="text/x-tmpl" id="owners-table-html">
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<table class="table table-striped">
+     <tr>
+        <th style="width: 10px">#</th>
+        <th>country Name</th>
+     </tr>
+{& for (var i=0; i<o.owners.length; i++) { &}
+     <tr>
+         <td>{&=i + 1 &}.</td>
+         <td>{&=o.owners[i] &}</td>
+     </tr>
+{& } &}
+</table>
+</div>
+</div>
+</script>
+
+<script>
+
+function actionFormatter(value, row, index, field){
+	return tmpl("action-html",{"row":row,"index":index});
+}
+
+function approverFormatter(value, row, index, field) {
+	if (value == null) return "";
+	var rs = value.split(" ");
+	return tmpl("col-owner-html",{"resultPref":rs,"index":index});
+
+}
+
+function queryParams(params){
+	return params;
+}
+
+function deleteItem(id,name){
+	bootbox.confirm({
+	    message: "Do you want to confirm delete this data=" + name,
+	    buttons: {
+	        confirm: {
+	            label: '<i class="fa fa-check"></i> Confirm',
+	            className: 'btn-success'
+	        },
+	        cancel: {
+	            label: '<i class="fa fa-times"></i> Cancel',
+	            className: 'btn-danger'
+	        }
+	    },
+	    callback: function (result) {
+	        if (result){
+				$.ajax({
+					type: "DELETE",
+					cache: false,
+					url: "{{ path_for('samples-table_delete') }}",
+					data: {"id":id,"name":name}, 
+					success: function (data,status){
+						//----reflush
+						bootbox.alert(data.data.message,function(){
+    						//window.location.reload();
+    						$('#table').bootstrapTable('refresh');
+						});
+					},
+					error: function (data, status, e){
+						if (typeof(res.responseJSON.error) !== "undefined" ){
+							bootbox.alert(res.responseJSON.error);
+						}else{
+							bootbox.alert('Error occured: ' + status);
+						}
+					}
+				});
+		    }else{
+				
+			}
+	    }
+	});
+	
+}
+
+function detail(id){
+	var $innerHtml = tmpl("owners-table-html",{"owners":$('#table').bootstrapTable('getData')[id].country.split(" ")});
+	$("#ownerListDiv").html($innerHtml);
+	$("#modal-ownerlist").modal();
+	
+};
+
+function editItem(id,name){
+	var row = $('#table').bootstrapTable('getData')[id];
+	$('#nameEdit').val(row.name);
+	$('#countryEdit').val(row.country);
+	$("#artGroupEditForm").data('validator').resetForm();
+	$("#modal-artgroupedit").modal();
+}
+
+$(function () {
+
+	$("#artGroupForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: true,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			name: {required: true},
+			country: {required: true},
+		},
+		messages: {
+
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-8'));
+		}
+		
+	});
+
+	$("#artGroupEditForm").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: true,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			nameEdit: {required: true},
+			countryEdit: {required: true},
+		},
+		messages: {
+
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-8'));
+		}
+		
+	});
+	
+	$table = $('#table').bootstrapTable(
+			{
+				url: "{{path_for('samples-table_list')}}",
+				sidePagination: "server",
+				pagination: true,
+				pageSize: 10,
+				pageNumber: 1,
+				pageList:[10,20,50,100],
+				smartDisplay: false
+   			}
+	);
+	$('#modal-artgroupadd').on('show.bs.modal', function (e) {
+		  $("#artGroupForm").data('validator').resetForm();
+		  $('#name').val(null);
+		  $('#desc').val(null);
+		  $('#approvers').val(null);
+    });
+
+	$('#submitBtn').on('click',function(){
+		if ($('#artGroupForm').valid()) {
+			$('#loading').loading();
+			$('#artGroupForm').submit();
+		}
+	});
+
+	$('#editSubmitBtn').on('click',function(){
+		if ($('#artGroupEditForm').valid()) {
+			$('#loading').loading();
+			$('#artGroupEditForm').submit();
+		}
+	});
+	
+
+});
+</script>
+{% endblock %}
+

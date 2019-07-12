@@ -1,0 +1,164 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table-filter-control.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Request form", "Submit form which validation") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+       <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="">Samples</li>
+        <li class="active">Form</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <i class="fa fa-random"></i>
+    <h3 class="box-title">
+    	Sample form page description here.
+    </h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body row" style="min-height:560px; height:auto!important;margin: 0 auto;">
+	<div class="col-md-offset-3 col-md-6" style="margin-top:2%">	
+		<div class="box">
+    		<form id="form" class="form-horizontal" method="post" action="{{ path_for('samples-form_submit') }}">
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">Core ID:</label>
+                      <div class="col-sm-7">
+                        <input type="input" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">Requester's Name:</label>
+                      <div class="col-sm-7">
+                        <input type="input" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
+                      </div>
+                    </div>
+                    {% if isAdmin > 0 %}
+                    <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">New approver's CoreID:</label>
+                      <div class="col-sm-7">
+                        <input type="input" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                    {% else %}
+					 <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">Select an approver's CoreID:</label>
+                      <div class="col-sm-7">
+                         <select class="form-control" id="newCoreid" name="newCoreid">
+                  			 	<option value=''>Select an approver</option>
+                  			     {% for key,value in al %}
+                        		 	<option value="{{ key }}">{{ value }}</option>
+                        		 {% endfor %}
+                  		  </select>
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">input:</label>
+                      <div class="col-sm-7">
+                        <input type="input" class="form-control" id="newinput" name="newinput" placeholder="newinput">
+                      </div>
+                      <span style="color:#FF0000;">*</span>
+                    </div>
+                      <div class="form-group">
+                      <label for="" class="col-sm-4 control-label">Reason:</label>
+                      <div class="col-sm-7">
+                        <textarea class="form-control" rows="3" placeholder="Enter ..." id="reasonText" name="reasonText" ></textarea>
+                      </div>
+                      <span style="color:#FF0000">*</span>
+                    </div>
+                   </div>
+                  <!-- /.box-body -->
+                  <div class="box-footer">
+                     <div class="row">
+                        <div class="col-md-2 col-md-offset-4">
+                        	<button type="button" class="btn btn-default" id="resetBtn">Reset</button>
+                        </div>
+                         <div class="col-md-2">
+                        	<button type="button" class="btn btn-info pull-right" id="submitBtn">Submit</button>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /.box-footer -->
+              </form>
+        </div>
+	</div>
+
+  </div>
+  <!-- /.box-body -->
+
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table-filter-control.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script>
+$(function () {
+	$("#form").validate({
+		errorElement: 'div',
+		errorClass: 'help-block',
+		focusInvalid: false,
+		onclick: false,
+		onkeyup: true,
+		onblur: true,
+		rules: {
+			newinput: {required: true},
+			newCoreid: {required: true},
+			reasonText: {required: true}
+		},
+		messages: {
+			newinput:{required:'please input newinput'},
+			newCoreid:{required:'please select newCoreid'},
+			reasonText:{required:'please input the reason'},
+		},
+		highlight: function (e) {
+			$(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+		},
+		success: function (e) {
+			$(e).closest('.form-group').removeClass('has-error').addClass('has-info');
+			$(e).remove();
+		},
+		errorPlacement: function (error, element) {  //----error placement
+			error.appendTo($(element).closest('.form-group >.col-sm-7'));
+		}
+		
+	});
+	
+	
+	$('#submitBtn').on('click',function(){
+		if ($('#form').valid()) {
+			$('#loading').loading();
+			$('#form').submit();
+		}
+	});
+
+	$('#resetBtn').on('click',function(){
+		window.location.reload();
+	});
+});
+</script>
+{% endblock %}
