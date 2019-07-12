@@ -47,7 +47,7 @@
 
 # Development guide 
 
->[guide doc](https://github.com/cw1427/Slimer/blob/master/docs/quick_start.md)
+##[guide doc](https://cw1427.github.io/Slimer)
 
 - 1. Configs
 
