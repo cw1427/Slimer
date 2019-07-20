@@ -7,9 +7,11 @@
 
 1.X versions would based on PHP5.6, support for Sqlite3, Mysql, Pgsql adn so on which Meedo framework support for.
 
-> Feature list
+## Feature list
 
 - Container
+- Controller action
+- Twig template
 - Config suit
 - RBAC
 - RESTFUL API 
@@ -21,13 +23,17 @@
 - Docker
 
 
-> Version release history.
+> Feature plan.
+
+ - Front-end UI
+ - RESTAPI by token
+ - Moduels ORM
 
 
-## v1.4.6(latest ready to go in the main branch)
+### v1.4.6(latest ready to go in the main branch)
 - Bug fix and add menu lable raw filter.
 
-## v1.4.5
+### v1.4.5
 - Fix some bug for the menu quick search and the security management page adjustment.
 - Add menu visible by permission feature.
 - Add introjs support to make it configurable.

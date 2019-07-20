@@ -47,7 +47,7 @@
 
 # Development guide 
 
-##[guide doc](https://cw1427.github.io/Slimer)
+## [guide doc](https://cw1427.github.io/Slimer)
 
 - 1. Configs
 
