@@ -3,6 +3,13 @@
 - Basic Concepts
 -  - [Project Structure](structure.md)
    - Config
+    - [Configure](config.md)
     - [Suit Config](suit-config.md)
+    - [Authentication Config](auth-config.md)
     - [Router Config](router-config.md)
     - [DB Config](db-config.md)
+    - [Menu Config](menu-config.md)
+    - [RBAC init Config](rbac-config.md)
+    - [Session Config](session-config.md)
+    - [Mail Config](mail-config.md)
+    - [Logger Config](log-config.md)

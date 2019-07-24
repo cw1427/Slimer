@@ -4,6 +4,6 @@
  * Desc: The monolog log config
  */
 return [
-    'channel' => 'gam',
+    'channel' => 'slimer',
     'level' => ('prod' === \getenv('APP_ENV')) ? \Monolog\Logger::WARNING : \Monolog\Logger::DEBUG,
 ];
