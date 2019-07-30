@@ -1,5 +1,15 @@
 # Slimer Configure in Container
 
+## APP_ENV
+
+Slimer setup an environment variable **APP_ENV** if it has been setup to 'prod' some production config will be enabled:
+
+- Slim displayErrorDetails: will not show the error stack
+- Slim debug mode will be disable
+- routerCacheFile: will enable router cache.
+- HTML config auto reload will be shut down.
+- Logger level will be setup to warning insteand of debug.
+
 ## Config dir
 
 Slimer App class allow customize the config_dir path when in the initialization

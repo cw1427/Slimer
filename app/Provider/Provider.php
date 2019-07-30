@@ -23,7 +23,7 @@ class Provider implements ServiceProviderInterface
         $container['logger'] = function ($c) {
             $config = $c['config']('log');
             $logger = new \Monolog\Logger(isset($config['channel'] ) ? $config['channel'] : 'app');
-            $streamHandler = new \Monolog\Handler\StreamHandler(LOG_PATH . DS .'gam_'.date("Ymd").'.log');
+            $streamHandler = new \Monolog\Handler\StreamHandler(LOG_PATH . DS . $config['channel'].'_'.date("Ymd").'.log');
             $introspection = new \Monolog\Processor\IntrospectionProcessor (
                 \Monolog\Logger::DEBUG, // whatever level you want this processor to handle
                 [
