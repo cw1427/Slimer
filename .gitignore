@@ -1,6 +1,5 @@
 *.pyc
 .buildpath
-app.db
 ./tmp
 ./build/*
 *.sublime*

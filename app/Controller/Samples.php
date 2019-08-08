@@ -70,17 +70,4 @@ class Samples extends \Slimer\Controller
         }
     }
     
-    public function edit_artgroupAction(){
-        $params = $this->request->getParams();
-        $data=[];
-        $data['AGROUP'] = trim($params['name']," ");
-        $data['APPROVERS'] = trim($params['approvers']," ");
-        $data['DESCRIPTION'] = $params['desc'];
-        $data['INTERNAL'] = $params['type'] == 0? 'Y':'N';
-        $data['EXTERNAL'] = $params['type'] == 1? 'Y':'N';
-        $data['TYPE'] = $params['type1'] == 'LOCAL'? 'LOCAL':'LDAP';
-        $this->dbDefault->update("artfac",$data,['SN'=>$params['SN']]);
-        $this->flash->addMessage('success',"Successfully edit a new group {$params['name']}");
-        return $this->response->withRedirect($this->router->pathFor('artJenkins-art_group_manage'));
-    }
 }

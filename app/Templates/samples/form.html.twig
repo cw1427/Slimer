@@ -3,6 +3,8 @@
 {% block stylesheets %}
 <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
 <link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table-filter-control.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/select2.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/adminlte/AdminLTE.min.css"/>
 {% endblock %}
 
 {% block header_content %}
@@ -61,7 +63,7 @@
 					 <div class="form-group">
                       <label for="" class="col-sm-4 control-label">Select an approver's CoreID:</label>
                       <div class="col-sm-7">
-                         <select class="form-control" id="newCoreid" name="newCoreid">
+                         <select class="form-control" id="host" name="host[]"  multiple="multiple" data-placeholder="Select host(s)">
                   			 	<option value=''>Select an approver</option>
                   			     {% for key,value in al %}
                         		 	<option value="{{ key }}">{{ value }}</option>
@@ -116,8 +118,37 @@
 <script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table-filter-control.min.js"></script>
 <script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
 <script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/adminlte/select2.min.js"></script>
 <script>
 $(function () {
+
+
+	$('#host').select2({closeOnSelect:false,scrollAfterSelect:false});
+    var start_index = null;
+    var options_selecteds = [];
+    $('#host').on("select2:select", function (e) {
+    	if( event.shiftKey ){
+        	if (!start_index) start_index = e.params.data.element.index;
+        	var start = start_index;
+        	var end = e.params.data.element.index;
+        	if (start_index > e.params.data.element.index){
+				end = start;
+				start = e.params.data.element.index;
+            }
+    		for (var i = start; i <= end; i++) {
+    			var option_value = $('#host option').eq(i).val();
+    			options_selecteds.push(option_value);
+    		}
+    		$('#host').val(options_selecteds);
+    		$('#host').trigger('change');
+    		$('#host').select2('close');
+    		shift_array = [];
+    		options_selecteds = [];
+    	}else{
+    		start_index = e.params.data.element.index;
+        }
+    });
+	
 	$("#form").validate({
 		errorElement: 'div',
 		errorClass: 'help-block',
