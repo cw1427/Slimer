@@ -24,8 +24,8 @@
 > Version release history.
 
 
-## v1.4.6(latest ready to go in the main branch)
-- Bug fix and add menu lable raw filter.
+## v1.4.7
+- Add dependency for slimer-core 1.1.2 to enable jump to redirect.
 
 ## v1.4.5
 - Fix some bug for the menu quick search and the security management page adjustment.

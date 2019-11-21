@@ -12,7 +12,7 @@
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your session</p>
 
-            <form id="loginForm" action="{{ path_for('login') }}" method="post">
+            <form id="loginForm" action="{{ path_for('login', [] ,{'to':to}) }}" method="post">
                 <div class="form-group has-feedback">
                     <input type="text" class="form-control" placeholder="Moto coreid" name="username" id="user">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

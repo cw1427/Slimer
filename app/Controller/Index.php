@@ -20,11 +20,12 @@ class Index extends \Slimer\Controller
     
     public function loginAction()
     {
+        $to = $this->request->getQueryParam("to");
         if ($this->request->isGet()){
             if ($this->container->has('user') && $this->container->get('user')){
-                return $this->response->withRedirect($this->router->pathFor('index'));            
+                return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }else{
-                $this->render('index/login.html.twig');
+                $this->render('index/login.html.twig',['to'=>$to]);
             }
         }else{
             //----check authen
@@ -35,7 +36,10 @@ class Index extends \Slimer\Controller
                 $this->flash->addMessage('warning','username or password is not correct');
                 return $this->response->withRedirect('/login');
             }else{
-                return $this->response->withRedirect($this->router->pathFor('index'));
+                if (isset($to)){
+                    return $this->response->withRedirect($this->router->pathFor($to));
+                }
+                return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }
         }
         
