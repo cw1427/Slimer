@@ -140,7 +140,7 @@ class Admin extends \Slimer\Controller
         $data = $this->request->getParsedBody();
         if (isset($data['newPassword']) && isset($data['id'])){
             if ($data['id'] ==1 && $this->user->get('id') != 1){
-                return $this->json(["error"=>["message"=>"admin account not allow been modified by other account"],"msg"=>"not allow change admin account info"],403);
+                return $this->json(["error"=>["message"=>"admin account not allow been modified by other account"],"message"=>"not allow change admin account info"],403);
             }
             $this->dbDefault->update("user",["password"=> \password_hash($data['newPassword'], PASSWORD_DEFAULT)],["id"=>$data["id"]]);
         }else{
@@ -298,7 +298,7 @@ class Admin extends \Slimer\Controller
         $args = $this->request->getParams();
         $this->dbDefault->update("perm_group",["Name"=> $args['name'],"Title"=>$args['title']],["ID"=>$args['id']]);
         $this->logger->info("groupid={$args["id"]} info changed by {$this->user->get('loginName')}");
-        return $this->json(["msg"=>"success"]);
+        return $this->json(["message"=>"success"]);
     }
     
     public function grouprole_editAction(){
@@ -527,7 +527,7 @@ class Admin extends \Slimer\Controller
                 if (!$data["result"]){
                     return $this->json(["error"=>["message"=>"Internal error"]],500);
                 }
-                return $this->json(["msg"=>"success"]);
+                return $this->json(["message"=>"success"]);
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
