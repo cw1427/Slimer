@@ -20,12 +20,12 @@ class Index extends \Slimer\Controller
     
     public function loginAction()
     {
-        $to = $this->request->getQueryParam("to");
+        $params=$this->request->getQueryParams();
         if ($this->request->isGet()){
             if ($this->container->has('user') && $this->container->get('user')){
                 return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }else{
-                $this->render('index/login.html.twig',['to'=>$to]);
+                $this->render('index/login.html.twig',['params'=>$params]);
             }
         }else{
             //----check authen
@@ -36,13 +36,12 @@ class Index extends \Slimer\Controller
                 $this->flash->addMessage('warning','username or password is not correct');
                 return $this->response->withRedirect('/login');
             }else{
-                if (isset($to)){
-                    return $this->response->withRedirect($this->router->pathFor($to));
+                if (isset($params['to'])){
+                    return $this->response->withRedirect($this->router->pathFor($params['to'],$params));
                 }
                 return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }
-        }
-        
+        }  
     }
     
     public function sbs_adminlte_sidebar_collapseAction()
