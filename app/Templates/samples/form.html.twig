@@ -42,20 +42,20 @@
                     <div class="form-group">
                       <label for="" class="col-sm-4 control-label">Core ID:</label>
                       <div class="col-sm-7">
-                        <input type="input" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
+                        <input type="text" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="" class="col-sm-4 control-label">Requester's Name:</label>
                       <div class="col-sm-7">
-                        <input type="input" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
+                        <input type="text" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
                       </div>
                     </div>
                     {% if isAdmin > 0 %}
                     <div class="form-group">
                       <label for="" class="col-sm-4 control-label">New approver's CoreID:</label>
                       <div class="col-sm-7">
-                        <input type="input" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
+                        <input type="text" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
                       </div>
                       <span style="color:#FF0000;">*</span>
                     </div>
@@ -76,7 +76,7 @@
                     <div class="form-group">
                       <label for="" class="col-sm-4 control-label">input:</label>
                       <div class="col-sm-7">
-                        <input type="input" class="form-control" id="newinput" name="newinput" placeholder="newinput">
+                        <input type="text" class="form-control" id="newinput" name="newinput" placeholder="newinput">
                       </div>
                       <span style="color:#FF0000;">*</span>
                     </div>

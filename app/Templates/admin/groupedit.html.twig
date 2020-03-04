@@ -45,19 +45,19 @@
                                     <div class="form-group">
                                       <label for="inputEmail3" class="col-sm-4 control-label">group name:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="name" name="name" value="{{ group.Name }}" {% if group.Type == 'ldap' %}disabled{% endif %}/>
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ group.Name }}" {% if group.Type == 'ldap' %}disabled{% endif %}/>
                                       </div>
                                     </div>
                                      <div class="form-group">
                                       <label for="inputPassword3" class="col-sm-4 control-label">group description:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="title" name="title" value="{{ group.Title }}" {% if group.Type == 'ldap' %}disabled{% endif %}/>
+                                        <input type="text" class="form-control" id="title" name="title" value="{{ group.Title }}" {% if group.Type == 'ldap' %}disabled{% endif %}/>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label for="inputPassword3" class="col-sm-4 control-label">group type:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" value="{{ group.Type }}" disabled/>
+                                        <input type="text" class="form-control" value="{{ group.Type }}" disabled/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -268,8 +268,8 @@ $(function () {
 	});
 
 	$('#roleSelector').multiSelect({
-		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source roles"></input>',
-		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target roles"></input>',
+		selectableHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Source roles"></input>',
+		selectionHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Target roles"></input>',
 		selectableFooter: "<a class='btn' onclick='roleSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
 		selectionFooter: "<a class='btn' onclick='roleDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
 		keepOrder: true,
@@ -332,8 +332,8 @@ $(function () {
 
 
 	$('#userSelector').multiSelect({
-		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source users"></input>',
-		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target users"></input>',
+		selectableHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Source users"></input>',
+		selectionHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Target users"></input>',
 		selectableFooter: "<a class='btn' {% if group.Type == 'ldap' %}disabled{% endif %} onclick='userSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
 		selectionFooter: "<a class='btn' {% if group.Type == 'ldap' %}disabled{% endif %} onclick='userDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
 		keepOrder: true,

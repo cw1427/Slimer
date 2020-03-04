@@ -10,6 +10,8 @@ ENV GOSU_CHOWN /slimer
 RUN set -ex \
     && adduser -D -S -h /slimer -s /bin/sh -g 9999 ${slimer_USER} \
     && apk add --no-cache --virtual .build-deps \
+   			coreutils \
+    		bash \
             libldap\
             gcc \
             make \

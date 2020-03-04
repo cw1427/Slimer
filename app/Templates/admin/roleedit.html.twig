@@ -45,13 +45,13 @@
                                     <div class="form-group">
                                       <label for="inputEmail3" class="col-sm-4 control-label">role name:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="Title" name="Title" value="{{ role.Title }}"/>
+                                        <input type="text" class="form-control" id="Title" name="Title" value="{{ role.Title }}"/>
                                       </div>
                                     </div>
                                      <div class="form-group">
                                       <label for="inputPassword3" class="col-sm-4 control-label">role description:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="Description" name="Description" value="{{ role.Description }}"/>
+                                        <input type="text" class="form-control" id="Description" name="Description" value="{{ role.Description }}"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -279,8 +279,8 @@ $(function () {
 	});
 
 	$('#permSelector').multiSelect({
-		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source permission"></input>',
-		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target permission"></input>',
+		selectableHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Source permission"></input>',
+		selectionHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Target permission"></input>',
 		selectableFooter: "<a class='btn' onclick='permSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
 		selectionFooter: "<a class='btn' onclick='permDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
 		keepOrder: true,
@@ -343,8 +343,8 @@ $(function () {
 
 
 	$('#groupSelector').multiSelect({
-		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
-		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
+		selectableHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
+		selectionHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
 		selectableFooter: "<a class='btn' onclick='groupSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
 		selectionFooter: "<a class='btn' onclick='groupDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
 		keepOrder: true,

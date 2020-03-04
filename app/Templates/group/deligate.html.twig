@@ -61,19 +61,19 @@
                     <div class="form-group">
                       <label for="inputEmail3" class="col-sm-3 control-label">Core ID:</label>
                       <div class="col-sm-8">
-                        <input type="input" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
+                        <input type="text" class="form-control" id="coreid" disabled value="{{ container.session.get('user')['loginName'] }}"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="inputEmail3" class="col-sm-3 control-label">Requester's Name:</label>
                       <div class="col-sm-8">
-                        <input type="input" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
+                        <input type="text" class="form-control" id="username" disabled value="{{ container.session.get('user')['userName'] }}"/>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="inputPassword3" class="col-sm-3 control-label">New approver's CoreID:</label>
                       <div class="col-sm-8">
-                        <input type="input" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
+                        <input type="text" class="form-control" id="newCoreid" name="newCoreid" placeholder="core ID">
                       </div>
                       <span style="color:#FF0000;">*</span>
                     </div>

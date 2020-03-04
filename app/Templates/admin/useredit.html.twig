@@ -45,19 +45,19 @@
                                     <div class="form-group">
                                       <label for="inputEmail3" class="col-sm-4 control-label">login name:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="coreid" disabled value="{{ user.loginName }}"/>
+                                        <input type="text" class="form-control" id="coreid" disabled value="{{ user.loginName }}"/>
                                       </div>
                                     </div>
                                      <div class="form-group">
                                       <label for="inputPassword3" class="col-sm-4 control-label">user Realm:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="type" disabled value="{{ user.type }}"/>
+                                        <input type="text" class="form-control" id="type" disabled value="{{ user.type }}"/>
                                       </div>
                                     </div>
                                      <div class="form-group">
                                       <label for="inputPassword3" class="col-sm-4 control-label">user status:</label>
                                       <div class="col-sm-6">
-                                        <input type="input" class="form-control" id="active" disabled value="{{ user.active }}"/>
+                                        <input type="text" class="form-control" id="active" disabled value="{{ user.active }}"/>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -71,13 +71,13 @@
                                         <div class="form-group">
                                       	<label for="inputPassword3" class="col-sm-4 control-label">first name:</label>
                                           <div class="col-sm-6">
-                                            <input type="input" class="form-control" id="firstName" name="firstName" {% if user.type == 'ldap' %}disabled {% endif %} value="{{ user.firstName }}"/>
+                                            <input type="text" class="form-control" id="firstName" name="firstName" {% if user.type == 'ldap' %}disabled {% endif %} value="{{ user.firstName }}"/>
                                           </div>
                                         </div>
                                         <div class="form-group">
                                           <label for="inputPassword3" class="col-sm-4 control-label">last name:</label>
                                           <div class="col-sm-6">
-                                            <input type="input" class="form-control" id="lastName" name="lastName" {% if user.type == 'ldap' %}disabled {% endif %}  value="{{ user.lastName }}"/>
+                                            <input type="text" class="form-control" id="lastName" name="lastName" {% if user.type == 'ldap' %}disabled {% endif %}  value="{{ user.lastName }}"/>
                                           </div>
                                         </div>
                                      </div>
@@ -332,8 +332,8 @@ $(function () {
 	});
 
 	$('#groupSelector').multiSelect({
-		selectableHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
-		selectionHeader: '<input type="input" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
+		selectableHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Source group"></input>',
+		selectionHeader: '<input type="text" style="width:166px;margin-bottom:2px" placeholder="Target group"></input>',
 		selectableFooter: "<a class='btn' onclick='groupSelectAll();return false;'>select all<i class='fa fa-hand-o-right'></i></a>",
 		selectionFooter: "<a class='btn' onclick='groupDeselectAll();return false;'><i class='fa fa-hand-o-left'></i>deselect all</a>",
 		keepOrder: true,
