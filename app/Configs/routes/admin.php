@@ -1,7 +1,7 @@
 <?php
 /**
  * Author: Shawn Chen
- * Desc: 
+ * Desc:
  */
 
 return [
@@ -19,7 +19,9 @@ return [
     ],
     'add_user' => [
         'pattern' =>'/adduser',
-        'methods' => ['POST']
+        'methods' => ['POST'],
+        'perm' => ['root'],
+        'middleware' => ['ActionLogMiddleware']
     ],
     'del_user' => [
         'pattern' =>'/deluser',
@@ -135,5 +137,16 @@ return [
     'permrole_edit' => [
         'pattern' =>'/editpermrole',
         'methods' => ['POST']
-    ]
+    ],
+    //----action log module
+    'action_log' => [
+        'pattern' => '/actionlog',
+        'methods' => ['GET'],
+        'perm' => ['root']
+    ],
+    'action_log_list' => [
+        'pattern' => '/actionlogl',
+        'methods' => ['GET','POST'],
+        'perm' => ['root']
+    ],
 ];

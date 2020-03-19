@@ -12,7 +12,7 @@
 - Container
 - Config suit
 - RBAC
-- RESTFUL API 
+- RESTFUL API
 - Commands
 - LDAP
 - Message flash
@@ -24,7 +24,8 @@
 > Version release history.
 
 
-## v1.4.7
+## v1.4.8
+- Add action log feature and involve slimer-core route middleware mechanism.
 - Add dependency for slimer-core 1.1.2 to enable jump to redirect.
 
 ## v1.4.5
@@ -45,7 +46,7 @@
 
 - AdminLTE: A html web template
 
-# Development guide 
+# Development guide
 
 ## [guide doc](https://cw1427.github.io/Slimer)
 
@@ -62,10 +63,10 @@
   -- like:  php index.php Dbinit --help
   -- command example page
   ![command example page](https://github.com/cw1427/Slimer/blob/master/app/Static/img/cmd.png)
-  
-- 6. Dockerization 
+
+- 6. Dockerization
   -- Add Dockerfile to made the slimer to be dockerization and support for php-fpm with Nginx.
-  
+
 - 7. Add gradle support
   -- build the docker command:  gradle -Dregistry=<your local docker registry> slimerDocker <-Dpush=true>
 

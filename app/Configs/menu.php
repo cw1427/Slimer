@@ -54,6 +54,14 @@ return [
                 'routeName' => '/admin/perm_manage',
                 'icon' => 'fa fa-gear'
             ],
+            [
+                'id' => uniqid(),
+                'active' => false,
+                'label' => 'Action Logs',
+                'route' => '/admin/actionlog',
+                'routeName' => '/admin/action_log',
+                'icon' => 'fa fa-list-alt'
+            ],
         ]
     ],
     [

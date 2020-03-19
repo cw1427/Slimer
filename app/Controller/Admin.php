@@ -15,12 +15,12 @@ use function GuzzleHttp\json_encode;
  */
 class Admin extends \Slimer\Controller
 {
-    
+
     public function user_manageAction(){
-        
+
         return $this->render('admin/usermanage.html.twig');
     }
-    
+
     public function get_usersAction(){
         $params = $this->request->getParams();
         $offset = $params['offset'];
@@ -54,7 +54,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$userList,"total"=>$total]);
     }
-    
+
     public function add_userAction(){
         $params = $this->request->getParams();
         //---check if the loginName exists
@@ -76,7 +76,7 @@ class Admin extends \Slimer\Controller
         $this->flash->addMessage('success',"Successfully add a new user {$params['loginName']}");
         return $this->response->withRedirect($this->router->pathFor('admin-user_manage'));
     }
-    
+
     public function del_userAction(){
         $params = $this->request->getParsedBody();
         if (isset($params["id"])){
@@ -107,7 +107,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function edit_userAction($args){
         $id = $args['uid'];
         if ($id == 1 && $this->user->get('id') !=1){
@@ -128,14 +128,14 @@ class Admin extends \Slimer\Controller
         $groups=$this->dbDefault->select("perm_group","*");
         $this->render("admin/useredit.html.twig",["user"=>$user->getData(),"groups"=>$groups]);
     }
-    
+
     public function userinfo_editAction(){
         $args = $this->request->getParams();
         $this->dbDefault->update("user",["firstName"=> $args['firstName'],"lastName"=>$args['lastName'],'userName'=>"{$args['firstName']} {$args['lastName']}"],["id"=>$args['id']]);
         $this->logger->info("userid={$args["id"]} userinfo changed by {$this->user->get('loginName')}");
         return $this->json(["message"=>"success"]);
     }
-    
+
     public function password_changeAction(){
         $data = $this->request->getParsedBody();
         if (isset($data['newPassword']) && isset($data['id'])){
@@ -149,7 +149,7 @@ class Admin extends \Slimer\Controller
         $this->logger->info("userid={$data["id"]} password changed by {$this->user->get('loginName')}");
         return $this->json(["message"=>"success"]);
     }
-    
+
     public function usergroup_editAction(){
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
@@ -179,13 +179,13 @@ class Admin extends \Slimer\Controller
         }else{
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
-        
+
     }
-    
+
     public function group_manageAction(){
         return $this->render('admin/groupmanage.html.twig');
     }
-    
+
     public function get_groupsAction(){
         $params = $this->request->getParams();
         $offset = $params['offset'];
@@ -219,7 +219,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$groupList,"total"=>$total]);
     }
-    
+
     public function add_groupAction(){
         $params = $this->request->getParams();
         $params['Name'] = trim($params['Name']," ");
@@ -234,7 +234,7 @@ class Admin extends \Slimer\Controller
         $this->flash->addMessage('success',"Successfully add a new group {$params['Name']}");
         return $this->response->withRedirect($this->router->pathFor('admin-group_manage'));
     }
-    
+
     public function del_groupAction(){
         $params = $this->request->getParsedBody();
         if (isset($params["id"])){
@@ -262,7 +262,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function edit_groupAction($args){
         $id = $args['uid'];
         $group = $this->dbDefault->get("perm_group","*",["ID"=>$id]);
@@ -293,14 +293,14 @@ class Admin extends \Slimer\Controller
         $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
         $this->render("admin/groupedit.html.twig",["group"=>$group,"users"=>$users,"roles"=>$roles]);
     }
-    
+
     public function groupinfo_editAction(){
         $args = $this->request->getParams();
         $this->dbDefault->update("perm_group",["Name"=> $args['name'],"Title"=>$args['title']],["ID"=>$args['id']]);
         $this->logger->info("groupid={$args["id"]} info changed by {$this->user->get('loginName')}");
         return $this->json(["message"=>"success"]);
     }
-    
+
     public function grouprole_editAction(){
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
@@ -331,7 +331,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function groupuser_editAction(){
         $data = $this->request->getParsedBody();
         if (isset($data['type']) && $data['type'] == 'ldap'){
@@ -365,12 +365,12 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function role_manageAction(){
         $roles = $this->dbDefault->select("perm_roles",["ID(key)","Title(value)"]);
         return $this->render('admin/rolemanage.html.twig',['roles'=>$roles]);
     }
-    
+
     public function get_rolesAction(){
         $params = $this->request->getParams();
         $offset = $params['offset'];
@@ -402,7 +402,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$roleList,"total"=>$total]);
     }
-    
+
     public function add_roleAction(){
         $params = $this->request->getParams();
         $params['Title'] = trim($params['Title']," ");
@@ -417,7 +417,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withRedirect($this->router->pathFor('admin-role_manage'));
     }
-    
+
     public function del_roleAction(){
         $params = $this->request->getParsedBody();
         if (isset($params["id"])){
@@ -447,7 +447,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function edit_roleAction($args){
         $id = $args['uid'];
         if ($id == 1 && $this->user->get('id') !=1){
@@ -488,7 +488,7 @@ class Admin extends \Slimer\Controller
             $perms=$this->dbDefault->select("perm_permissions",["ID","Title"]);
             $this->render("admin/roleedit.html.twig",["role"=>$role,"groups"=>$groups,"perms"=>$perms]);
     }
-    
+
     public function roleinfo_editAction(){
         $args = $this->request->getParams();
         //----check if Title already exists
@@ -501,7 +501,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["message"=>"success"]);
         }
     }
-    
+
     public function roleperm_editAction(){
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
@@ -532,7 +532,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function rolegroup_editAction(){
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
@@ -563,14 +563,14 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     //----------------start permissions related action--------------------------------
-    
+
     public function perm_manageAction(){
         $perm = $this->dbDefault->select("perm_permissions",["ID(key)","Title(value)"]);
         return $this->render('admin/permmanage.html.twig',['perms'=>$perm]);
     }
-    
+
     public function get_permsAction(){
         $params = $this->request->getParams();
         $offset = $params['offset'];
@@ -602,7 +602,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withStatus(200)->withJson(["rows"=>$permList,"total"=>$total]);
     }
-    
+
     public function add_permAction(){
         $params = $this->request->getParams();
         $params['Title'] = trim($params['Title']," ");
@@ -617,7 +617,7 @@ class Admin extends \Slimer\Controller
         }
         return $this->response->withRedirect($this->router->pathFor('admin-perm_manage'));
     }
-    
+
     public function del_permAction(){
         $params = $this->request->getParsedBody();
         if (isset($params["id"])){
@@ -632,7 +632,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
     public function edit_permAction($args){
         $id = $args['uid'];
         if ($id == 1 && $this->user->get('id') !=1){
@@ -659,7 +659,7 @@ class Admin extends \Slimer\Controller
             $roles=$this->dbDefault->select("perm_roles",["ID","Title"]);
             $this->render("admin/permedit.html.twig",["perm"=>$perm,"roles"=>$roles]);
     }
-    
+
     public function perminfo_editAction(){
         $args = $this->request->getParams();
         //----check if Title already exists
@@ -672,7 +672,7 @@ class Admin extends \Slimer\Controller
             return $this->json(["message"=>"success"]);
         }
     }
-    
+
     public function permrole_editAction(){
         $data = $this->request->getParsedBody();
         if(!isset($data['selected'])) $data['selected']=[];
@@ -703,5 +703,38 @@ class Admin extends \Slimer\Controller
             return $this->json(["error"=>["message"=>"wrong parameter"]],400);
         }
     }
-    
+
+
+    /*
+     * @desc Show action log page
+     */
+    public function action_logAction(){
+        return $this->render('admin/action_log.html.twig');
+    }
+
+    /*
+     * @desc Show action list by BT
+     */
+    public function action_log_listAction(){
+        $params = $this->request->getParams();
+        $offset = $params['offset'];
+        $limit = $params['limit'];
+        $search = isset($params['search'])? $params['search']: null;
+        $WHERE = [];
+        if (isset($search) && $search !=""){
+            $WHERE['OR']=["route[~]"=>"%{$search}%","operator[~]"=>"%{$search}%","uri[~]"=>"%{$search}%"];
+        }
+        if (isset($params['route'])){
+            $WHERE['route']=$params['route'];
+        }
+        $total = $this->dbGam->count("actionlog",$WHERE);
+        $WHERE['LIMIT']=[$offset,$limit];
+        if (isset($params['sort'])){
+            $WHERE['ORDER']=[$params['sort']=>\strtoupper($params['order'])];
+        }
+        $artGroupList=$this->dbGam->select("actionlog",['id','route','operator','actiontime','desc','params','uri'],$WHERE);
+        return $this->response->withStatus(200)->withJson(["rows"=>$artGroupList,"total"=>$total]);
+    }
+
+
 }

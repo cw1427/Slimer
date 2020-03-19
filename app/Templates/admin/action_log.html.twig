@@ -1,0 +1,110 @@
+{% extends 'adminlte/layout/base.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/bootstrap-table.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{ base_url() }}/app/Static/css/multi-select.css"/>
+{% endblock %}
+
+{% block header_content %}
+    {{ macros.page_header("Admin", "Action Log List") }}
+{% endblock %}
+
+ {% block admin_lte_breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="{{ path_for('admin-admin') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><i class="fa fa-cog"></i> Admin</li>
+        <li class="active"><i class="fa fa-user"></i>Action Log List</li>
+      </ol>
+ {% endblock %}
+
+{% block page_content %}
+	<!-- Default box -->
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <i class="fa fa-random"></i>
+    <h3 class="box-title">
+    Show action log about the business modules
+    </h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+              title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body row" style="min-height:560px; height:auto!important;margin: 0 auto;">
+   <div class="row">
+  	<div class="col-md-12">
+  		   <div id="toolbar">
+      	   </div>
+      	   <table id="table"
+                   data-show-refresh="true"
+                   data-show-columns="true"
+                   data-search="true"
+                   data-query-params="queryParams"
+                   data-toolbar="#toolbar"
+                   data-search-on-enter-key="false"
+                   data-click-to-select="true"
+                   data-sort-name="actiontime"
+                   data-sort-order="desc">
+                <thead>
+                <tr>
+                    <th data-field="id"  data-width="5%" data-visible="false">Id</th>
+                    <th data-field="route" data-filter-Control="input">Route</th>
+                    <th data-field="uri" data-filter-Control="input">Uri</th>
+                    <th data-field="desc">Desc</th>
+                    <th data-field="operator">Operator</th>
+                    <th data-field="actiontime" data-sortable="true" data-formatter="timeFormatter">Action Time</th>
+                    <th data-field="params">Parameters</th>
+                </tr>
+                </thead>
+            </table>
+     </div>
+   </div>
+
+  </div>
+  <!-- /.box-body -->
+
+</div>
+ <!-- /.box -->
+
+{% endblock %}
+
+
+
+{% block javascripts %}
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/tmpl.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.multi-select.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/jquery.quicksearch.min.js"></script>
+<script type="text/javascript" src="{{ base_url() }}/app/Static/js/moment.min.js"></script>
+
+<script>
+
+function timeFormatter(value, row, index, field) {
+
+	return moment.unix(value).format('YYYY-MM-DD HH:mm:ss');
+}
+
+function queryParams(params){
+	return params;
+}
+
+$(function () {
+	$table = $('#table').bootstrapTable(
+			{
+				url: "{{path_for('admin-action_log_list')}}",
+				sidePagination: "server",
+				pagination: true,
+				pageSize: 10,
+				pageNumber: 1,
+				pageList:[10,20,50,100],
+				smartDisplay: false
+   			}
+	);
+
+});
+</script>
+{% endblock %}
+

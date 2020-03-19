@@ -18,11 +18,12 @@ return [
         'session_middleware', //----checking the request session info
 	    'commandRunner',//----add cli command middleware
     ],
-    
+
     'namespaces' => [
         'controller' => '\\App\\Controller\\',
+        'route_middleware' => '\\App\\Middleware\\'
     ],
-    
+
     'tasks'=> [],
     'notices'=>[],
     'actions' => [
@@ -33,7 +34,7 @@ return [
             'data'=>[]
         ]
     ],
-    
+
     'commands' => [
         'cmd' => '\App\Command\Cmd',
         'sampletask' => '\App\Command\SampleTask',
@@ -42,7 +43,7 @@ return [
         'rbacreset' => '\App\Command\RbacReset',
         'rbacmanage' => '\App\Command\RbacManage',
     ],
-    
+
     'settings' => [
         'displayErrorDetails' => ('prod' === \getenv('APP_ENV')) ? false : true,
         'determineRouteBeforeAppMiddleware' => true,
@@ -52,14 +53,14 @@ return [
             'template_path' => APP_PATH . DS . 'Templates',
         ]
     ],
-    
+
     'httpauth' => [
         'secure'=>false,
         'path'=> ['/api'],  //----the basic path need to do the httpauth
         'passthrough' => null, //----the white list bypass the httpauth
         "relaxed" => ["localhost", "127.0.0.1"],
     ],
-    
+
     'version_key' => 'VERSION',
     'commitid_key' => 'COMMITID',
     'project_name' => 'Slimer', //----default is Slimer
