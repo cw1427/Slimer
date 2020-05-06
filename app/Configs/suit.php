@@ -88,5 +88,9 @@ return [
             'data-intro' => 'Input key words about the menus lable for quick seach',
         ],
     ],
-    'menu_visible_by_perm' => True
+    'menu_visible_by_perm' => True,
+    // used for ActionLogMiddleware to search route config by routename.
+    'api_route_mapping'=>[
+        'cmd'=>'/api-cmd'
+    ]
 ];

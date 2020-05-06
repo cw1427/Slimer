@@ -30,8 +30,11 @@ class ActionLogMiddleware extends Root
         if (\count($rn)==1){
             $rn=['',$rn[0]];
         }
-        $routeConf = $this->container['config']('routes')["/{$rn[0]}"][$rn[1]];
-        $this->logger->debug(json_encode($routeConf));
+        if ( \array_key_exists($rn[0], $this->container['config']('suit.api_route_mapping')) ){
+            $routeConf = $this->container['config']('routes')[$this->container['config']('suit.api_route_mapping')[$rn[0]]][$rn[1]];
+        }else{
+            $routeConf = $this->container['config']('routes')["/{$rn[0]}"][$rn[1]];
+        }
         $params = $request->getParams();
         $actionLogModel = $this->entity('ActionLog');
         $actionLogModel->setData(['route'=>$route->getName(),'uri'=>$route->getPattern(),'desc'=>isset($routeConf['desc'])?$routeConf['desc']:$rn[1],
