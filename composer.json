@@ -17,20 +17,20 @@
     },
 
     "require": {
-        "slimer/slimer-core": "^1.2.1",
+        "slimer/slimer-core": "^1.2.5",
         "symfony/console": "^3.4",
         "symfony/web-server-bundle": "3.4.29"
     },
     "autoload": {
         "psr-4": {
-        	"App\\": "app/",
-        	"App\\Provider\\": "app/Provider/",
-        	"App\\Middleware\\": "app/Middleware/",
+            "App\\": "app/",
+            "App\\Provider\\": "app/Provider/",
+            "App\\Middleware\\": "app/Middleware/",
             "App\\Command\\": "app/Command/",
-			"App\\Api\\": "app/Api/"
+            "App\\Api\\": "app/Api/"
         },
         "psr-0":{
-        	 "Slimer\\": "app/"
+             "Slimer\\": "app/"
         }
     },
     "minimum-stability": "dev",

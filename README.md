@@ -23,6 +23,8 @@
 
 > Version release history.
 
+## v1.4.9
+- Increase slimer-core dependency to v1.2.5 to adjust Index controller to support for quary parameter passing.
 
 ## v1.4.8
 - Add action log feature and involve slimer-core route middleware mechanism.

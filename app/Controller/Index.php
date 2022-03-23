@@ -37,18 +37,18 @@ class Index extends \Slimer\Controller
                 return $this->response->withRedirect('/login');
             }else{
                 if (isset($params['to'])){
-                    return $this->response->withRedirect($this->router->pathFor($params['to'],$params));
+                    return $this->response->withRedirect($this->router->pathFor($params['to'],$params, \array_slice($params,1)));
                 }
                 return $this->response->withRedirect($this->router->pathFor('admin-admin'));
             }
-        }  
+        }
     }
     
     public function sbs_adminlte_sidebar_collapseAction()
     {
         $collapse = $this->request->getParams()['collapse'];
         $this->session->set('sbs_adminlte_sidebar_collapse',$collapse);
-        return $this->json(['msg'=>'success']); 
+        return $this->json(['msg'=>'success']);
     }
     
     public function logoutAction() {
